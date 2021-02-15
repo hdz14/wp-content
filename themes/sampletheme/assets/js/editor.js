@@ -33,8 +33,24 @@ wp.blocks.registerBlockStyle(
 wp.blocks.registerBlockStyle( 
     'core/heading', 
     {
+        name: 'pink-heading',
+        label: 'Pink Heading',
+    } 
+);
+
+wp.blocks.registerBlockStyle( 
+    'core/heading', 
+    {
         name: 'blue-heading',
         label: 'Blue Heading',
+    } 
+);
+
+wp.blocks.registerBlockStyle( 
+    'core/heading', 
+    {
+        name: 'white-heading',
+        label: 'White Heading',
     } 
 );
 
@@ -67,6 +83,14 @@ wp.blocks.registerBlockStyle(
     {
         name: 'fancy-columns',
         label: 'Fancy Columns',
+    } 
+);
+
+wp.blocks.registerBlockStyle( 
+    'core/column', 
+    {
+        name: 'fancy-column',
+        label: 'Fancy Column',
     } 
 );
 
