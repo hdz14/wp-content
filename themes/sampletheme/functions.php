@@ -135,6 +135,21 @@ if ( ! function_exists( 'sampletheme_setup' ) ) :
 				'slug' => 'lightpink',
 				'color' => '#e2bbcb',
 			),
+			array(
+				'name' => esc_attr__( 'Lightblue', 'sampletheme' ),
+				'slug' => 'lightblue',
+				'color' => '#82a2cd',
+			),
+			array(
+				'name' => esc_attr__( 'White', 'sampletheme' ),
+				'slug' => 'white',
+				'color' => '#ffffff',
+			),
+			array(
+				'name' => esc_attr__( 'Bggrey', 'sampletheme' ),
+				'slug' => 'bggrey',
+				'color' => '#e9eaea',
+			),
 		) );
 
 		/** 
