@@ -50,7 +50,7 @@
 					</div>
 				</div>
 				
-				<div class="col-4 topnav">
+				<div class="col-6 topnav">
 					<div class="search-container">
 					<form action="/action_page.php">
 						<input type="text" placeholder="Search..." name="search">
@@ -59,25 +59,20 @@
 					</div>
 				</div>
 
-				<div class="col-4 topnav">
-					<img id="cart" src="<?php echo get_bloginfo('template_url') ?>/assets/images/cart.png"/>
+				<div class="col-1 topnav">
 					<h3>SIGN IN</h3>
 				</div>
 
-				<!-- <div class="col-6">
-					<nav id="site-navigation" class="main-navigation">
-						<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e( 'Primary Menu', 'sampletheme' ); ?></button>
-						<?php
-						wp_nav_menu(
-							array(
-								'theme_location' => 'menu-1',
-								'menu_id'        => 'primary-menu',
-							)
-						);
-						?>
-					</nav>
-				</div> -->
+				<div class="col-1 topnav">
+					<img id="cart" src="<?php echo get_bloginfo('template_url') ?>/assets/images/cart.png"/>
+				</div>
 
+			</div>
+
+			<div class="row nav">
+				<div class="col-3 shopBrand">SHOP BRAND</div>
+				<div class="col-3 shopCat">SHOP CAT</div>
+				<div class="col-3 shopDog">SHOP DOG</div>
 			</div>
 		</div>
 

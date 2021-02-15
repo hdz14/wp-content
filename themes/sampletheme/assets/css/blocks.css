@@ -191,12 +191,23 @@ h1 {
     color: #d086a3;
     font-size: 20px;
     float: right;
-    margin-top: 20px;
-    margin-right: 20px;
+    margin-top: 30px;
+    margin-right: 10px;
 }
 
 #cart {
     display: block;
-    float: right;
-    margin: 20px;
+    float: left;
+    margin-top: 20px;
+}
+
+.nav {
+    background-color: #d086a3;
+    color: white;
+    height: 40px;
+    padding-top: 8px;
+}
+
+.shopBrand {
+    margin-left: 20px;
 }
