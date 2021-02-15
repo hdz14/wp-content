@@ -12,6 +12,29 @@
 ?>
 
 	<footer id="colophon" class="site-footer">
+		<div class="row quick-link">
+			<div class="row">
+				<div class="col-3">
+					<p>Privacy Policy</p>
+					<p>Return Policy</p>
+					<p>Help Center</p>
+				</div>
+				<div class="col-3">
+					<p>FAQs</p>
+					<p>Shipping</p>
+					<p>Current Flyer</p>
+				</div>
+				<div class="col-3">
+					<p>Store Locator</p>
+					<p>Services</p>
+					<p>Careers</p>
+				</div>
+				<div class="col-3">
+				<img id="map" src="<?php echo get_bloginfo('template_url') ?>/assets/images/map.png"/>
+				</div>
+			</div>
+		</div>
+
 		<div class="row site-info">
 			<div class="col">
 				<a style="color: white; float: right" href="<?php echo esc_url( __( 'https://wordpress.org/', 'sampletheme' ) ); ?>">
