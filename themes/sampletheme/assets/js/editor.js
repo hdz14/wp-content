@@ -55,6 +55,14 @@ wp.blocks.registerBlockStyle(
 );
 
 wp.blocks.registerBlockStyle( 
+    'core/paragraph', 
+    {
+        name: 'smalltext-paragraph',
+        label: 'Smalltext Paragraph',
+    } 
+);
+
+wp.blocks.registerBlockStyle( 
     'core/columns', 
     {
         name: 'fancy-columns',

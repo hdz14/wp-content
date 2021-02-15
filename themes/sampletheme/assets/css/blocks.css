@@ -28,7 +28,7 @@ h1 {
 
 .is-style-blue-heading {
     color: #82a2cd;
-    font-size: 30px;
+    font-size: 25px;
     text-align: center;
 }
 
@@ -41,17 +41,25 @@ h1 {
     align-items: center;
 }
 
-.is-style-fancy-image {
-    align-items: center;
-}
-
 .is-style-fancy-paragraph {
     color: #716b6d;
     font-size: 20px;
 }
 
+.is-style-smalltext-paragraph {
+    color: #716b6d;
+    font-size: 18px;
+}
+
 .is-style-fancy-columns {
     background-color: #e9eaea;
+    width: 70%;
+    align-content: center;
+    margin: auto;
+}
+
+.is-style-fancy-columns {
+    width: 80%;
 }
 
 .alignwide {
