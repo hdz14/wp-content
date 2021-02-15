@@ -11,6 +11,10 @@
     background-color: blue;
 }
 
+h1 {
+    color: #a156b4;
+}
+
 .alignwide {
     max-width: 50%;
     margin: 0 auto;
@@ -27,4 +31,28 @@
 
 .has-magenta-color {
     color: #a156b4;
+}
+
+.has-pink-background-color {
+    background-color: #d086a3;
+}
+
+.has-pink-color {
+    color: #d086a3;
+}
+
+.has-lightgrey-background-color {
+    background-color: #716b6d;
+}
+
+.has-lightgrey-color {
+    color: #716b6d;
+}
+
+.has-lightpink-background-color {
+    background-color: #e2bbcb;
+}
+
+.has-lightpink-color {
+    color: #e2bbcb;
 }

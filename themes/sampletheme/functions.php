@@ -120,6 +120,21 @@ if ( ! function_exists( 'sampletheme_setup' ) ) :
 				'slug' => 'magenta',
 				'color' => '#a156b4',
 			),
+			array(
+				'name' => esc_attr__( 'Pink', 'sampletheme' ),
+				'slug' => 'pink',
+				'color' => '#d086a3',
+			),
+			array(
+				'name' => esc_attr__( 'Lightgrey', 'sampletheme' ),
+				'slug' => 'lightgrey',
+				'color' => '#716b6d',
+			),
+			array(
+				'name' => esc_attr__( 'Lightpink', 'sampletheme' ),
+				'slug' => 'lightpink',
+				'color' => '#e2bbcb',
+			),
 		) );
 
 		/** 
