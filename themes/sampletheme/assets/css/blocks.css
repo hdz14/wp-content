@@ -36,12 +36,15 @@ h1 {
     color: #82a2cd;
     font-size: 25px;
     text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .is-style-white-heading {
     color: white;
-    font-size: 25px;
+    font-size: 60px;
     text-align: center;
+    padding: 20px;
 }
 
 .wp-block-image img {
@@ -63,6 +66,12 @@ h1 {
     font-size: 18px;
 }
 
+.is-style-whitetext-paragraph {
+    color: white;
+    font-size: 18px;
+    text-align: center;
+}
+
 .is-style-fancy-columns {
     background-color: #e9eaea;
     width: 70%;
@@ -79,6 +88,8 @@ h1 {
     width: 70%;
     align-content: center;
     margin: auto;
+    font-size: 30px;
+    color: white;
 }
 
 .alignwide {

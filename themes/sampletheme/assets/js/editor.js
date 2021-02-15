@@ -79,6 +79,14 @@ wp.blocks.registerBlockStyle(
 );
 
 wp.blocks.registerBlockStyle( 
+    'core/paragraph', 
+    {
+        name: 'whitetext-paragraph',
+        label: 'Whitetext Paragraph',
+    } 
+);
+
+wp.blocks.registerBlockStyle( 
     'core/columns', 
     {
         name: 'fancy-columns',
