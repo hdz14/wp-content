@@ -73,6 +73,7 @@
 				<div class="col-3 shopBrand">SHOP BRAND</div>
 				<div class="col-3 shopCat">SHOP CAT</div>
 				<div class="col-3 shopDog">SHOP DOG</div>
+				<div class="col-2 shopALL"><button id="naviButton">SHOP All</button></div>
 			</div>
 		</div>
 
