@@ -4,15 +4,15 @@
 }
 
 .wp-block-quote.is-style-fancy-quote {
-    color: red;
+    color: #716b6d;
 }
 
 .wp-block-buttons .wp-block-button .wp-block-button__link {
-    background-color: blue;
+    background-color: #e2bbcb;
 }
 
 h1 {
-    color: #a156b4;
+    color: darkslategrey;
 }
 
 .alignwide {
