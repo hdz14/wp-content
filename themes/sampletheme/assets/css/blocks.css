@@ -127,3 +127,76 @@ h1 {
 .has-bggrey-color {
     color: #e9eaea;
 }
+
+/* Header Navigation */
+
+.custom-logo-link {
+    padding: 10px;
+}
+
+.topnav .search-container {
+    float: right;
+}
+
+.topnav input[type=text] {
+    padding: 6px;
+    margin-top: 20px;
+    font-size: 17px;
+    border: none;
+}
+
+.topnav .search-container button {
+    float: right;
+    padding: 6px 10px;
+    margin-top: 20px;
+    margin-right: 16px;
+    background: #d086a3;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+}
+
+.topnav .search-container button:hover {
+    background: #ccc;
+}
+
+
+.topnav .search-container {
+    float: none;
+}
+
+.topnav a, .topnav input[type=text], .topnav .search-container button {
+    float: none;
+    display: inline;
+    text-align: left;
+    margin-top: 5px;
+    padding: 10px;
+}
+
+.topnav input[type=text] {
+    width: 80%;
+}
+
+.search-container {
+    padding: 8px;
+}
+
+
+.topnav input[type=text] {
+    border: 1px solid #d086a3;  
+}
+
+.topnav h3 {
+    display: block;
+    color: #d086a3;
+    font-size: 20px;
+    float: right;
+    margin-top: 20px;
+    margin-right: 20px;
+}
+
+#cart {
+    display: block;
+    float: right;
+    margin: 20px;
+}

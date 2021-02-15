@@ -16,6 +16,7 @@
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="profile" href="https://gmpg.org/xfn/11">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 	<?php wp_head(); ?>
 </head>
@@ -28,7 +29,7 @@
 	<header id="masthead" class="site-header">
 		<div class="container">
 			<div class="row">
-				<div class="col-6">
+				<div class="col-4">
 					<div class="site-branding">
 						<?php
 						the_custom_logo();
@@ -46,11 +47,24 @@
 							?>
 							<p class="site-description"><?php echo $sampletheme_description; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 						<?php endif; ?>
-					</div><!-- .site-branding -->
+					</div>
 				</div>
 				
+				<div class="col-4 topnav">
+					<div class="search-container">
+					<form action="/action_page.php">
+						<input type="text" placeholder="Search..." name="search">
+						<button type="submit"><i class="fa fa-search"></i></button>
+					</form>
+					</div>
+				</div>
 
-				<div class="col-6">
+				<div class="col-4 topnav">
+					<img id="cart" src="<?php echo get_bloginfo('template_url') ?>/assets/images/cart.png"/>
+					<h3>SIGN IN</h3>
+				</div>
+
+				<!-- <div class="col-6">
 					<nav id="site-navigation" class="main-navigation">
 						<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e( 'Primary Menu', 'sampletheme' ); ?></button>
 						<?php
@@ -61,8 +75,8 @@
 							)
 						);
 						?>
-					</nav><!-- #site-navigation -->
-				</div>
+					</nav>
+				</div> -->
 
 			</div>
 		</div>
