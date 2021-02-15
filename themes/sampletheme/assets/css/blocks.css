@@ -220,3 +220,10 @@ h1 {
     background-color: white;
     color:#d086a3;
 }
+
+/* footer */
+.site-info {
+    height: 35px;
+    padding-top: 5px;
+    background-color: #d086a3;
+}

@@ -77,6 +77,6 @@
 			</div>
 		</div>
 
-	</header><!-- #masthead -->
+	</header>
 
 	<div class="container">
