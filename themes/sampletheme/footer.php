@@ -12,7 +12,7 @@
 ?>
 
 	<footer id="colophon" class="site-footer">
-		<div class="row" style="height: 50px; background-color: #e2bbcb; width: 100%;">
+		<div class="row quick-title">
 			<h3>Quick Links</h3>
 		</div>
 		<div class="row quick-link">
