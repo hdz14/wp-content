@@ -59,21 +59,20 @@
 					</div>
 				</div>
 
-				<div class="col-1 topnav">
-					<h3>SIGN IN</h3>
+				<div class="col-2 topnav cart">
+					<a href="cart"><h3>My Cart</h3></a>
 				</div>
-
-				<div class="col-1 topnav">
-					<img id="cart" src="<?php echo get_bloginfo('template_url') ?>/assets/images/cart.png"/>
-				</div>
+				
 
 			</div>
 
 			<div class="row nav">
-				<div class="col-3 shopBrand">SHOP BRAND</div>
-				<div class="col-3 shopCat">SHOP CAT</div>
-				<div class="col-3 shopDog">SHOP DOG</div>
-				<div class="col-2 shopALL"><button id="naviButton">SHOP All</button></div>
+				<div class="col-2"><a href="home">Home</a></div>
+				<div class="col-2"><a href="about-page">About Us</a></div>
+				<div class="col-2"><a href="shop">Shop</a></div>
+				<div class="col-2"><a href="service">Service</a></div>
+				<div class="col-2"><a href="blog">Blog</a></div>
+				<div class="col-2"><a href="contact">Contact Us</a></div>
 			</div>
 
 			<!-- Use in conjunction with https://gist.github.com/woogists/c0a86397015b88f4ca722782a724ff6c -->

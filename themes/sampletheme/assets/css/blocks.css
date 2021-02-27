@@ -193,7 +193,6 @@ h1 {
     background: #ccc;
 }
 
-
 .topnav .search-container {
     float: none;
 }
@@ -214,7 +213,6 @@ h1 {
     padding: 8px;
 }
 
-
 .topnav input[type=text] {
     border: 1px solid #d086a3;  
 }
@@ -223,12 +221,12 @@ h1 {
     display: block;
     color: #d086a3;
     font-size: 20px;
-    float: right;
+    float: left;
     margin-top: 30px;
     margin-right: 10px;
 }
 
-#cart {
+.cart {
     display: block;
     float: left;
     margin-top: 20px;
@@ -239,6 +237,19 @@ h1 {
     color: white;
     height: 40px;
     padding-top: 8px;
+}
+
+.nav a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.nav a:hover {
+    color: #e4e26e;
+}
+
+.nav a:visited {
+    color: white;
 }
 
 .shopBrand {
