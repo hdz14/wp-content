@@ -301,3 +301,15 @@ h1 {
     background-color: #d086a3;
 }
 
+.quick-link a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.quick-link a:hover {
+    color: #e4e26e;
+}
+
+.quick-link a:visited {
+    color: white;
+}
