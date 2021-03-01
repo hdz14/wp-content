@@ -33,7 +33,7 @@
 				<ul>
 					<li><a href="home">FAQs</a></li>
 					<li><a href="home">Shipping</a></li>
-					<li><a href="service">Service</a></li>
+					<li><a href="post-single">Service</a></li>
 				</ul>
 			</div>
 
@@ -42,7 +42,7 @@
 				<ul>
 					<li><a href="about-page">About Us</a></li>
 					<li><a href="contact">Contact Us</a></li>
-					<li><a href="blog">Blog</a></li>
+					<li><a href="post-page">Blog</a></li>
 				</ul>
 			</div>
 
