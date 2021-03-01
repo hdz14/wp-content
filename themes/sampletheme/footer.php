@@ -18,19 +18,19 @@
 		<div class="row quick-link">
 			<div class="row">
 				<div class="col-3">
-					<p>Privacy Policy</p>
-					<p>Return Policy</p>
-					<p>Help Center</p>
+					<p><a href="home">Privacy Policy</a></p>
+					<p><a href="home">Return Policy</a></p>
+					<p><a href="home">Help Center</a></p>
 				</div>
 				<div class="col-3">
-					<p>FAQs</p>
-					<p>Shipping</p>
-					<p>Current Flyer</p>
+					<p><a href="home">FAQs</a></p>
+					<p><a href="home">Shipping</a></p>
+					<p><a href="service">Service</a></p>
 				</div>
 				<div class="col-3">
-					<p>Store Locator</p>
-					<p>Services</p>
-					<p>Careers</p>
+					<p><a href="about-page">About Us</a></p>
+					<p><a href="contact">Contact Us</a></p>
+					<p><a href="blog">Blog</a></p>
 				</div>
 				<div class="col-3">
 				<img id="map" src="<?php echo get_bloginfo('template_url') ?>/assets/images/map.png"/>
