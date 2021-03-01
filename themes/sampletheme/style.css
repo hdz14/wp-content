@@ -976,6 +976,41 @@ textarea {
     padding: 10px;
 }
 
+.site-nav {
+	background-color: #d086a3;
+}
+
+.top-bar ul {
+	margin-bottom: 0;
+}
+
+.top-bar li {
+	list-style-type: none;
+	margin-top: 0px;
+	padding: 5px;
+	display: inline-block;
+}
+
+.top-bar li a {
+	padding: 20rem 2rem;
+	color: #fff;
+	text-decoration: none;
+}
+
+.top-bar li a:hover {
+	color: #fff9c0;
+}
+
+.top-bar li form {
+	margin-left: 3rem;
+}
+
+.top-bar input {
+	color:#d086a3;
+	background-color: #fff;
+}
+
+
 .topnav .search-container {
     float: right;
 }
@@ -1110,11 +1145,7 @@ textarea {
 
 .site-footer ul {
 	list-style-type: none;
-	padding: 10px;
-}
-
-.site-footer li {
-	padding: 5px;
+	
 }
 
 .eSeparator {

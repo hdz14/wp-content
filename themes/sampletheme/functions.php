@@ -83,6 +83,14 @@ if ( ! function_exists( 'sampletheme_setup' ) ) :
 		// 	)
 		// );
 
+		// search box
+		add_filter( 'wp_nav_menu_items','add_search_box', 10, 2 );
+		function add_search_box( $items, $args ) {
+			$items .= '<li class=”searchbox-position”>' . get_search_form( false ) . 
+			'</li>';
+			return $items;
+		}
+
 		// Add theme support for selective refresh for widgets.
 		add_theme_support( 'customize-selective-refresh-widgets' );
 
@@ -286,3 +294,14 @@ function sampletheme_enqueue_block_assets() {
 	);
 }
 add_action( 'enqueue_block_assets', 'sampletheme_enqueue_block_assets' );
+
+
+register_nav_menus(
+
+	array(
+
+		'top-menu' => 'Top Menu Location',
+		'mobile-menu' => 'Mobile Menu Location'
+	)
+); 
+

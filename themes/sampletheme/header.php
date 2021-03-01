@@ -51,12 +51,12 @@
 				</div>
 				
 				<div class="col-6 topnav">
-					<div class="search-container">
+					<!-- <div class="search-container">
 					<form action="/action_page.php">
 						<input type="text" placeholder="Search..." name="search">
 						<button type="submit"><i class="fa fa-search"></i></button>
 					</form>
-					</div>
+					</div> -->
 				</div>
 
 				<div class="col-2 topnav cart">
@@ -66,13 +66,17 @@
 
 			</div>
 
-			<div class="row nav">
-				<div class="col-2"><a href="home">Home</a></div>
-				<div class="col-2"><a href="about-page">About Us</a></div>
-				<div class="col-2"><a href="shop">Shop</a></div>
-				<div class="col-2"><a href="service">Service</a></div>
-				<div class="col-2"><a href="blog">Blog</a></div>
-				<div class="col-2"><a href="contact">Contact Us</a></div>
+			<div class="site-nav row">
+				
+				<?php
+				wp_nav_menu( 
+
+					array( 
+    					'theme_location' => 'top-menu', 
+    					'container_class' => 'top-bar' 
+					) 
+				); 
+				?>
 			</div>
 
 			<!-- Use in conjunction with https://gist.github.com/woogists/c0a86397015b88f4ca722782a724ff6c -->
