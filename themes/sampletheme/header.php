@@ -50,7 +50,7 @@
 					</div>
 				</div>
 				
-				<div class="col-6 topnav">
+				<div class="col-7 topnav">
 					<!-- <div class="search-container">
 					<form action="/action_page.php">
 						<input type="text" placeholder="Search..." name="search">
@@ -59,7 +59,7 @@
 					</div> -->
 				</div>
 
-				<div class="col-2 topnav cart">
+				<div class="col-1 topnav cart">
 					<a href="cart"><h3>My Cart</h3></a>
 				</div>
 				
