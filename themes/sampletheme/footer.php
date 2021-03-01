@@ -12,50 +12,68 @@
 ?>
 
 	<footer id="colophon" class="site-footer">
-		<div class="row quick-title">
-			<h3>Quick Links</h3>
-		</div>
-		<div class="row quick-link">
-			<div class="row">
-				<div class="col-3">
-					<p><a href="home">Privacy Policy</a></p>
-					<p><a href="home">Return Policy</a></p>
-					<p><a href="home">Help Center</a></p>
-				</div>
-				<div class="col-3">
-					<p><a href="home">FAQs</a></p>
-					<p><a href="home">Shipping</a></p>
-					<p><a href="service">Service</a></p>
-				</div>
-				<div class="col-3">
-					<p><a href="about-page">About Us</a></p>
-					<p><a href="contact">Contact Us</a></p>
-					<p><a href="blog">Blog</a></p>
-				</div>
-				<div class="col-3">
-				<img id="map" src="<?php echo get_bloginfo('template_url') ?>/assets/images/map.png"/>
-				</div>
+		<div class="grid-container row">
+			<div class="quick-title">
+				<h3 id="quick-h3">Quick Links</h3>
 			</div>
 		</div>
-
-		<div class="row site-info">
-			<div class="col">
-				<a style="color: white; float: right" href="<?php echo esc_url( __( 'https://wordpress.org/', 'sampletheme' ) ); ?>">
-					<?php
-					/* translators: %s: CMS name, i.e. WordPress. */
-					printf( esc_html__( 'Proudly powered by %s', 'sampletheme' ), 'WordPress' );
-					?>
-				</a>
+		<div class="grid-container row footer-sidebar">
+			
+			<div class="col-3 footer-sidebar1">
+				<hr class="eSeparator">
+				<ul>
+					<li><a href="home">Privacy Policy</a></li>
+					<li><a href="home">Return Policy</a></li>
+					<li><a href="home">Help Center</a></li>
+				</ul>
 			</div>
 
-			<div class="col">
-				<span class="sep"> | </span>
-					<?php
-					/* translators: 1: Theme name, 2: Theme author. */
-					printf( esc_html__( 'Theme: %1$s by %2$s.', 'sampletheme' ), 'sampletheme', '<a style="color: white" href="https://handanzhang.com">Handan Zhang</a>' );
-					?>
+			<div class="col-3 footer-sidebar2">
+				<hr class="eSeparator">
+				<ul>
+					<li><a href="home">FAQs</a></li>
+					<li><a href="home">Shipping</a></li>
+					<li><a href="service">Service</a></li>
+				</ul>
 			</div>
-		</div><!-- .site-info -->
+
+			<div class="col-3 footer-sidebar3">
+				<hr class="eSeparator">
+				<ul>
+					<li><a href="about-page">About Us</a></li>
+					<li><a href="contact">Contact Us</a></li>
+					<li><a href="blog">Blog</a></li>
+				</ul>
+			</div>
+
+			<div class="col-3 footer-sidebar4">
+				<hr class="eSeparator">
+				<a href="https://www.google.com/maps" target="_blank"><img id="map" src="<?php echo get_bloginfo('template_url') ?>/assets/images/map.png"/></a>
+			</div>
+
+		</div>
+
+		<div class="grid-container row site-info">
+			
+				<div class="col-6">
+					<a style="color: white; float: right" href="<?php echo esc_url( __( 'https://wordpress.org/', 'sampletheme' ) ); ?>" target="_blank">
+						<?php
+						/* translators: %s: CMS name, i.e. WordPress. */
+						printf( esc_html__( 'Proudly powered by %s', 'sampletheme' ), 'WordPress' );
+						?>
+					</a>
+				</div>
+
+				<div class="col-6">
+					<span class="sep"> | </span>
+						<?php
+						/* translators: 1: Theme name, 2: Theme author. */
+						printf( esc_html__( 'Theme: %1$s by %2$s', 'sampletheme' ), 'sampletheme', '<a style="color: white" href="https://handanzhang.com">Handan Zhang</a>' );
+						?>
+				</div>
+			<!-- .site-info -->
+		</div>
+
 	</footer><!-- #colophon -->
 </div><!-- #page -->
 

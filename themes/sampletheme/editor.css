@@ -110,7 +110,19 @@
     color:#d086a3;
 }
 
+/* body */
+
+.entry-content {
+    margin-top: 0;
+    width: 100%;
+}
+
 /* footer */
+.footer-sidebar {
+    background-color: #e2bbcb;
+    color: #ffffff;
+}
+
 .quick-link {
     width: 100%;
     height: 150px;
@@ -123,7 +135,7 @@
 
 .quick-title {
     height: 50px; 
-    background-color: #e2bbcb; 
+    background-color: #e4e26e; 
     width: 100%;
 }
 
@@ -147,15 +159,15 @@
 }
 
 /* quick-link */
-.quick-link a {
+.site-footer a {
     color: #ffffff;
     text-decoration: none;
 }
 
-.quick-link a:hover {
+.site-footer a:hover {
     color: #e4e26e;
 }
 
-.quick-link a:visited {
+.site-footer a:visited {
     color: white;
 }
