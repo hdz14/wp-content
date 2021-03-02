@@ -992,7 +992,7 @@ textarea {
 }
 
 .top-bar li a {
-	padding: 20rem 2rem;
+	padding: 10rem 1rem;
 	color: #fff;
 	text-decoration: none;
 }
@@ -1076,38 +1076,8 @@ textarea {
     margin-top: 20px;
 }
 
-.nav {
-    background-color: #d086a3;
-    color: white;
-    height: 40px;
-    padding-top: 8px;
-}
 
-.nav a {
-    color: #ffffff;
-    text-decoration: none;
-}
 
-.nav a:hover {
-    color: #e4e26e;
-}
-
-.nav a:visited {
-    color: white;
-}
-
-.shopBrand {
-    margin-left: 20px;
-}
-
-#naviButton {
-    padding: 1px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-top: 0px;
-    background-color: white;
-    color:#d086a3;
-}
 
 /* body */
 
@@ -1115,6 +1085,34 @@ textarea {
     margin-top: 0;
     width: 100%;
 }
+
+/* woocommerce */
+/* my account */
+.woocommerce {
+	margin-top: 3em;
+}
+
+.woocommerce-MyAccount-navigation {
+	padding-left: 2rem;
+	border-right: 2px solid #e2bbcb;
+}
+
+.woocommerce-MyAccount-navigation ul {
+	list-style: none;
+	margin-left: 3rem;
+	font-size: large;
+}
+
+.woocommerce-MyAccount-navigation li {
+	list-style: none;
+	margin: 1rem;
+}
+
+.woocommerce-MyAccount-navigation a {
+	color: #d086a3;
+	text-decoration: none;
+}
+
 
 /* footer */
 .footer-sidebar {
