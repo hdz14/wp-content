@@ -1113,6 +1113,9 @@ textarea {
 	text-decoration: none;
 }
 
+.woocommerce-MyAccount-content {
+	margin-top: 2rem;
+}
 
 /* footer */
 .footer-sidebar {
