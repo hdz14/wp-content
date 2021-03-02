@@ -1071,7 +1071,6 @@ textarea {
 }
 
 
-
 /* body */
 
 .entry-header {
@@ -1136,7 +1135,7 @@ form a {
 	color: #d086a3;
 }
 
-.product {
+.shop .product {
 	background-color: #eedde4;
 }
 
@@ -1170,6 +1169,21 @@ form a {
     text-decoration: none;
 	text-align: center;
 	color: #fff;
+}
+
+/* product single */
+.summary h1 {
+	text-align: left;
+}
+
+.product_meta {
+	color: #666;
+}
+
+.product_meta a {
+	text-decoration: none;
+	color: #666;
+	font-style: italic;
 }
 
 /* my account */
