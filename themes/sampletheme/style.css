@@ -1206,7 +1206,29 @@ form a {
 }
 
 .cart-subtotal td, .order-total td {
-	color: #cfa0b4;
+	color: #b38397;
+}
+
+/* woocommerce checkout */
+.woocommerce-checkout form {
+	background-color: #f3eaee;
+	padding: 2rem;
+}
+
+.site-nav form {
+	background-color: #d086a3;
+	padding: 0;
+}
+
+.woocommerce-checkout form h3 {
+	color:#d086a3;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+	font-weight: bold;
+}
+
+.woocommerce-checkout label {
+	color:#d086a3;
 }
 
 /* contact page */
