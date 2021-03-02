@@ -992,7 +992,7 @@ textarea {
 }
 
 .top-bar li a {
-	padding: 10rem 1rem;
+	padding: 1rem;
 	color: #fff;
 	text-decoration: none;
 }
@@ -1116,6 +1116,11 @@ textarea {
 .woocommerce-MyAccount-content {
 	margin-top: 2rem;
 }
+
+.woocommerce-MyAccount-content p {
+	color: #404040;
+}
+
 
 /* footer */
 .footer-sidebar {
