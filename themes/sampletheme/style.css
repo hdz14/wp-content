@@ -1170,6 +1170,11 @@ form a {
 	color: #404040;
 }
 
+/* contact page */
+.has-text-align-center {
+	margin-top: 2rem;
+} 
+
 
 /* footer */
 .footer-sidebar {
