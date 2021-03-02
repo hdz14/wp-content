@@ -1081,9 +1081,40 @@ textarea {
 
 /* body */
 
+.entry-header {
+	margin-top: 2rem;
+	margin-bottom: 2rem;
+}
+
+.entry-meta {
+	text-align: center;
+	margin-top: 1rem;
+	color: #aaa;
+}
+
+.entry-meta a {
+	text-decoration: none;
+	color:#aaa;
+	font-size: 1rem;
+}
+
+h2 a {
+	text-decoration: none;
+	color: #82a2cd;
+}
+
+h1, h2 {
+	text-align: center;
+	color: #82a2cd;
+}
+
 .entry-content {
     margin-top: 0;
     width: 100%;
+}
+
+.entry-footer {
+	visibility: hidden;
 }
 
 /* woocommerce */
