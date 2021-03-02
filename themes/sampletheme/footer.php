@@ -21,11 +21,20 @@
 			
 			<div class="col-3 footer-sidebar1">
 				<hr class="eSeparator">
-				<ul>
+				<?php
+				wp_nav_menu( 
+
+					array( 
+    					'theme_location' => 'side-menu', 
+    					'container_class' => 'side-bar' 
+					) 
+				); 
+				?>
+				<!-- <ul>
 					<li><a href="home">Privacy Policy</a></li>
 					<li><a href="home">Return Policy</a></li>
 					<li><a href="home">Help Center</a></li>
-				</ul>
+				</ul> -->
 			</div>
 
 			<div class="col-3 footer-sidebar2">
