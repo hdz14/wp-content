@@ -1070,13 +1070,6 @@ textarea {
     margin-right: 10px;
 }
 
-.cart {
-    display: block;
-    float: left;
-    margin-top: 20px;
-}
-
-
 
 
 /* body */
@@ -1168,6 +1161,52 @@ form a {
 
 .woocommerce-MyAccount-content p {
 	color: #404040;
+}
+
+/* woocommerce cart */
+.woocommerce-cart-form table th {
+	color: #d086a3;
+}
+
+.woocommerce-cart-form thead {
+	background-color: #f3f1dc;
+}
+
+.woocommerce-cart-form td {
+	padding: 2rem;
+}
+
+.woocommerce-cart-form a {
+	color: #82a2cd;
+	font-size: 20px;
+	text-decoration: none;
+}
+
+.woocommerce-cart-form tr:last-child {
+	background-color: #f3f1dc;
+}
+
+.coupon {
+	width: 20%;
+}
+
+.woocommerce button.button, .woocommerce input.button {
+	background-color: #d086a3;
+	color: #fff;
+}
+
+.cart-collaterals h2 {
+	font-size: 2em;
+	text-align: left;
+	color: #d086a3;
+}
+
+.cart-subtotal th, .order-total th {
+	color: #d086a3;
+}
+
+.cart-subtotal td, .order-total td {
+	color: #cfa0b4;
 }
 
 /* contact page */
