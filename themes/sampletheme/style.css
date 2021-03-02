@@ -1117,6 +1117,24 @@ h1, h2 {
 	visibility: hidden;
 }
 
+/* post page */
+.nav-title, .nav-subtitle {
+	color:#d086a3;
+}
+
+.nav-next a  {
+	color:#d086a3;
+	text-decoration: none;
+}
+
+.comment-respond h3 {
+	color: #d086a3;
+}
+
+form a {
+	color: #aaa;
+}
+
 /* woocommerce */
 /* my account */
 .woocommerce {
