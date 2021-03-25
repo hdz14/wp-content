@@ -24,12 +24,21 @@
 		while ( $recipe_query->have_posts() ) {
 			$recipe_query->the_post();
 			?>
-			<h2><?php the_title(); ?></h2>
+			<div class="grid-x recipe-footer">
+				<div class="large-4">
+					<h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
+				</div>
+				<div class="large-4">
+					<?php the_excerpt(); ?>
+				</div>
+				<div class="large-4" style="width: 100px;" >
+					<?php the_post_thumbnail(); ?>
+				</div>
+		</div>
 			<?php
 		}
 	}
 	?>
-
 
 
 	<footer id="colophon" class="site-footer">

@@ -10,12 +10,19 @@
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-	<!-- <header class="entry-header">
-		<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
-	</header> -->
-	<!-- no .entry-header -->
+	<!-- <?php if ( get_the_title() ) { ?>
+		<header class="entry-header">
+			<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
+		</header>
+	<?php } ?> --> <!-- no .entry-header -->
+	
+	<?php // sampletheme_post_thumbnail(); ?>
 
-	<?php sampletheme_post_thumbnail(); ?>
+	<?php if ( has_post_thumbnail() ) { ?>
+		<div class="post-thumbnail">
+			<img src="<?php echo esc_url( get_the_post_thumbnail_url() ) ?>">
+		</div>
+	<?php } ?>
 
 	<div class="entry-content">
 		<?php
