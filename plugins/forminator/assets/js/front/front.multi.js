@@ -29,7 +29,8 @@
 		    general_messages: {
 			    calculation_error: 'Failed to calculate field.',
 			    payment_require_ssl_error: 'SSL required to submit this form, please check your URL.',
-				payment_require_amount_error: 'PayPal amount must be greater than 0.'
+				payment_require_amount_error: 'PayPal amount must be greater than 0.',
+			    form_has_error: 'Please correct the errors before submission.'
 		    },
 		    payment_require_ssl : false,
 	    };
@@ -204,6 +205,14 @@
 						has_loader: self.settings.has_loader,
 						loader_label: self.settings.loader_label,
 					});
+
+                    // Enable inline validation if paypal is used to prevent checkout if form has errors
+                    if ( ! this.settings.inline_validation ) {
+                        $( this.element ).forminatorFrontValidate({
+                            rules: self.settings.rules,
+                            messages: self.settings.messages
+                        });
+                    }
 				}
 			}
 
@@ -447,7 +456,7 @@
 				} else {
 					var hasHustle = form.closest('.hustle-content');
 
-					if ( 480 >= formWidth && ! hasHustle.length ) {
+					if ( form.is(":visible") && 480 >= formWidth && ! hasHustle.length ) {
 						form.addClass( 'forminator-size--small' );
 					}
 				}
@@ -872,11 +881,18 @@
 			});
 
 			form.find('.forminator-currency').each(function () {
-				var decimals = $(this).data('decimals');
-				$(this).change(function (e) {
-					this.value = parseFloat(this.value).toFixed(decimals);
-				});
+				var decimals = $(this).data('decimals'),
+					decimal_point = $(this).data('decimal-point'),
+					decimal_separator = $(this).data('decimal-separator');
+				if( '' !== decimal_point && '' !== decimal_separator ) {
+					$( this ).number( true, decimals, decimal_separator, decimal_point );
+				} else {
+					$( this ).change(function (e) {
+						this.value = parseFloat( this.value ).toFixed( decimals );
+					});
+				}
 			});
+
 
 			// form.find('.forminator-number--field').each(function () {
 			// 	var separators = $(this).data('separators');
@@ -1134,6 +1150,17 @@
 		});
 	});
 
+	// Focus to nearest input when label is clicked
+	$( document ).on( 'ready after.load.forminator', function () {
+
+		$( '.forminator-custom-form' ).find( '.forminator-label' ).on( 'click', function ( e ) {
+			e.preventDefault();
+			var fieldLabel = $( this );
+
+			fieldLabel.next( '#' + fieldLabel.attr( 'for' ) ).focus();
+		});
+	});
+
 })(jQuery, window, document);
 
 // noinspection JSUnusedGlobalSymbols
@@ -1142,12 +1169,16 @@ var forminator_render_captcha = function () {
 	//  notify forminator front that grecaptcha loaded. anc can be used
 	jQuery('.forminator-g-recaptcha').each(function () {
 		// find closest form
-		var form = jQuery(this).closest('form');
+		var thisCaptcha = jQuery(this),
+			form 		= thisCaptcha.closest('form');
+		
 		if (form.length > 0) {
-			var forminatorFront = form.data('forminatorFront');
-			if (typeof forminatorFront !== 'undefined') {
-				forminatorFront.renderCaptcha(jQuery(this)[0]);
-			}
+			window.setTimeout( function() {
+				var forminatorFront = form.data( 'forminatorFront' );
+				if (typeof forminatorFront !== 'undefined') {
+					forminatorFront.renderCaptcha( thisCaptcha[0] );
+				}
+			}, 100 );
 		}
 	});
 };

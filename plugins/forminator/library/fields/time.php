@@ -127,7 +127,7 @@ class Forminator_Time extends Forminator_Field {
 		$field_type       = trim( self::get_property( 'field_type', $field, 'input' ) );
 		$type             = trim( self::get_property( 'time_type', $field ) );
 		$field_label      = esc_html( self::get_property( 'field_label', $field ) );
-		$description      = esc_html( self::get_property( 'description', $field, '' ) );
+		$description      = self::get_property( 'description', $field, '' );
 		$default_time     = esc_html( self::get_property( 'default_time', $field, '' ) );
 		$increment_hour   = self::get_property( 'increment_hour', $field, 0 );
 		$increment_minute = self::get_property( 'increment_minute', $field, 0 );
@@ -223,7 +223,7 @@ class Forminator_Time extends Forminator_Field {
 							$hours_data = array(
 								'name'       => $id . '-hours',
 								'id'         => 'forminator-field-' . $id . '-hours',
-								'class'      => 'forminator-select',
+								'class'      => 'forminator-select2',
 								'data-field' => 'hours',
 							);
 
@@ -281,7 +281,7 @@ class Forminator_Time extends Forminator_Field {
 							$minutes_data = array(
 								'name'       => $id . '-minutes',
 								'id'         => 'forminator-field-' . $id . '-minutes',
-								'class'      => 'forminator-select',
+								'class'      => 'forminator-select2',
 								'data-field' => 'minutes',
 							);
 
@@ -316,7 +316,7 @@ class Forminator_Time extends Forminator_Field {
 					$ampm = array(
 						'name'       => $id . '-ampm',
 						'id'         => $id . '-ampm',
-						'class'      => 'forminator-select',
+						'class'      => 'forminator-select2',
 						'data-field' => 'ampm',
 					);
 

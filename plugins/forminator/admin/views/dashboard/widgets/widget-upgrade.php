@@ -16,6 +16,7 @@
 
 		<ul class="sui-list-pro">
 			<li><span class="sui-icon-check sui-lg" aria-hidden="true"></span><?php esc_html_e( 'Premium form fields and E-Signature integration', Forminator::DOMAIN ); ?></li>
+			<li><span class="sui-icon-check sui-lg" aria-hidden="true"></span><?php esc_html_e( 'Accept subscription and recurring payments', Forminator::DOMAIN ); ?></li>
 			<li><span class="sui-icon-check sui-lg" aria-hidden="true"></span><?php esc_html_e( 'Early access to the newest from features', Forminator::DOMAIN ); ?></li>
 			<li><span class="sui-icon-check sui-lg" aria-hidden="true"></span><?php esc_html_e( 'Smush and Hummingbird Pro performance pack', Forminator::DOMAIN ); ?></li>
 			<li><span class="sui-icon-check sui-lg" aria-hidden="true"></span><?php esc_html_e( 'Complete marketing suite - pop-ups, email, and more', Forminator::DOMAIN ); ?></li>

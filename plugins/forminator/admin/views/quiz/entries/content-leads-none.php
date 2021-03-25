@@ -88,8 +88,14 @@ if ( $page_number > 1 ) {
 
 							<?php
 							$meta  = $entry->meta_data['entry']['value'];
-							$total = 0;
+							$total = count( $meta );
 							$right = 0;
+
+                            foreach( $meta as $key => $val ) {
+                                if ( isset( $val['isCorrect'] ) && boolval( $val['isCorrect'] ) ) {
+                                    $right ++;
+                                }
+                            }
 							?>
 
 							<p class="sui-description"><?php echo sprintf( __( 'You got %s/%s correct answers.', Forminator::DOMAIN ), $right, $total ); // phpcs:ignore ?></p>
@@ -99,8 +105,8 @@ if ( $page_number > 1 ) {
 								<thead>
 
 									<tr>
-										<th><?php esc_html_e( 'Question', Forminator::DOMAIN ); ?></th>
-										<th><?php esc_html_e( 'Answer', Forminator::DOMAIN ); ?></th>
+										<th><?php esc_html_e( 'Questions', Forminator::DOMAIN ); ?></th>
+										<th><?php esc_html_e( 'Answers', Forminator::DOMAIN ); ?></th>
 									</tr>
 
 								</thead>
@@ -116,20 +122,36 @@ if ( $page_number > 1 ) {
 											$right ++;
 										}
 
-										$user_answer = $answer['answer'];
+                                        if ( isset( $answer['answer'] ) ) {
+                                            $user_answer = $answer['answer'];
+                                        } else {
+                                            $user_answer = $answer['answers'];
+                                        }
 										?>
 
 										<tr>
 											<td><strong><?php echo esc_html( $answer['question'] ); ?></strong></td>
 											<td>
-												<?php if ( $answer['isCorrect'] ) {
-													echo '<span class="sui-tag sui-tag-success">' . esc_html( $user_answer ) . '</span>';
-												} else {
-													echo '<span class="sui-tag sui-tag-error">' . esc_html( $user_answer ) . '</span>';
-												} ?>
+												<?php
+                                                    if ( is_array( $user_answer ) ) {
+                                                        foreach( $user_answer as $val ) {
+                                                            if ( $answer['isCorrect'] ) {
+                                                                echo '<span class="sui-tag sui-tag-success">' . esc_html( $val ) . '</span>';
+                                                            } else {
+                                                                echo '<span class="sui-tag sui-tag-error">' . esc_html( $val ) . '</span>';
+                                                            }
+                                                        }
+                                                    } else {
+                                                        if ( $answer['isCorrect'] ) {
+                                                            echo '<span class="sui-tag sui-tag-success">' . esc_html( $user_answer ) . '</span>';
+                                                        } else {
+                                                            echo '<span class="sui-tag sui-tag-error">' . esc_html( $user_answer ) . '</span>';
+                                                        }
+                                                    }
+                                                ?>
 											</td>
 										</tr>
-
+                                    
 									<?php endforeach; ?>
 
 								</tbody>

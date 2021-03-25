@@ -223,6 +223,7 @@ class Forminator_Addon_Trello_Quiz_Hooks extends Forminator_Addon_Quiz_Hooks_Abs
 				$card_description         = $connection_settings['card_description'];
 				$quiz_answers_to_markdown = $this->quiz_answers_to_markdown( $current_entry_fields );
 				$quiz_result_to_markdown  = $this->quiz_result_to_markdown( $current_entry_fields );
+				$card_description         = str_ireplace( '{quiz_name}', '#' . forminator_get_name_from_model( $this->quiz ), $card_description );
 				$card_description         = str_ireplace( '{quiz_answer}', $quiz_answers_to_markdown, $card_description );
 				$card_description         = str_ireplace( '{quiz_result}', $quiz_result_to_markdown, $card_description );
 				$card_description         = forminator_replace_variables( $card_description );

@@ -392,6 +392,25 @@ class Forminator_Custom_Form_Admin extends Forminator_Admin_Module {
 	}
 
 	/**
+	 * Check if Custom form has stripe field
+	 *
+	 * @since 1.7
+	 * @return bool
+	 */
+	public function has_stripe_field( $form ) {
+		$fields = isset( $form->fields ) ? $form->fields : array();
+
+		foreach ( $fields as $field ) {
+			$field = $field->to_formatted_array();
+			if ( isset( $field['type'] ) && 'stripe' === $field['type'] ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Check if submit is handled with AJAX
 	 *
 	 * @since 1.9.3
@@ -400,6 +419,11 @@ class Forminator_Custom_Form_Admin extends Forminator_Admin_Module {
 	 */
 	public function is_ajax_submit( $form ) {
 		$form_settings  = $form->settings;
+
+		// Force AJAX submit if form contains Stripe payment field
+		if ( $this->has_stripe_field( $form ) ) {
+			return true;
+		}
 
 		if ( ! isset( $form_settings['enable-ajax'] ) || empty( $form_settings['enable-ajax'] ) ) {
 			return false;

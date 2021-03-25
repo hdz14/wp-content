@@ -128,229 +128,39 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 
 				$submitted_data = $this->replace_hidden_field_values( $custom_form, $submitted_data );
 
-				if ( isset( $submitted_data['forminator-multifile-hidden'] ) ) {
-					$form_upload_data      = json_decode( stripslashes( $submitted_data['forminator-multifile-hidden'] ), true );
-				}
-
 				$pseudo_submitted_data = $this->build_pseudo_submitted_data( $custom_form, $submitted_data );
 
 				if ( $custom_form->has_stripe_field() ) {
-					if ( $custom_form->is_payment_require_ssl() && ! is_ssl() ) {
-						$response = array(
-							'message' => apply_filters(
-								'forminator_payment_require_ssl_error_message',
-								__( 'SSL required to submit this form, please check your URL.', Forminator::DOMAIN )
-							),
-							'error'   => array()
-						);
-
-						wp_send_json_error( $response );
-					}
-
-					$field_suffix     = Forminator_Form_Entry_Model::field_suffix();
 					$fields           = $custom_form->get_fields();
 					$field_classes    = forminator_fields_to_array();
-					$submit_errors    = array();
-					$form_upload_data = array();
-					$submission_behav = $custom_form->get_submission_behaviour();
 
-					// verify captcha before any else
-					$captcha_field = $custom_form->get_captcha_field();
-					if ( $captcha_field && isset( $field_classes['captcha'] ) && $field_classes['captcha'] instanceof Forminator_Captcha ) {
-						$captcha_field_array   = $captcha_field->to_formatted_array();
-						$field_id              = Forminator_Field::get_property( 'element_id', $captcha_field_array );
-						$captcha_user_response = '';
-						if ( isset( $submitted_data['g-recaptcha-response'] ) ) {
-							$captcha_user_response = $submitted_data['g-recaptcha-response'];
-						}
-
-						/**
-						 * Filter captcha user response, default is from `g-recaptcha-response`
-						 *
-						 * @since 1.5.3
-						 *
-						 * @param string $captcha_user_response
-						 * @param int $form_id
-						 * @param array $submitted_data
-						 *
-						 * @return string captcha user response
-						 */
-						$captcha_user_response = apply_filters( 'forminator_captcha_user_response', $captcha_user_response, $form_id, $submitted_data );
-
-						/** @var Forminator_Field $field_captcha_obj */
-						$field_captcha_obj = $field_classes['captcha'];
-						if ( $field_captcha_obj->is_available( $captcha_field_array ) ) {
-							$field_captcha_obj->validate( $captcha_field_array, $captcha_user_response );
-
-							$valid_response = $field_captcha_obj->is_valid_entry();
-							if ( is_array( $valid_response ) && isset( $valid_response[ $field_id ] ) ) {
-								$response = array(
-									'message' => $valid_response[ $field_id ],
-									'errors'  => array(),
-								);
-
-								wp_send_json_error( $response );
-							}
-						}
-					}
-
-					$ignored_field_types = Forminator_Form_Entry_Model::ignored_fields();
-
-					// Go through each field to check if valid
 					foreach ( $fields as $field ) {
-						$field_data  = array();
 						$field_array = $field->to_formatted_array();
-						$field_id    = Forminator_Field::get_property( 'element_id', $field_array );
 						$field_type  = isset( $field_array['type'] ) ? $field_array['type'] : '';
-						$field_data  = array();
-						$post_file   = false;
 
-						if ( in_array( $field_type, $ignored_field_types, true ) ) {
-							continue;
-						}
-						$form_field_obj = isset( $field_classes[ $field_type ] ) ? $field_classes[ $field_type ] : null;
+						if ( 'stripe' === $field_type ) {
+							$field_id = Forminator_Field::get_property( 'element_id', $field_array );
 
-						if ( ! isset( $submitted_data[ $field_id ] ) ) {
-							foreach ( $field_suffix as $suffix ) {
-								$mod_field_id = $field_id . '-' . $suffix;
-								if ( isset( $submitted_data[ $mod_field_id ] ) ) {
-									$field_data[ $suffix ] = $submitted_data[ $mod_field_id ];
-								} elseif ( isset( $_FILES[ $mod_field_id ] ) ) {
-									if ( "postdata" === $field_type && 'post-image' === $suffix ) {
-										$post_file = $mod_field_id;
-									}
-								}
+							$forminator_stripe_field = isset( $field_classes[ $field_type ] ) ? $field_classes[ $field_type ] : null;
+
+							if ( $forminator_stripe_field instanceof Forminator_Stripe ) {
+								$currency = Forminator_Field::get_property( 'currency', $field_array, $this->get_default_currency() );
+								$mode     = Forminator_Field::get_property( 'mode', $field_array, 'test' );
+
+								$forminator_stripe_field->update_paymentIntent(
+									$submitted_data['paymentid'],
+									$pseudo_submitted_data[ $field_id ],
+									$submitted_data,
+									$field_array,
+									$pseudo_submitted_data
+								);
 							}
 
-							if ( 'upload' === $field_type ) {
-								/** @var  Forminator_Upload $form_field_obj */
-								$file_type = Forminator_Field::get_property( 'file-type', $field_array, 'single' );
-								$upload_method = Forminator_Field::get_property( 'upload-method', $field_array, 'ajax' );
-								if ( 'multiple' === $file_type && 'ajax' === $upload_method ) {
-									$upload_multiple_data = isset( $form_upload_data[ $field->slug ] ) ? $form_upload_data[ $field->slug ] : array();
-									$upload_data          = $form_field_obj->handle_ajax_multifile_upload( $upload_multiple_data, $field_array );
-								} elseif ( 'multiple' === $file_type && 'submission' === $upload_method ) {
-									$upload_multiple_data = isset( $_FILES[ $field->slug ] ) ? $_FILES[ $field->slug ] : array();
-									$upload_data = $form_field_obj->handle_submission_multifile_upload( $field_array, $upload_multiple_data );
-								} else {
-									$upload_data = $form_field_obj->handle_file_upload( $field_array );
-								}
-								if ( isset( $upload_data['success'] ) && $upload_data['success'] ) {
-									$field_data['file'] = $upload_data;
-								}
-							}
-							if ( 'postdata' === $field_type ) {
-								$post_type     = Forminator_Field::get_property( 'post_type', $field_array, 'post' );
-								$category_list = forminator_post_categories( $post_type );
-								if ( ! empty( $category_list ) ) {
-									foreach ( $category_list as $category ) {
-										$mod_field_id = $field_id . '-' . $category['value'];
-										if ( isset( $submitted_data[ $mod_field_id ] ) ) {
-											$field_data[ $category['value'] ] = $submitted_data[ $mod_field_id ];
-										}
-									}
-								}
-								$custom_vars = Forminator_Field::get_property( 'post_custom_fields', $field_array );
-								if ( ! empty( $custom_vars ) ) {
-									$custom_meta = Forminator_Field::get_property( 'options', $field_array );
-									if ( ! empty( $custom_meta ) ) {
-										foreach ( $custom_meta as $meta ) {
-											$value = ! empty( $meta['value'] ) ? trim( $meta['value'] ) : '';
-											$label = $meta['label'];
-											if ( strpos( $value, '{' ) !== false ) {
-												$value = forminator_replace_form_data( $value, $submitted_data );
-												$value = forminator_replace_variables( $value, $form_id );
-											}
-											$field_data['post-custom'][] = array(
-												'key'   => $label,
-												'value' => $value,
-											);
-										}
-									}
-								}
-							}
-						} else {
-							$field_data = $submitted_data[ $field_id ];
-						}
-
-						/**
-						 * Filter handle specific field types
-						 *
-						 * @since 1.13
-						 *
-						 * @param array $field_data Field data
-						 * @param object $form_field_obj Form field object
-						 * @param array $field_array field settings
-						 * @param string $submission_behav submission behaviour
-						 *
-						 * @return array $field_data Set `return` element of the array as true for returning
-						 */
-						$field_data = apply_filters( 'forminator_handle_specific_field_types', $field_data, $form_field_obj, $field_array, $submission_behav );
-
-						if ( ! empty( $field_data['return'] ) ) {
-							unset( $field_data['return'] );
-
-							return $field_data;
-						}
-
-						// Validate data when its available and not hidden on front end
-						if ( $form_field_obj->is_available( $field_array ) && ! $form_field_obj->is_hidden( $field_array, $submitted_data, $pseudo_submitted_data, $custom_form ) ) {
-							/**
-							 * @since 1.0.5
-							 * Mayble re autofill, when autofill not editable, it should return autofill value
-							 */
-							$field_data = $form_field_obj->maybe_re_autofill( $field_array, $field_data, $setting );
-
-							$form_field_obj->validate( $field_array, $field_data );
-						}
-
-						$form_field_obj->init_autofill( $setting );
-
-						$valid_response = $form_field_obj->is_valid_entry();
-
-						if ( is_array( $valid_response ) ) {
-							foreach ( $valid_response as $error_field => $error_response ) {
-								$submit_errors[][ $error_field ] = $error_response;
-							}
+							// process only first stripe field
+							break;
 						}
 					}
 
-					// If no form errors do another loop to update Stripe amount
-					if ( empty( $submit_errors ) ) {
-						foreach ( $fields as $field ) {
-							$field_array = $field->to_formatted_array();
-							$field_type  = isset( $field_array['type'] ) ? $field_array['type'] : '';
-
-							if ( 'stripe' === $field_type ) {
-								$field_id = Forminator_Field::get_property( 'element_id', $field_array );
-
-								$forminator_stripe_field = isset( $field_classes[ $field_type ] ) ? $field_classes[ $field_type ] : null;
-
-								if ( $forminator_stripe_field instanceof Forminator_Stripe ) {
-									$currency = Forminator_Field::get_property( 'currency', $field_array, $this->get_default_currency() );
-									$mode     = Forminator_Field::get_property( 'mode', $field_array, 'test' );
-
-									$forminator_stripe_field->update_paymentIntent(
-										$submitted_data['paymentid'],
-										$pseudo_submitted_data[ $field_id ],
-										$submitted_data,
-										$field_array,
-										$pseudo_submitted_data
-									);
-								}
-
-								// process only first stripe field
-								break;
-							}
-						}
-					} else {
-						$response = array(
-							'message' => $this->get_invalid_form_message( $setting, $form_id ),
-							'errors'  => $submit_errors
-						);
-
-						wp_send_json_error( $response );
-					}
 				} else {
 					$response = array(
 						'message' => __( "Error: Stripe field doesn't exist in your form!", Forminator::DOMAIN ),
@@ -620,6 +430,7 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 			$submit_error     = $form_submit['error'];
 			$prevent_store    = $custom_form->is_prevent_store();
 			$submission_behav = $custom_form->get_submission_behaviour();
+			$form_type        = isset( $setting['form-type'] ) ? $setting['form-type'] : '';
 
 			// If preview, prevent storing
 			if ( $preview ) {
@@ -627,14 +438,14 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 			}
 
 			if ( isset( $setting['logged-users'] ) && $setting['logged-users'] ) {
-				$error      = __( "Only logged in users can submit this form.", Forminator::DOMAIN );
-				$can_submit = is_user_logged_in();
+				$submit_error = __( "Only logged in users can submit this form.", Forminator::DOMAIN );
+				$can_submit   = is_user_logged_in();
 			}
 
-			// disable submit if status is not published
-			if ( Forminator_Custom_Form_Model::STATUS_PUBLISH !== $custom_form->status ) {
-				$error      = __( "This form is not published.", Forminator::DOMAIN );
-				$can_submit = false;
+			// disable submit if status is draft.
+			if ( Forminator_Custom_Form_Model::STATUS_DRAFT === $custom_form->status ) {
+				$submit_error = __( "This form is not published.", Forminator::DOMAIN );
+				$can_submit   = false;
 			}
 
 			/**
@@ -666,7 +477,8 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 				$select_field_value    = array();
 				$login_user            = array();
 				$form_upload_data      = array();
-				$form_type             = isset( $setting['form-type'] ) ? $setting['form-type'] : '';
+				$postdata_fields       = array();
+				$upload_in_customfield = array();
 
 				// set default response to error message
 				$response = array(
@@ -732,7 +544,7 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 					// build pseudo submit data first to later usage
 					$pseudo_submitted_data = $this->build_pseudo_submitted_data( $custom_form, $submitted_data );
 
-					foreach ( $fields as $field ) {
+					foreach ( $fields as $field_index => $field ) {
 						$field_array = $field->to_formatted_array();
 						$field_type  = $field_array["type"];
 						if ( in_array( $field_type, $ignored_field_types, true ) ) {
@@ -760,6 +572,10 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 									continue;
 								}
 							}
+						}
+						if ( 'hidden' === $field_type && ! empty( $field_array['element_id'] )
+								&& ! empty( $field_array['default_value'] ) && 'user_ip' === $field_array['default_value'] ) {
+							$submitted_data[ $field_array['element_id'] ] = Forminator_Geo::get_user_ip();
 						}
 
 						if ( isset( $field->slug ) ) {
@@ -800,12 +616,22 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 											foreach ( $custom_meta as $meta ) {
 												$value = ! empty( $meta['value'] ) ? trim( $meta['value'] ) : '';
 												$label = $meta['label'];
-												if ( strpos( $value, '{' ) !== false ) {
-													$value = forminator_replace_form_data( $value, $submitted_data );
-													$value = forminator_replace_variables( $value, $form_id );
+
+												if ( strpos( $value, '{' ) !== false && strpos( $value, '{upload' ) === false ) {
+                                                    $value = forminator_replace_form_data( $value, $submitted_data );
+                                                    $value = forminator_replace_variables( $value, $form_id );
 												} elseif ( isset( $submitted_data[ $value ] ) ) {
 													$value = $submitted_data[ $value ];
 												}
+
+                                                // Store data that will be used later by upload fields
+                                                if ( strpos( $value, '{upload' ) !== false ) {
+                                                    $upload_in_customfield[] = array(
+                                                        'postdata_id' => $field_id,
+                                                        'upload_id'   => trim( $value, '{}' ),
+                                                        'uploads'     => '',
+                                                    );
+                                                }
 
 												$field_data['post-custom'][] = array(
 													'key'   => $label,
@@ -844,6 +670,21 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 									}
 									if ( isset( $upload_data['success'] ) && $upload_data['success'] ) {
 										$field_data['file'] = $upload_data;
+
+                                        // If upload is successful, add the upload data to custom field if tag is present
+                                        if ( ! empty( $upload_in_customfield ) ) {
+                                            $file_url = $upload_data['file_url'];
+                                            if ( 'multiple' === $file_type ) {
+                                                $file_url = implode( ', ', $upload_data['file_url'] );
+                                            }
+
+                                            foreach ( $upload_in_customfield as $cf_key => $cf ) {
+                                                if ( $field_id === $cf['upload_id'] ) {
+                                                    $upload_in_customfield[$cf_key]['uploads'] = $file_url;
+                                                }
+                                            }
+                                        }
+
 									} elseif ( isset( $upload_data['success'] ) && false === $upload_data['success'] ) {
 										$response = array(
 											'message' => isset( $upload_data['message'] ) ? $upload_data['message'] : $this->get_invalid_form_message( $setting, $form_id ),
@@ -915,51 +756,40 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 								 */
 								$form_field_obj->init_autofill( $setting );
 
+								/**
+								 * Sanitize data
+								 *
+								 * @since 1.0.2
+								 *
+								 * @param array $field
+								 * @param array|string $data - the data to be sanitized
+								 */
+								$field_data = $form_field_obj->sanitize( $field_array, $field_data );
+
+								// Validate data when its available and not hidden on front end
+								if ( $form_field_obj->is_available( $field_array ) && ! $form_field_obj->is_hidden( $field_array, $submitted_data, $pseudo_submitted_data, $custom_form ) ) {
+
+									/**
+									 * @since 1.0.5
+									 * Mayble re autofill, when autofill not editable, it should return autofill value
+									 */
+									$field_data = $form_field_obj->maybe_re_autofill( $field_array, $field_data, $setting );
+
+									$form_field_obj->validate( $field_array, $field_data, $submitted_data );
+								}
+								$valid_response = $form_field_obj->is_valid_entry();
+
 								if ( ! empty( $field_data ) || '0' === $field_data ) {
-									// Validate data when its available and not hidden on front end
-									if ( $form_field_obj->is_available( $field_array ) && ! $form_field_obj->is_hidden( $field_array, $submitted_data, $pseudo_submitted_data, $custom_form ) ) {
-
-										/**
-										 * @since 1.0.5
-										 * Mayble re autofill, when autofill not editable, it should return autofill value
-										 */
-										$field_data = $form_field_obj->maybe_re_autofill( $field_array, $field_data, $setting );
-
-										$form_field_obj->validate( $field_array, $field_data, $submitted_data );
-									}
-									$valid_response = $form_field_obj->is_valid_entry();
 									if ( ! is_array( $valid_response ) ) {
-
-										/**
-										 * Sanitize data
-										 *
-										 * @since 1.0.2
-										 *
-										 * @param array $field
-										 * @param array|string $data - the data to be sanitized
-										 */
-										$field_data = $form_field_obj->sanitize( $field_array, $field_data );
 										if ( "postdata" === $field_type && ! $form_field_obj->is_hidden( $field_array, $submitted_data, $pseudo_submitted_data, $custom_form ) ) {
-											// check if field_data of post values not empty (happen when postdata is not required)
-											$filtered   = array_filter( $field_data );
-											$post_value = $field_data;
-											if ( ! empty( $filtered ) ) {
-												$post_id = $form_field_obj->save_post( $field_array, $field_data );
-												if ( $post_id ) {
-													$field_data = [
-														'postdata' => $post_id,
-														'value'    => $post_value,
-													];
-												} else {
-													$submit_errors[][ $field->slug ] = __( 'There was an error saving the post data. Please try again', Forminator::DOMAIN );
-												}
-											} else {
-												$field_data = [
-													'postdata' => null,
-													'value'    => $post_value,
-												];
-											}
-
+                                            // Store postdata' data here to be used later. This allows support for upload tags inside custom fields.
+                                            $postdata_fields[] = array(
+                                                'key'            => $field_index,
+                                                'field_id'       => $field_id,
+                                                'field_data'     => $field_data,
+                                                'field_array'    => $field_array,
+                                                'form_field_obj' => $form_field_obj,
+                                            );
 										}
 
 										if ( 'date' === $field_type && 'picker' !== $field->field_type ) {
@@ -978,24 +808,11 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 											'value' => $field_data,
 										);
 									} else {
-										if ( is_array( $valid_response ) ) {
-											foreach ( $valid_response as $error_field => $error_response ) {
-												$submit_errors[][ $error_field ] = $error_response;
-											}
+										foreach ( $valid_response as $error_field => $error_response ) {
+											$submit_errors[][ $error_field ] = $error_response;
 										}
 									}
-
 								} else {
-									// Validate data when its available and not hidden on front end
-									if ( $form_field_obj->is_available( $field_array ) && ! $form_field_obj->is_hidden( $field_array, $submitted_data, $pseudo_submitted_data, $custom_form ) ) {
-										/**
-										 * @since 1.0.5
-										 * Mayble re autofill, when autofill not editable, it should return autofill value
-										 */
-										$field_data = $form_field_obj->maybe_re_autofill( $field_array, '', $setting );
-										$form_field_obj->validate( $field_array, $field_data, $submitted_data );
-									}
-									$valid_response = $form_field_obj->is_valid_entry();
 									if ( is_array( $valid_response ) && isset( $valid_response[ $field_id ] ) ) {
 										$submit_errors[][ $field->slug ] = $valid_response[ $field_id ];
 									}
@@ -1003,6 +820,30 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 							}
 						}
 					}
+
+                    /**
+                     * Get saved postdata fields data and replace upload tags with uploaded data
+                     * move to function ++++
+                    */
+                    if ( ! empty( $postdata_fields ) ) {
+                        $postdata_return = $this->create_post_from_postdata( $postdata_fields, $upload_in_customfield );
+
+                        foreach ( $postdata_return as $postdata ) {
+                            if ( 'success' === $postdata['type'] ) {
+
+                                foreach ( $field_data_array as $field_key => $field_datum ) {
+                                    if ( $field_datum['name'] === $postdata['field_id'] ) {
+                                        $field_data_array[$field_key] = array(
+                                            'name'  => $postdata['field_id'],
+                                            'value' => $postdata['field_data'],
+                                        );
+                                    }
+                                }
+                            } else {
+                                $submit_errors[][ $field->slug ] = $postdata['value'];
+                            }
+                        }
+                    }
 
 					/**
 					 * @since 1.11
@@ -1030,7 +871,6 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 							'success' => false,
 							'behav'   => $submission_behav,
 						);
-
 						if ( $can_creat_user && 'login' === $setting['form-type'] ) {
 							$forminator_user_login = new Forminator_CForm_Front_User_Login();
 							$login_user            = $forminator_user_login->process_login( $custom_form, $submitted_data, $entry, $field_data_array );
@@ -1064,7 +904,7 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 							$field_data_array = $forminator_user_login->remove_password( $field_data_array );
 						} elseif ( $can_creat_user ) {
 							$forminator_user_registration = new Forminator_CForm_Front_User_Registration();
-							$registration_error           = $forminator_user_registration->process_validation( $custom_form, $submitted_data, $field_data_array );
+							$registration_error           = $forminator_user_registration->process_validation( $custom_form, $submitted_data, $field_data_array, $pseudo_submitted_data );
 							if ( true !== $registration_error ) {
 								$user_response['message'] = $registration_error;
 
@@ -1190,19 +1030,119 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 									if ( ! empty( $stripe_entry_meta ) ) {
 										$stripe_meta_value = $stripe_entry_meta['value'];
 										forminator_maybe_log( __METHOD__, $stripe_meta_value );
-										// Error
-										if ( 'success' !== $stripe_meta_value['status'] ) {
-											$response = array(
-												'message' => $stripe_meta_value['error'],
-												'errors'  => array(),
-												'success' => false,
-											);
 
-											return $response;
-										}
 										$field_data_array = array_merge( $field_data_array, $stripe_entry_data_array );
 									}
+								}
 
+								$fields_collection = forminator_fields_to_array();
+
+								foreach ( $fields as $field ) {
+									$field = $field->to_formatted_array();
+
+									if ( isset( $field['type'] ) && 'stripe' === $field['type'] ) {
+
+										if ( isset( $fields_collection['stripe'] ) ) {
+											$element_id = isset( $field['element_id'] ) ? $field['element_id'] : false;
+											$mode 		= isset( $field['mode'] ) ? $field['mode'] : 'sandbox';
+
+											$i = 0;
+											foreach( $field_data_array as $data ) {
+												if ( $data['name'] === $element_id ) {
+
+													$field_object = $fields_collection['stripe'];
+
+													// Try to get Payment Intent from submitted date
+													try {
+														$intent = $field_object->get_paymentIntent( $field, $submitted_data );
+
+														// Make sure PaymentIntent is valid
+														if ( is_wp_error( $intent ) ) {
+															throw new Exception( __('Invalid Stripe Payment Intent.', Forminator::DOMAIN ) );
+														}
+
+														// Confirm payment intent
+														$result = $intent->confirm();
+													} catch ( Exception $e ) {
+														// Delete entry if paymentIntent confirmation is not successful
+														$entry->delete();
+
+														$response = array(
+															'message' => $e->getMessage(),
+															'success' => false,
+															'errors'  => array(),
+															'behav'   => $submission_behav,
+														);
+
+														wp_send_json_error( $response );
+													}
+
+													// If we have 3D security on the card return for verification
+													if ( 'requires_action' === $result->status ) {
+														// Delete entry if 3d security is needed, we will store it on next attempt
+														$entry->delete();
+
+														$response = array(
+															'message'  => __( 'This payment require 3D Secure authentication! Please follow the instructions.', Forminator::DOMAIN ),
+															'success'  => false,
+															'errors'   => array(),
+															'behav'    => $submission_behav,
+															'stripe3d' => true,
+															'secret'	  => $result->client_secret
+														);
+
+														wp_send_json_error( $response );
+													}
+
+													// Try to capture payment
+													try {
+														$capture = $intent->capture();
+													} catch ( Exception $e ) {
+														// Delete entry if capture is not successful
+														$entry->delete();
+
+														$response = array(
+															'message' => $e->getMessage(),
+															'success' => false,
+															'errors'  => array(),
+															'behav'   => $submission_behav,
+														);
+
+														wp_send_json_error( $response );
+													}
+
+													if ( isset( $capture->charges->data[0]->captured ) && $capture->charges->data[0]->captured === true ) {
+														$field_data_array[ $i ]['value']['status'] = "COMPLETED";
+
+														$field_data_array[ $i ]['value']['transaction_id'] = $intent->id;
+
+														$transaction_link = 'https://dashboard.stripe.com/payments/' . rawurlencode( $intent->id );
+														if ( 'test' === $mode ) {
+															$transaction_link = 'https://dashboard.stripe.com/test/payments/' . rawurlencode( $intent->id );
+														}
+
+														$field_data_array[ $i ]['value']['transaction_link'] = $transaction_link;
+
+													} else {
+														// Delete entry if capture is not successful
+														$entry->delete();
+
+														// Return error
+														$response = array(
+															'message' => __( 'Payment failed, please try again!', Forminator::DOMAIN ),
+															'success' => false,
+															'errors'  => array(),
+															'behav'   => $submission_behav,
+														);
+
+														wp_send_json_error( $response );
+													}
+												}
+
+												$i++;
+											}
+										}
+									}
 								}
 							}
 
@@ -1289,7 +1229,7 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 															'behav'   => $submission_behav,
 														);
 
-														wp_send_json_error( $response );
+														return $response;
 													}
 												}
 
@@ -1420,6 +1360,12 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 							} else {
 								$is_ajax_enabled = filter_var( $setting['enable-ajax'], FILTER_VALIDATE_BOOLEAN );
 							}
+
+							// Force AJAX submit if form contains Stripe payment field
+							if ( $custom_form->has_stripe_field() ) {
+								$is_ajax_enabled = true;
+							}
+
 							if ( $is_ajax_enabled && ! empty( $select_field_value ) ) {
 								$result = array();
 								foreach ( $select_field_value as $select_name => $select_field ) {
@@ -2252,4 +2198,79 @@ class Forminator_CForm_Front_Action extends Forminator_Front_Action {
 
 		return $format;
 	}
+
+	/**
+	 * Create new post from postdata field
+     * Add upload file urls to postdata custom fields if necessary
+	 *
+	 * @param $postdata_fields       array
+	 * @param $upload_in_customfield array
+	 *
+	 * @return array
+	 */
+	public function create_post_from_postdata( $postdata_fields, $upload_in_customfield ) {
+        if ( empty( $postdata_fields ) ) {
+            return array(
+                            'type'  => 'error',
+                            'value' => __( 'Failed to supply necessary data.', Forminator::DOMAIN )
+                        );
+        }
+
+        $postdata_result = array();
+        foreach ( $postdata_fields as $postdata_field ) {
+            $field_id       = $postdata_field['field_id'];
+            $field_data     = $postdata_field['field_data'];
+            $field_array    = $postdata_field['field_array'];
+            $form_field_obj = $postdata_field['form_field_obj'];
+
+            // check if field_data of post values not empty (happen when postdata is not required)
+            $filtered   = array_filter( $field_data );
+            $post_value = $field_data;
+            if ( ! empty( $filtered ) ) {
+                if ( isset( $filtered['post-custom'] ) ) {
+                    foreach( $filtered['post-custom'] as $custom_field_index => $custom_field ) {
+                        if ( preg_match( '/\{upload-(\d+)\}/', $custom_field['value'] ) ) {
+                            $upload_id = trim( $custom_field['value'], '{}' );
+
+                            if ( ! empty( $upload_in_customfield ) ) {
+                                foreach ( $upload_in_customfield as $cf_data ) {
+                                    if ( $upload_id === $cf_data['upload_id'] && $field_id === $cf_data['postdata_id'] ) {
+                                        $field_data['post-custom'][$custom_field_index]['value'] = $cf_data['uploads'];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                $post_id = $form_field_obj->save_post( $field_array, $field_data );
+                if ( $post_id ) {
+                    $field_data = [
+                        'postdata' => $post_id,
+                        'value'    => $field_data,
+                    ];
+                } else {
+                    return array(
+                        'type'     => 'error',
+                        'field_id' => $field_id,
+                        'value'    => __( 'There was an error saving the post data. Please try again', Forminator::DOMAIN )
+                    );
+                }
+            } else {
+                $field_data = [
+                    'postdata' => null,
+                    'value'    => $post_value,
+                ];
+            }
+
+            $postdata_result[] = array(
+                'type'       => 'success',
+                'field_id'   => $field_id,
+                'field_data' => $field_data,
+            );
+        }
+
+		return $postdata_result;
+	}
+
 }

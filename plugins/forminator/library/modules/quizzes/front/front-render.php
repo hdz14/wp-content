@@ -420,7 +420,9 @@ class Forminator_QForm_Front extends Forminator_Render_Form {
 
 		ob_start();
 
-		$class         = ( isset( $this->model->settings['results_behav'] ) && 'end' === $this->model->settings['results_behav'] ) ? '' : 'forminator-submit-rightaway';
+		$result_behav  = isset( $this->model->settings['results_behav'] ) ? $this->model->settings['results_behav'] : '';
+		$class         = ( isset( $result_behav ) && 'end' === $result_behav ) ? '' : 'forminator-submit-rightaway';
+		$input_type    = ( isset( $result_behav ) && 'end' === $result_behav ) ? 'checkbox' : 'radio';
 		$uniq_id       = '-' . uniqid();
 		$field_slug    = uniqid();
 		$form_settings = $this->get_form_settings();
@@ -439,11 +441,12 @@ class Forminator_QForm_Front extends Forminator_Render_Form {
 		$has_image     = ( ! empty( $image ) );
 		$has_image_alt = ( isset( $image_alt ) && ! empty( $image_alt ) );
 		$has_answers   = ( isset( $answers ) && ! empty( $answers ) );
+        $role          = 'radio' === $input_type ? 'radiogroup' : 'checkbox';
 		?>
 
 		<div
 			tabindex="0"
-			role="radiogroup"
+			role="<?php echo esc_attr( $role ); ?>"
 			id="<?php echo esc_html( $field_slug ); ?>"
 			class="forminator-question<?php echo ( true === $last_field ) ? ' forminator-last' : ''; ?>"
 			aria-labelledby="<?php echo esc_html( $field_slug ) . '-label'; ?>"
@@ -469,6 +472,7 @@ class Forminator_QForm_Front extends Forminator_Render_Form {
 
 					$answer_id     = $field_slug . '-' . $k . $uniq_id;
 					$label         = $answer['title'];
+					$input_name    = 'end' === $result_behav ? $field_slug . '-' . $k : $field_slug;
 					$image         = isset( $answer['image'] ) ? $answer['image'] : '';
 					$image_alt     = '';
 					$has_label     = isset( $label ) && '' !== $label;
@@ -491,8 +495,8 @@ class Forminator_QForm_Front extends Forminator_Render_Form {
 					<label for="<?php echo esc_attr( $answer_id ); ?>" class="forminator-answer<?php echo $empty_class; // WPCS: XSS ok. ?>">
 
 						<input
-							type="radio"
-							name="answers[<?php echo esc_attr( $field_slug ); ?>]"
+							type="<?php echo esc_attr( $input_type ); ?>"
+							name="answers[<?php echo esc_attr( $input_name ); ?>]"
 							value="<?php echo esc_attr( $k ); ?>"
 							id="<?php echo esc_attr( $answer_id ); ?>"
 							class="<?php echo esc_attr( $class ); ?>"

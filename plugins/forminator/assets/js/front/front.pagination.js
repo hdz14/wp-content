@@ -287,6 +287,7 @@
 						hasStripe = page.find(".forminator-stripe-element").not(".forminator-hidden .forminator-stripe-element")
 					;
 
+
 					// Check if Stripe exists on current step
 					if (hasStripe.length > 0) {
 						payment._stripe.createToken(payment._cardElement).then(function (result) {
@@ -305,6 +306,19 @@
 				} else {
 					this.go_to(this.step + 1, true);
 					this.update_buttons();
+				}
+			}
+
+			// re-init textarea floating labels.
+			var form = $( this.$el );
+			var textarea = form.find( '.forminator-textarea' );
+			var isMaterial = form.hasClass( 'forminator-design--material' );
+
+			if ( isMaterial ) {
+				if ( textarea.length ) {
+					textarea.each( function() {
+						FUI.textareaMaterial( this );
+					});
 				}
 			}
 		},

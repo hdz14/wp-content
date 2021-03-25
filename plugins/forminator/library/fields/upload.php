@@ -124,7 +124,7 @@ class Forminator_Upload extends Forminator_Field {
 		$required    = self::get_property( 'required', $field, false );
 		$design      = $this->get_form_style( $settings );
 		$label       = esc_html( self::get_property( 'field_label', $field, '' ) );
-		$description = esc_html( self::get_property( 'description', $field, '' ) );
+		$description = self::get_property( 'description', $field, '' );
 		$file_type   = self::get_property( 'file-type', $field, 'single' );
 		$form_id     = isset( $settings['form_id'] ) ? $settings['form_id'] : 0;
 
@@ -498,7 +498,7 @@ class Forminator_Upload extends Forminator_Field {
 					}
 				}
 
-				$file_mime = mime_content_type( $file_object['tmp_name'] );
+				$file_mime = $this->get_mime_type( $file_object['tmp_name'] );
 				// use move_uploaded_file instead of $wp_filesystem->put_contents
 				// increase performance, and avoid permission issues
 				if ( false !== move_uploaded_file( $file_object['tmp_name'], $file_path ) ) {
@@ -766,5 +766,23 @@ class Forminator_Upload extends Forminator_Field {
 		}
 
 		return $mime_types;
+	}
+
+	/**
+	 * Get mime type, provide alternative if function is not available
+	 *
+	 * @param $file
+	 *
+	 * @return string
+	 */
+	public function get_mime_type( $file ) {
+        if ( function_exists( 'mime_content_type' ) ) {
+            $mime_type = mime_content_type( $file );
+        } else {
+            $file_type = wp_check_filetype( $file );
+            $mime_type = $file_type['type'];
+        }
+
+		return $mime_type;
 	}
 }

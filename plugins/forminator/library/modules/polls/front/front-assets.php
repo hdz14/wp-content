@@ -126,7 +126,7 @@ class Forminator_Assets_Enqueue_Poll extends Forminator_Assets_Enqueue {
 
 		// LOAD: ChartJS
 		wp_enqueue_script(
-			'chartjs',
+			'forminator-chartjs',
 			forminator_plugin_url() . 'assets/js/front/Chart.min.js',
 			array( 'jquery' ),
 			'2.8.0',

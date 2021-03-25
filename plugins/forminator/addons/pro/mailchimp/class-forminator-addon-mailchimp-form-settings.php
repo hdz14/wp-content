@@ -45,11 +45,6 @@ class Forminator_Addon_Mailchimp_Form_Settings extends Forminator_Addon_Form_Set
 		// already filtered on Abstract
 		// numerical array steps
 		return array(
-			// 0
-			array(
-				'callback'     => array( $this, 'mail_list_limit' ),
-				'is_completed' => array( $this, 'step_mail_list_limit_is_completed' ),
-			),
 			// 1
 			array(
 				'callback'     => array( $this, 'choose_mail_list' ),
@@ -60,75 +55,6 @@ class Forminator_Addon_Mailchimp_Form_Settings extends Forminator_Addon_Form_Set
 				'callback'     => array( $this, 'map_fields' ),
 				'is_completed' => array( $this, 'step_map_fields_is_completed' ),
 			),
-		);
-	}
-
-	/**
-	 * Choose Mail Limit wizard
-	 *
-	 * @since 1.0 Mailchimp Addon
-	 *
-	 * @param $submitted_data
-	 *
-	 * @return array
-	 */
-	public function mail_list_limit( $submitted_data ) {
-
-		$this->addon_form_settings = $this->get_form_settings_values();
-		$current_data              = array();
-
-		if ( isset( $submitted_data['mail_list_limit'] ) ) {
-			$current_data['mail_list_limit'] = $submitted_data['mail_list_limit'];
-		} elseif ( isset( $this->addon_form_settings['mail_list_limit'] ) ) {
-			$current_data['mail_list_limit'] = $this->addon_form_settings['mail_list_limit'];
-		} else {
-			$current_data['mail_list_limit'] = 10;
-		}
-
-		forminator_addon_maybe_log( __METHOD__, 'current_data', $current_data );
-
-		$is_submit = ! empty( $submitted_data );
-
-		if ( $is_submit ) {
-			forminator_addon_maybe_log( __METHOD__, '$submitted_data', $submitted_data );
-
-			$this->addon_form_settings['mail_list_limit'] = $submitted_data['mail_list_limit'];
-
-			$this->save_form_settings_values( $this->addon_form_settings );
-		}
-		$buttons = array();
-		// add disconnect button if already is_form_connected
-		if ( $this->addon->is_form_connected( $this->form_id ) ) {
-			$buttons['disconnect']['markup'] = Forminator_Addon_Mailchimp::get_button_markup(
-				esc_html__( 'DISCONNECT', Forminator::DOMAIN ),
-				'sui-button-ghost sui-tooltip sui-tooltip-top-center forminator-addon-form-disconnect',
-				esc_html__( 'Disconnect Mailchimp from this Form.', Forminator::DOMAIN )
-			);
-		}
-
-		$buttons['next']['markup'] = '<div class="sui-actions-right">' .
-									Forminator_Addon_Mailchimp::get_button_markup( esc_html__( 'Next', Forminator::DOMAIN ), 'forminator-addon-next' ) .
-									'</div>';
-
-		return array(
-			'html'       => '<div class="sui-box-content integration-header"><h3 class="sui-box-title" id="dialogTitle2">' . __( 'Enter list limit', Forminator::DOMAIN ) . '</h3></div>
-							<form>
-								<div class="sui-form-field">
-									<label class="sui-label">' . __( 'List limit', Forminator::DOMAIN ) . '</label>
-									<div class="sui-form-field">
-										<input name="mail_list_limit"
-											placeholder="' . sprintf( __( 'Example: 10', Forminator::DOMAIN ), 'Mailchimp' ) . '"
-											value="' . esc_attr( $current_data['mail_list_limit'] ) . '"
-											class="sui-form-control" />
-											<span class="sui-description">' . __( 'By default list limit will be 10.', Forminator::DOMAIN ) . '</spna>
-									
-									</div>
-								</div>
-							</form>',
-			'redirect'   => false,
-			'buttons'    => $buttons,
-			'has_errors' => '',
-			'size'       => 'small',
 		);
 	}
 
@@ -169,34 +95,22 @@ class Forminator_Addon_Mailchimp_Form_Settings extends Forminator_Addon_Form_Set
 
 		$html_select_mail_list = '';
 		$html_field_mail_list  = '';
-		$list_array            = array();
 
 		try {
 			$api = $this->addon->get_api();
-			if ( ! empty( $this->addon_form_settings['mail_list_limit'] ) ) {
-				$list_array['count'] = $this->addon_form_settings['mail_list_limit'];
-			}
-			$request_mail_lists = $api->get_lists( $list_array );
+			$mail_lists = $api->get_all_lists();
 
 			// Get mailchimp list to be selected, bail on empty
-			if ( ! isset( $request_mail_lists->lists ) || empty( $request_mail_lists->lists ) || ! is_array( $request_mail_lists->lists ) ) {
+			if ( empty( $mail_lists ) ) {
 				throw new Forminator_Addon_Mailchimp_Exception( 'Your Mailchimp Lists is empty, please create one.' );
 			}
-			$mail_lists = $request_mail_lists->lists;
 
-			// build html select for mail list
-			$html_select_mail_list  = '<select name="mail_list_id" class="sui-select sui-form-control">';
-			$html_select_mail_list .= '<option value="">' . __( 'None', Forminator::DOMAIN ) . '</option>';
-
-			foreach ( $mail_lists as $mail_list ) {
-				$html_select_mail_list
-					.= '<option value="' . esc_attr( $mail_list->id ) . '" ' . selected(
-						$current_data['mail_list_id'],
-						$mail_list->id,
-						false
-					) . '>' . esc_html( $mail_list->name ) . '</option>';
-			}
+			$html_select_mail_list  = '<div class="forminator-select-refresh">';
+			$html_select_mail_list .= '<select name="mail_list_id" class="sui-select sui-form-control">';
+			$html_select_mail_list .= self::email_lists_options( $mail_lists, $current_data['mail_list_id'] );
 			$html_select_mail_list .= '</select>';
+			$html_select_mail_list .= self::refresh_button();
+			$html_select_mail_list .= '</div>';
 
 			// logic when user submit mail list
 			if ( $is_submit ) {
@@ -301,7 +215,6 @@ class Forminator_Addon_Mailchimp_Form_Settings extends Forminator_Addon_Form_Set
 			'buttons'    => $buttons,
 			'has_errors' => ( ! empty( $error_message ) || ! empty( $input_error_messages ) ),
 			'size'       => 'small',
-			'has_back'   => true,
 		);
 
 	}
@@ -767,33 +680,6 @@ class Forminator_Addon_Mailchimp_Form_Settings extends Forminator_Addon_Form_Set
 		 */
 
 		return true;
-	}
-
-	/**
-	 * Check if list limit is completed
-	 *
-	 * @since 1.0 Mailchimp Addon
-	 * @return bool
-	 */
-	public function step_mail_list_limit_is_completed() {
-
-		$this->addon_form_settings = $this->get_form_settings_values();
-		if ( ! isset( $this->addon_form_settings['mail_list_limit'] ) ) {
-			// preliminary value
-			$this->addon_form_settings['mail_list_limit'] = 10;
-
-			return true;
-		}
-
-		/**
-		 * TODO: check if saved mail list limit still valid, by request info on mailchimp
-		 * Easy achieved but will add overhead on site
-		 * force_form_disconnect();
-		 * save_force_form_disconnect_reason();
-		 */
-
-		return true;
-
 	}
 
 }

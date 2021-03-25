@@ -37,7 +37,7 @@ class Forminator_Admin_L10n {
 	 * @return array
 	 */
 	public function admin_l10n() {
-		return array(
+		$properties = array(
 			"popup"         => array(
 				"form_name_label"       => __( "Name your form", Forminator::DOMAIN ),
 				"form_name_placeholder" => __( "E.g., Contact Form", Forminator::DOMAIN ),
@@ -371,6 +371,52 @@ class Forminator_Admin_L10n {
 			),
 			'exporter_logs' => forminator_get_export_logs( forminator_get_form_id_helper() ),
 		);
+
+		$properties = self::add_notice( $properties );
+
+		return $properties;
+	}
+
+	/**
+	 * Maybe add notices to properties
+	 *
+	 * @param array $properties Properties.
+	 * @return array
+	 */
+	private static function add_notice( $properties ) {
+		$key = filter_input( INPUT_GET, 'forminator_notice', FILTER_SANITIZE_STRING );
+		if ( ! $key ) {
+			return $properties;
+		}
+
+		$notices = self::get_notices_list();
+		if ( ! empty( $notices[ $key ] ) ) {
+			$properties['notices'][] = $notices[ $key ];
+		}
+
+		return $properties;
+	}
+
+	/**
+	 * All possible notices that can be shown after refreshing page
+	 *
+	 * @return array
+	 */
+	private static function get_notices_list() {
+		$list = array(
+			'settings_reset'  => __( 'Data and settings have been reset successfully!', Forminator::DOMAIN ),
+			'form_deleted'    => __( 'Form successfully deleted.', Forminator::DOMAIN ),
+			'poll_deleted'    => __( 'Poll successfully deleted.', Forminator::DOMAIN ),
+			'quiz_deleted'    => __( 'Quiz successfully deleted.', Forminator::DOMAIN ),
+			'form_duplicated' => __( 'Form successfully duplicated.', Forminator::DOMAIN ),
+			'poll_duplicated' => __( 'Poll successfully duplicated.', Forminator::DOMAIN ),
+			'quiz_duplicated' => __( 'Quiz successfully duplicated.', Forminator::DOMAIN ),
+			'form_reset'      => __( 'Form tracking data successfully reset.', Forminator::DOMAIN ),
+			'poll_reset'      => __( 'Poll tracking data successfully reset.', Forminator::DOMAIN ),
+			'quiz_reset'      => __( 'Quiz tracking data successfully reset.', Forminator::DOMAIN ),
+		);
+
+		return $list;
 	}
 
 	/**

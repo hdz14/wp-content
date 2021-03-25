@@ -1079,10 +1079,103 @@ function render_entry( $item, $column_name, $field = null, $type = '' ) {
 							if ( 'postdata' === $key ) {
 								// possible empty when postdata not required
 								if ( ! empty( $value ) ) {
-									$url    = get_edit_post_link( $value );
-									$title  = get_the_title( $value );
-									$name   = ! empty( $title ) ? $title : '(no title)';
-									$output .= "<a href='" . $url . "' target='_blank' rel='noreferrer' title='" . __( 'Edit Post', Forminator::DOMAIN ) . "'>$name</a> ,";
+                                    
+                                    $post_id = $data['postdata'];
+                                    $url = get_edit_post_link( $post_id, 'link' );
+                                    
+                                    // Title
+                                    $title = get_the_title( $post_id );
+                                    $title = ! empty( $title ) ? $title : __( '(no title)', Forminator::DOMAIN );
+                                    
+                                    $output .= '<ul>';
+                                    
+                                        $output .= '<li>';
+                                        $output .= '<b>' . esc_html__( 'Title', Forminator::DOMAIN ) . ':</b> ';
+                                        $output .= '<a href="' . $url . '" target="_blank" rel="noopener noreferrer" title="' . esc_attr__( 'Edit Post', Forminator::DOMAIN ) . '">'
+                                                        . $title .
+                                                    '</a>';
+                                        $output .= '</li>';
+
+                                        // Content
+                                        if ( ! empty( $data['value']['post-content'] ) ) {
+                                            $post_content  = $data['value']['post-content'];
+                                            $output .= '<li>';
+                                            $output .= '<b>' . esc_html__( 'Content', Forminator::DOMAIN ) . ':</b><br>';
+                                            $output .= wp_kses( $post_content, 'post' );
+                                            $output .= '</li>';
+                                        }
+
+                                        // Excerpt
+                                        if ( ! empty( $data['value']['post-excerpt'] ) ) {
+                                            $post_excerpt = $data['value']['post-excerpt'];
+                                            $output .= '<li>';
+                                            $output .= '<b>' . esc_html__( 'Excerpt', Forminator::DOMAIN ) . ':</b><br>';
+                                            $output .= wp_strip_all_tags( $post_excerpt );
+                                            $output .= '</li>';
+                                        }
+
+                                        // Category
+                                        if ( ! empty( $data['value']['category'] ) ) {
+                                            $post_category = $data['value']['category'];
+                                            $post_category = get_the_category_by_ID( $post_category );
+                                            // In case of deleted categories.
+                                            if ( ! empty( $post_category ) ) {
+                                                $output .= '<li>';
+                                                $output .= '<b>' . esc_html__( 'Category', Forminator::DOMAIN ) . ':</b> ';
+                                                $output .= $post_category;
+                                                $output .= '</li>';
+                                            }
+                                        }
+
+                                        // Tags
+                                        if ( ! empty( $data['value']['post_tag'] ) ) {
+                                            $post_tag_id = $meta_value['value']['post_tag'];
+                                            $term_args = array(
+                                                'taxonomy'          => 'post_tag',
+                                                'term_taxonomy_id'  => $post_tag_id,
+                                                'hide_empty'        => false,
+                                                'fields'            => 'names',
+                                            );
+                                            $term_query = new WP_Term_Query( $term_args );
+                                            
+                                            // In case of deleted tags.
+                                            if ( ! empty( $tag = $term_query->terms ) ) {
+                                                $output .= '<li>';
+                                                $output .= '<b>' . esc_html__( 'Tag', Forminator::DOMAIN ) . ':</b> ';
+                                                $output .= $tag[0];
+                                                $output .= '</li>';
+                                            }
+                                        }
+
+                                        // Featured Image
+                                        if ( ! empty( $data['value']['post-image'] ) && ! empty( $data['value']['post-image']['attachment_id'] ) ) {
+                                            $post_image_id = $data['value']['post-image']['attachment_id'];
+                                            $output .= '<li>';
+                                            $output .= '<b>' . esc_html__( 'Featured image', Forminator::DOMAIN ) . ':</b><br>';
+                                            $output .= wp_get_attachment_image( $post_image_id, array( 100, 100 ) );
+                                            $output .= '</li>';
+                                        }
+
+                                        // Custom fields
+                                        if ( ! empty( $data['value']['post-custom'] ) ) {
+                                            $post_custom   = $data['value']['post-custom'];
+                                            $output .= '<li>';
+                                                $output .= '<b>' . esc_html__( 'Custom fields', Forminator::DOMAIN ) . ':</b><br>';
+                                                $output .= '<ul class="' . esc_attr( 'bulleted' ) . '">';
+                                                    foreach ( $post_custom as $field ) {
+                                                        if ( ! empty( $field['value'] ) ) {
+                                                            $output .= '<li>';
+                                                            $output .= esc_html( $field['key'] ) . ': ';
+                                                            $output .= esc_html( $field['value'] );
+                                                            $output .= '</li>';
+                                                        }
+                                                    }
+                                                $output .= '</ul>';
+                                            $output .= '</li>';
+                                        }
+                                    
+                                    $output .= '</ul>';
+                                    
 								}
 							} else {
 								if ( is_string( $key ) ) {
@@ -1728,6 +1821,7 @@ function forminator_get_poll_vars() {
  * @return mixed
  */
 function forminator_replace_quiz_form_data( $content, Forminator_Quiz_Form_Model $quiz, $data, Forminator_Form_Entry_Model $entry ) {
+    $result_behav = isset( $quiz->settings['results_behav'] ) ? $quiz->settings['results_behav'] : '';
 
 	if ( stripos( $content, '{quiz_name}' ) !== false ) {
 		$quiz_name = forminator_get_name_from_model( $quiz );
@@ -1744,7 +1838,8 @@ function forminator_replace_quiz_form_data( $content, Forminator_Quiz_Form_Model
 		$content = str_ireplace( '{quiz_type}', $quiz_type, $content );
 	}
 
-	if ( stripos( $content, '{quiz_answer}' ) !== false ) {
+    // For single answer quiz
+	if ( stripos( $content, '{quiz_answer}' ) !== false && ( empty( $result_behav ) || 'after' === $result_behav ) ) {
 		$answer_content = PHP_EOL . '<ul>' . PHP_EOL;
 		$answers        = isset( $data['answers'] ) ? $data['answers'] : array();
 		if ( is_array( $answers ) ) {
@@ -1762,6 +1857,40 @@ function forminator_replace_quiz_form_data( $content, Forminator_Quiz_Form_Model
 				$answer_content .= '<li><b>' . esc_html__( 'Answer : ', Forminator::DOMAIN ) . '</b>' . esc_html( $answer_text ) . '</li>' . PHP_EOL;
 				$answer_content .= '</ul>' . PHP_EOL;
 
+				$answer_content .= '</li>' . PHP_EOL;
+			}
+		}
+		$answer_content .= '</ul>';
+
+		$content = str_ireplace( '{quiz_answer}', $answer_content, $content );
+
+	}
+
+    // For multi-answer quiz
+	if ( stripos( $content, '{quiz_answer}' ) !== false && 'end' === $result_behav ) {
+		$answer_content = PHP_EOL . '<ul>' . PHP_EOL;
+		$answers        = isset( $data['answers'] ) ? $data['answers'] : array();
+		$question_ids   = array();
+		if ( is_array( $answers ) ) {
+			foreach ( $answers as $question_id => $answer_id ) {
+                // In multi-answer, $question_id looks like this "question-2051-7608-3"
+                $question_id    = preg_replace( '/(-\d+$)/', '', $question_id );
+                if ( ! in_array( $question_id, $question_ids ) ) {
+                    $answer      = $quiz->getAnswer( $question_id, $answer_id );
+                    $answer_text = isset( $answer['title'] ) ? $answer['title'] : '';
+                    $question_ids[$question_id][] = $answer_text;
+                }
+			}
+			foreach ( $question_ids as $question_id => $answer_titles ) {
+				$question      = $quiz->getQuestion( $question_id );
+				$question_text = isset( $question['title'] ) ? $question['title'] : '';
+                $answer_head   = count( $answer_titles ) > 1 ? esc_html__( 'Answers : ', Forminator::DOMAIN ) : esc_html__( 'Answer : ', Forminator::DOMAIN );
+
+				$answer_content .= '<li>' . PHP_EOL;
+                    $answer_content .= '<ul>' . PHP_EOL;
+                        $answer_content .= '<li><b>' . esc_html__( 'Question : ', Forminator::DOMAIN ) . '</b>' . esc_html( $question_text ) . '</li>' . PHP_EOL;
+                        $answer_content .= '<li><b>' . $answer_head . '</b>' . esc_html( implode( ', ', $answer_titles ) ) . '</li>' . PHP_EOL;
+                    $answer_content .= '</ul>' . PHP_EOL;
 				$answer_content .= '</li>' . PHP_EOL;
 			}
 		}
@@ -2027,4 +2156,118 @@ function formninator_upload_url_root() {
 	}
 
 	return $dir['baseurl'] . 'forminator_upload';
+}
+
+/**
+ * Replace lead form data
+ *
+ * @param $content
+ * @param $quiz_settings
+ * @param Forminator_Form_Entry_Model|null $entry
+ *
+ * @return string
+ */
+function forminator_replace_lead_form_data( $content, $quiz_settings, Forminator_Form_Entry_Model $entry = null ) {
+
+	if ( isset( $quiz_settings['hasLeads'] ) && $quiz_settings['hasLeads'] ) {
+		$lead_id           = isset( $quiz_settings['leadsId'] ) ? $quiz_settings['leadsId'] : 0;
+		$lead_model        = Forminator_Custom_Form_Model::model()->load( $lead_id );
+		$form_entry_fields = forminator_lead_entry_data( $entry );
+		$submitted_data    = forminator_lead_submitted_data( $form_entry_fields );
+		$entry->meta_data  = $form_entry_fields;
+		$content           = forminator_replace_form_data( $content, $submitted_data, $lead_model, $entry );
+	}
+
+	return $content;
+}
+
+/**
+ * lead form data
+ *
+ * @param Forminator_Form_Entry_Model $entry
+ *
+ * @return array
+ */
+function forminator_lead_entry_data( $entry ) {
+	$entry_data  = array();
+	if ( isset( $entry->meta_data['lead_entry'] ) && ! empty( $entry->meta_data['lead_entry']['value'] ) ) {
+		$entry_data = $entry->meta_data['lead_entry']['value'];
+	}
+
+	return $entry_data;
+}
+
+/**
+ * lead form submitted data
+ *
+ * @param $lead_entry
+ *
+ * @return array
+ */
+function forminator_lead_submitted_data( $lead_entry ) {
+	$meta_data       = array();
+	if ( ! empty( $lead_entry ) ) {
+		foreach ( $lead_entry as $lead_value ) {
+			if ( ! empty( $lead_value['value'] ) && is_array( $lead_value['value'] ) ) {
+				foreach ( $lead_value['value'] as $multi => $multi_value ) {
+					if ( ! empty( $multi_value ) && is_array( $multi_value ) ) {
+						foreach ( $multi_value as $sub => $sub_value ) {
+							$meta_sub_name = $lead_value['name'] . '-' . $sub;
+							$meta_data[ $meta_sub_name ] = $sub_value;
+						}
+					} else {
+						$meta_name = $lead_value['name'] . '-' . $multi;
+						$meta_data[ $meta_name ] = $multi_value;
+					}
+				}
+			} else {
+				$meta_data[ $lead_value['name'] ] = $lead_value['value'];
+			}
+		}
+	}
+
+	return $meta_data;
+}
+
+/**
+ * Check how many instances of a field type exists in a given post ID
+ *
+ * @param $field_type
+ *
+ * @return int
+ */
+function forminator_count_field_type_in_page( $field_type ) {
+    global $post;
+
+    if ( empty( $post->ID ) ) {
+        return 0;
+    }
+
+    $page        = get_post( $post->ID );
+    $content     = $page->post_content;
+    $field_count = 0;
+    $form        = Forminator_Custom_Form_Model::model();
+
+    // Check for forminator shortcodes.
+    preg_match_all(
+        '/' . get_shortcode_regex( ['forminator_form'] ) . '/',
+        $content,
+        $matches,
+        PREG_SET_ORDER
+    );
+
+    // Increase count for every $field_type found.
+    foreach( $matches as $shortcode ) {
+        preg_match_all('!\d+!', $shortcode[0], $form_ids);
+        $form = $form->load( $form_ids[0][0] );
+        $form_fields = $form->get_fields();
+
+        foreach( $form_fields as $field ) {
+            if ( false !== strpos( $field->slug, $field_type ) ) {
+                $field_count++;
+            }
+        }
+    }
+
+	return $field_count;
 }

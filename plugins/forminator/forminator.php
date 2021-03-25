@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Forminator
- * Version: 1.14.8.1
- * Plugin URI:  https://premium.wpmudev.org/project/forminator/
+ * Version: 1.14.9
+ * Plugin URI:  https://wpmudev.com/project/forminator/
  * Description: Capture user information (as detailed as you like), engage users with interactive polls that show real-time results and graphs, “no wrong answer” Facebook-style quizzes and knowledge tests.
  * Author: WPMU DEV
- * Author URI: https://premium.wpmudev.org
+ * Author URI: https://wpmudev.com
  * Text Domain: forminator
  * Domain Path: /languages/
  *
@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'FORMINATOR_VERSION' ) ) {
-	define( 'FORMINATOR_VERSION', '1.14.8.1' );
+	define( 'FORMINATOR_VERSION', '1.14.9' );
 }
 
 if ( ! defined( 'FORMINATOR_SUI_VERSION' ) ) {
@@ -42,7 +42,7 @@ if ( ! defined( 'FORMINATOR_SUI_VERSION' ) ) {
 }
 
 if ( ! defined( 'FORMINATOR_STRIPE_LIB_VERSION' ) ) {
-	define( 'FORMINATOR_STRIPE_LIB_VERSION', '7.21.1' );
+	define( 'FORMINATOR_STRIPE_LIB_VERSION', '7.67.0' );
 }
 
 if ( ! defined( 'FORMINATOR_STRIPE_LIB_DATE' ) ) {

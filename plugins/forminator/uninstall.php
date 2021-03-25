@@ -159,31 +159,13 @@ function forminator_clear_module_submissions() {
 	wp_cache_delete( 'forminator_form_total_entries_draft', 'forminator_form_total_entries_draft' );
 }
 
-$uninstall_settings = array();
+$clear_data = get_option( 'forminator_uninstall_clear_data', false );
 
-$forminator_uninstall = get_option( "forminator_uninstall_clear_data", false );
-if ( $forminator_uninstall ) {
-	// delete all
-	$uninstall_settings = array(
-		'settings' => true,
-		'data'     => true,
-	);
-}
-
-$delete_settings = isset( $uninstall_settings['settings'] ) ? $uninstall_settings['settings'] : false;
-$delete_data     = isset( $uninstall_settings['data'] ) ? $uninstall_settings['data'] : false;
-
-if ( $delete_settings ) {
+if ( $clear_data ) {
 	forminator_delete_custom_options();
 	forminator_delete_addon_options();
 	forminator_delete_custom_posts();
-}
-
-if ( $delete_data ) {
 	forminator_clear_module_views();
 	forminator_clear_module_submissions();
-}
-
-if ( $delete_settings && $delete_data ) {
 	forminator_drop_custom_tables();
 }

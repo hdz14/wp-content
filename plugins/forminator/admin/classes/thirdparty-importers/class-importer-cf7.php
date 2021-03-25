@@ -124,7 +124,11 @@ class Forminator_Admin_Import_CF7 extends Forminator_Import_Mediator {
 			$blank_options    = array();
 			$type             = $this->get_thirdparty_field_type( $field->basetype );
 
-			if ( empty( $type ) ) {
+			if ( 'honeypot' === $type && in_array( 'honeypot', $cf7_addons, true ) ) {
+				$honeypot = true;
+			}
+
+			if ( 'honeypot' === $type || empty( $type ) ) {
 				continue;
 			}
 
@@ -193,10 +197,6 @@ class Forminator_Admin_Import_CF7 extends Forminator_Import_Mediator {
 
 				if ( 'acceptance' === $field['type'] ) {
 					$gdpr = true;
-				}
-
-				if ( 'honeypot' === $type && in_array( 'honeypot', $cf7_addons, true ) ) {
-					$honeypot = true;
 				}
 
 				if ( isset( $field['options'] ) ) {

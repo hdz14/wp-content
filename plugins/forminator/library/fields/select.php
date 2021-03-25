@@ -130,7 +130,7 @@ class Forminator_Select extends Forminator_Field {
 		$options       = self::get_property( 'options', $field, array() );
 		$post_value    = self::get_post_data( $name, false );
 		$uniq_id       = uniqid();
-		$description   = esc_html( self::get_property( 'description', $field, '' ) );
+		$description   = self::get_property( 'description', $field, '' );
 		$label         = esc_html( self::get_property( 'field_label', $field, '' ) );
 		$design        = $this->get_form_style( $settings );
 		$field_type    = self::get_property( 'value_type', $field, '' );
@@ -257,10 +257,10 @@ class Forminator_Select extends Forminator_Field {
 		} else {
 			$options_markup = '';
 			$default        = '';
-			$select_class   = 'forminator-select';
+			$search         = 'false';
 
 			if ( 'enable' === $search_status ) {
-				$select_class = 'forminator-select2';
+				$search = 'true';
 			}
 
 			if ( ! empty( $placeholder ) ) {
@@ -335,7 +335,7 @@ class Forminator_Select extends Forminator_Field {
 				);
 			}
 
-			$html .= sprintf( '<select class="forminator-select--field %s" id="%s" data-required="%s" name="%s" data-default-value="%s" data-placeholder="%s">', $select_class, $id, $required, $name, $default, esc_html( $placeholder ) );
+			$html .= sprintf( '<select class="forminator-select--field forminator-select2" id="%s" data-required="%s" name="%s" data-default-value="%s" data-placeholder="%s" data-search="%s">', $id, $required, $name, $default, esc_html( $placeholder ), $search );
 
 			$html .= $options_markup;
 

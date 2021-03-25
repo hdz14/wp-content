@@ -236,13 +236,26 @@ abstract class Forminator_Field {
 		$html = '';
 
 		if ( ! empty( $description ) ) {
+            $allowed_html = array(
+                'a'      => array(
+                    'href'   => true,
+                    'title'  => true,
+                    'target' => true,
+                    'rel'    => true,
+                ),
+                'span'   => array(
+                    'class' => true,
+                ),
+                'br'     => array(),
+                'em'     => array(),
+                'strong' => array(),
+            );
 
 			$html .= sprintf(
 				'<span class="forminator-description" aria-describedby="%s">%s</span>',
 				$get_id,
-				esc_html( $description )
+                wp_kses( $description, $allowed_html )
 			);
-
 		}
 
 		return $html;
@@ -322,7 +335,7 @@ abstract class Forminator_Field {
 		}
 
 		if ( ! empty( $description ) || '' !== $description ) {
-			$html .= self::get_description( esc_html( $description ), $get_id );
+			$html .= self::get_description( $description, $get_id );
 		}
 
 		return apply_filters( 'forminator_field_create_input', $html, $attr, $label, $description );
@@ -629,8 +642,8 @@ abstract class Forminator_Field {
 		$html        = '';
 		$style       = '';
 		$field_id    = $id;
-		$id          = 'forminator-field-' . $id;
-		$button_id   = 'forminator-field-' . $id . '_button';
+		$id          = 'forminator-field-' . $field_id;
+		$button_id   = 'forminator-field-' . $field_id . '_button';
 		$mainclass   = 'forminator-file-upload';
 		$class       = 'forminator-input-file';
 
@@ -791,44 +804,6 @@ abstract class Forminator_Field {
 	}
 
 	/**
-	 * Get field nested conditions
-	 *
-	 * @param $field
-	 * @param $conditions
-	 * @param bool $form_object
-	 *
-	 * @since 1.7.2
-	 *
-	 * @return array
-	 */
-	public function get_field_conditions( $field, $conditions, $form_object = false ) {
-		$all_conditions = array();
-
-		foreach ( $conditions as $condition ) {
-			// Check if we have nested conditions
-			$element_id = $condition['element_id'];
-
-			if ( $form_object ) {
-				// Get condition field object
-				$parent_field      = $form_object->get_field( $element_id );
-				$parent_conditions = self::get_property( 'conditions', $parent_field, array() );
-
-				if ( ! empty( $parent_conditions ) ) {
-					$all_conditions[] = self::get_field_conditions( $parent_field, $parent_conditions, $form_object )[0];
-				} else {
-					// Add main condition
-					$all_conditions[] = $condition;
-				}
-			} else {
-				// Add main condition
-				$all_conditions[] = $condition;
-			}
-		}
-
-		return $all_conditions;
-	}
-
-	/**
 	 * Check if Field is hidden based on conditions property and POST-ed data
 	 *
 	 * @since 1.0
@@ -854,8 +829,6 @@ abstract class Forminator_Field {
 		$condition_fulfilled = 0;
 		$conditions_count    = 0;
 
-		$all_conditions = self::get_field_conditions( $field, $conditions, $form_object );
-
 		foreach ( $conditions as $condition ) {
 
 			$element_id = $condition['element_id'];
@@ -872,6 +845,10 @@ abstract class Forminator_Field {
 						$is_condition_fulfilled = self::is_condition_fulfilled( $form_data[ $signature_data ], $condition );
 					}
 				}
+			} elseif ( stripos( $element_id, 'date-' ) !== false ) {
+				$date_value   = preg_replace( "/(\d+)\D+(\d+)\D+(\d+)/","$1/$2/$3", $form_data[ $element_id ] );
+				$is_condition_fulfilled = self::is_condition_fulfilled( $date_value, $condition );
+
 			} elseif ( stripos( $element_id, 'calculation-' ) !== false || stripos( $element_id, 'stripe-' ) !== false ) {
 				$is_condition_fulfilled = false;
 				if ( isset( $pseudo_submitted_data[ $element_id ] ) ) {
@@ -1667,7 +1644,7 @@ abstract class Forminator_Field {
 		$prefill = self::get_property( $prefix . 'prefill', $field, false );
 
 		if ( ! empty( $_REQUEST[ $prefill ] ) ) {  // WPCS: CSRF ok.
-			return sanitize_text_field( $_REQUEST[ $prefill ] );
+			return sanitize_text_field( urldecode( $_REQUEST[ $prefill ] ) );
 		}
 
 		return $default;

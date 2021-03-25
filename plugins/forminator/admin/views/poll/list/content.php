@@ -156,7 +156,7 @@ $most_entry = Forminator_Form_Entry_Model::get_most_entry( 'poll' );
 							<span class="sui-screen-reader-text"><?php esc_html_e( 'Select this poll', Forminator::DOMAIN ); ?></span>
 						</label>
 
-						<span class="sui-trim-text"><?php echo forminator_get_form_name( $module['id'], 'poll' ); // phpcs:ignore ?></span>
+						<span class="sui-trim-text"><?php echo htmlspecialchars( forminator_get_form_name( $module['id'], 'poll' ) ); // phpcs:ignore ?></span>
 
 						<?php
 						if ( 'publish' === $module['status'] ) {
@@ -193,7 +193,7 @@ $most_entry = Forminator_Form_Entry_Model::get_most_entry( 'poll' );
 								<li><a href="#"
 									class="wpmudev-open-modal"
 									data-modal="preview_polls"
-									data-modal-title="<?php /* translators: ... */ echo sprintf( '%s - %s', __( 'Preview Poll', Forminator::DOMAIN ), forminator_get_form_name( $module['id'], 'poll' ) ); // phpcs:ignore ?>"
+									data-modal-title="<?php /* translators: ... */ echo sprintf( '%s - %s', __( 'Preview Poll', Forminator::DOMAIN ), htmlspecialchars( htmlspecialchars( forminator_get_form_name( $module['id'], 'poll' ) ) ) ); // phpcs:ignore ?>"
 									data-form-id="<?php echo esc_attr( $module['id'] ); ?>"
 									data-nonce-preview="<?php echo esc_attr( wp_create_nonce( 'forminator_load_module' ) ); ?>"
 									data-nonce="<?php echo esc_attr( wp_create_nonce( 'forminator_popup_preview_polls' ) ); ?>">
@@ -215,7 +215,10 @@ $most_entry = Forminator_Form_Entry_Model::get_most_entry( 'poll' );
 											<input type="hidden" name="status" value="publish"/>
 										<?php endif; ?>
 
-										<?php wp_nonce_field( 'forminatorPollFormRequest', 'forminatorNonce' ); ?>
+                                        <?php
+                                            $update_status_nonce = esc_attr( 'forminator-nonce-update-status-' . $module['id'] );
+                                            wp_nonce_field( $update_status_nonce, $update_status_nonce );
+                                        ?>
 										<button type="submit">
 
 											<?php if ( Forminator_Poll_Form_Model::STATUS_PUBLISH === $module['status'] ) : ?>
@@ -233,16 +236,26 @@ $most_entry = Forminator_Form_Entry_Model::get_most_entry( 'poll' );
 								<li><form method="post">
 									<input type="hidden" name="forminator_action" value="clone">
 									<input type="hidden" name="id" value="<?php echo esc_attr( $module['id'] ); ?>"/>
-									<?php wp_nonce_field( 'forminatorPollFormRequest', 'forminatorNonce' ); ?>
+                                    <?php
+                                        $clone_nonce = esc_attr( 'forminator-nonce-clone-' . $module['id'] );
+                                        wp_nonce_field( $clone_nonce, $clone_nonce );
+                                    ?>
 									<button type="submit"><i class="sui-icon-page-multiple" aria-hidden="true"></i> <?php esc_html_e( 'Duplicate', Forminator::DOMAIN ); ?></button>
 								</form></li>
 
-								<li><form method="post">
-									<input type="hidden" name="forminator_action" value="reset-views">
-									<input type="hidden" name="id" value="<?php echo esc_attr( $module['id'] ); ?>"/>
-									<?php wp_nonce_field( 'forminatorPollFormRequest', 'forminatorNonce' ); ?>
-									<button type="submit"><i class="sui-icon-update" aria-hidden="true"></i> <?php esc_html_e( 'Reset Tracking data', Forminator::DOMAIN ); ?></button>
-								</form></li>
+								<li>
+									<button
+										class="wpmudev-open-modal"
+										data-modal="delete-module"
+										data-modal-title="<?php esc_attr_e( 'Reset Tracking Data', Forminator::DOMAIN ); ?>"
+										data-modal-content="<?php esc_attr_e( 'Are you sure you wish reset the tracking data of this poll?', Forminator::DOMAIN ); ?>"
+										data-form-id="<?php echo esc_attr( $module['id'] ); ?>"
+										data-action="reset-views"
+										data-nonce="<?php echo esc_attr( wp_create_nonce( 'forminator-nonce-reset-views-' . $module['id'] ) ); ?>"
+									>
+										<i class="sui-icon-update" aria-hidden="true"></i> <?php esc_html_e( 'Reset Tracking data', Forminator::DOMAIN ); ?>
+									</button>
+								</li>
 
 								<?php if ( Forminator::is_import_export_feature_enabled() ) : ?>
 

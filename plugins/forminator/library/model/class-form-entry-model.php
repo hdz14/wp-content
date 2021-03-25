@@ -1135,7 +1135,7 @@ class Forminator_Form_Entry_Model {
 
 		$model = forminator_get_model_from_id( $form_id );
 		if ( is_object( $model ) ) {
-			wp_cache_delete( $model->get_post_type() . '_form_type', 'forminator_total_entries' );
+			wp_cache_delete( $model->get_entry_type() . '_form_type', 'forminator_total_entries' );
 		}
 	}
 
@@ -1239,6 +1239,7 @@ class Forminator_Form_Entry_Model {
 	public static function meta_value_to_string( $field_type, $meta_value, $allow_html = false, $truncate = PHP_INT_MAX ) {
 		switch ( $field_type ) {
 			case 'postdata':
+                
 				if ( is_string( $meta_value ) ) {
 					$string_value = $meta_value;
 				} else if ( ! isset( $meta_value['postdata'] ) || empty( $meta_value['postdata'] ) ) {
@@ -1246,33 +1247,183 @@ class Forminator_Form_Entry_Model {
 				} else {
 					$post_id = $meta_value['postdata'];
 
+                    // Title
 					if ( current_user_can( 'edit_post', $post_id ) ) {
 						$url = get_edit_post_link( $post_id, 'link' );
 					} else {
 						// is not logged in
 						$url = get_home_url();
 					}
+                    
+                    if ( $allow_html ) {
+                        
+                        // Title make link
+                        $title = get_the_title( $post_id );
+                        $title = ! empty( $title ) ? $title : __( '(no title)', Forminator::DOMAIN );
+                        //truncate
+                        if ( strlen( $title ) > $truncate ) {
+                            $title = substr( $title, 0, $truncate ) . '...';
+                        }
+                        $string_value  = '<b>' . esc_html__( 'Title', Forminator::DOMAIN ) . ':</b> ';
+                        $string_value .= '<a href="' . $url . '" target="_blank" rel="noopener noreferrer" title="' . esc_attr__( 'Edit Post', Forminator::DOMAIN ) . '">' . $title . '</a>';
+                    
+                        // Content
+                        if ( ! empty( $meta_value['value']['post-content'] ) ) {
+                            $post_content  = $meta_value['value']['post-content'];
+                            //truncate
+                            if ( strlen( $post_content ) > $truncate ) {
+                                $post_content = substr( $post_content, 0, $truncate ) . '...';
+                            }
+                            $string_value .= '<hr>';
+                            $string_value .= '<b>' . esc_html__( 'Content', Forminator::DOMAIN ) . ':</b><br>';
+                            $string_value .= wp_kses( $post_content, 'post' );
+                        }
+                    
+                        // Excerpt
+                        if ( ! empty( $meta_value['value']['post-excerpt'] ) ) {
+                            $post_excerpt  = $meta_value['value']['post-excerpt'];
+                            //truncate
+                            if ( strlen( $post_excerpt ) > $truncate ) {
+                                $post_excerpt = substr( $post_excerpt, 0, $truncate ) . '...';
+                            }
+                            $string_value .= '<hr>';
+                            $string_value .= '<b>' . esc_html__( 'Excerpt', Forminator::DOMAIN ) . ':</b><br>';
+                            $string_value .= wp_strip_all_tags( $post_excerpt );
+                        }
+                    
+                        // Category
+                        if ( ! empty( $meta_value['value']['category'] ) ) {
+                            $post_category = $meta_value['value']['category'];
+                            $post_category = get_the_category_by_ID( $post_category );
+                            // In case of deleted categories.
+                            if ( ! empty( $post_category ) ) {
+                                $string_value .= '<hr>';
+                                $string_value .= '<b>' . esc_html__( 'Category', Forminator::DOMAIN ) . ':</b> ';
+                                $string_value .= $post_category;
+                            }
+                        }
+                    
+                        // Tags
+                        if ( ! empty( $meta_value['value']['post_tag'] ) ) {
+                            $post_tag_id = $meta_value['value']['post_tag'];
+                            $term_args = array(
+                                'taxonomy'          => 'post_tag',
+                                'term_taxonomy_id'  => $post_tag_id,
+                                'hide_empty'        => false,
+                                'fields'            => 'names',
+                            );
+                            $term_query = new WP_Term_Query( $term_args );
+                            
+                            // In case of deleted tags.
+                            if ( ! empty( $tag = $term_query->terms ) ) {
+                                $string_value .= '<hr>';
+                                $string_value .= '<b>' . esc_html__( 'Tag', Forminator::DOMAIN ) . ':</b> ';
+                                $string_value .= $tag[0];
+                            }
+                        }
+                        
+                        // Featured Image
+                        if ( ! empty( $meta_value['value']['post-image'] ) && ! empty( $meta_value['value']['post-image']['attachment_id'] ) ) {
+                            $post_image_id = $meta_value['value']['post-image']['attachment_id'];
+                            $string_value .= '<hr>';
+                            $string_value .= '<b>' . esc_html__( 'Featured image', Forminator::DOMAIN ) . ':</b><br>';
+                            $string_value .= wp_get_attachment_image( $post_image_id, array( 100, 100 ) );
+                        }
+                        
+                        // Custom fields
+                        if ( ! empty( $meta_value['value']['post-custom'] ) ) {
+                            $post_custom   = $meta_value['value']['post-custom'];
+                            $string_value .= '<hr>';
+                            $string_value .= '<b>' . esc_html__( 'Custom fields', Forminator::DOMAIN ) . ':</b><br>';
 
-					if ( $url ) {
-						$string_value = $url;
-						if ( $allow_html ) {
-							// make link
-							$title = get_the_title( $post_id );
-							$title = ! empty( $title ) ? $title : __( '(no title)', Forminator::DOMAIN );
-							//truncate
-							if ( strlen( $title ) > $truncate ) {
-								$title = substr( $title, 0, $truncate ) . '...';
-							}
-							$string_value = '<a href="' . $url . '" target="_blank" rel="noopener noreferrer" title="' . __( 'Edit Post', Forminator::DOMAIN ) . '">' . $title . '</a>';
-						} else {
-							//truncate url
-							if ( strlen( $string_value ) > $truncate ) {
-								$string_value = substr( $string_value, 0, $truncate ) . '...';
-							}
-						}
-					} else {
-						$string_value = '';
-					}
+                            $string_value .= '<ul class="' . esc_attr( 'bulleted' ) . '">';
+                                foreach ( $post_custom as $field ) {
+                                    if ( ! empty( $field['value'] ) ) {
+                                        $string_value .= '<li>';
+                                        $string_value .= esc_html( $field['key'] ) . ': ';
+                                        $string_value .= esc_html( $field['value'] );
+                                        $string_value .= '</li>';
+                                    }
+                                }
+                            $string_value .= '</ul>';
+                        }
+                        
+                    } else {
+                        
+                        // Title
+                        $title = get_the_title( $post_id );
+                        $title = ! empty( $title ) ? $title : __( '(no title)', Forminator::DOMAIN );
+                        $string_value  = esc_html__( 'Title', Forminator::DOMAIN ) . ': ';
+                        $string_value .= $title . ' | ';
+                    
+                        // Content
+                        if ( ! empty( $meta_value['value']['post-content'] ) ) {
+                            $post_content  = strip_tags( $meta_value['value']['post-content'] );
+                            $string_value .= esc_html__( 'Content', Forminator::DOMAIN ) . ': ';
+                            $string_value .= $post_content . ' | ';
+                        }
+                    
+                        // Excerpt
+                        if ( ! empty( $meta_value['value']['post-excerpt'] ) ) {
+                            $post_excerpt  = strip_tags( $meta_value['value']['post-excerpt'] );
+                            $string_value .= esc_html__( 'Excerpt', Forminator::DOMAIN ) . ': ';
+                            $string_value .= $post_excerpt . ' | ';
+                        }
+                    
+                        // Category
+                        if ( ! empty( $meta_value['value']['category'] ) ) {
+                            $post_category = $meta_value['value']['category'];
+                            $post_category = get_the_category_by_ID( $post_category );
+                            // In case of deleted categories.
+                            if ( ! empty( $post_category ) ) {
+                                $string_value .= esc_html__( 'Category', Forminator::DOMAIN ) . ': ';
+                                $string_value .= $post_category . ' | ';
+                            }
+                        }
+                    
+                        // Tags
+                        if ( ! empty( $meta_value['value']['post_tag'] ) ) {
+                            $post_tag_id = $meta_value['value']['post_tag'];
+                            $term_args = array(
+                                'taxonomy'          => 'post_tag',
+                                'term_taxonomy_id'  => $post_tag_id,
+                                'hide_empty'        => false,
+                                'fields'            => 'names',
+                            );
+                            $term_query = new WP_Term_Query( $term_args );
+                            
+                            // In case of deleted tags.
+                            if ( ! empty( $tag = $term_query->terms ) ) {
+                                $string_value .= esc_html__( 'Tag', Forminator::DOMAIN ) . ': ';
+                                $string_value .= $tag[0] . ' | ';
+                            }
+                        }
+                    
+                        // Featured Image
+                        if ( ! empty( $meta_value['value']['post-image'] ) && ! empty( $meta_value['value']['post-image']['uploaded_file'] ) ) {
+                            $post_image_url = $meta_value['value']['post-image']['uploaded_file'][0];
+                            $string_value .= esc_html__( 'Featured image', Forminator::DOMAIN ) . ': ';
+                            $string_value .= $post_image_url;
+                        }
+                        
+                        // Custom fields
+                        if ( ! empty( $meta_value['value']['post-custom'] ) ) {
+                            $post_custom = $meta_value['value']['post-custom'];
+                            $string_value .= esc_html__( 'Custom fields', Forminator::DOMAIN ) . ': ';
+                            foreach ( $post_custom as $index => $field ) {                                
+                                if ( ! empty( $field['value'] ) ) {
+                                    0 === $index ?: $string_value .= ', ';
+                                    $string_value .= esc_html( $field['key'] ) . ' = ';
+                                    $string_value .= esc_html( $field['value'] );
+                                }
+                            }
+                        }
+                        
+                        //truncate
+                        if ( strlen( $string_value ) > $truncate ) {
+                            $string_value = substr( $string_value, 0, $truncate ) . '...';
+                        }
+                    }
 				}
 				break;
 			case 'time':
@@ -1366,6 +1517,7 @@ class Forminator_Form_Entry_Model {
 					if ( $allow_html ) {
 						// make link
 						$string_value = '';
+						$upload_count = 0;
 						$file_values  = is_array( $file['file_url'] ) ? $file['file_url'] : array( $file['file_url'] );
 						foreach ( $file_values as $file_value ) {
 							$url       = $file_value;
@@ -1375,7 +1527,13 @@ class Forminator_Form_Entry_Model {
 							if ( strlen( $file_name ) > $truncate ) {
 								$file_name = substr( $file_name, 0, $truncate ) . '...';
 							}
-							$string_value .= '<a href="' . $url . '" rel="noopener noreferrer" target="_blank" title="' . __( 'View File', Forminator::DOMAIN ) . '">' . $file_name . '</a><br/>';
+
+							$upload_count ++;
+							if ( $upload_count > 1 ) {
+							  $string_value .= ', ';
+							}
+
+							$string_value .= '<a href="' . $url . '" rel="noopener noreferrer" target="_blank" title="' . __( 'View File', Forminator::DOMAIN ) . '">' . $file_name . '</a>';
 						}
 					} else {
 						//truncate url

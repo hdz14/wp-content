@@ -8,6 +8,7 @@ require_once forminator_plugin_dir() . 'library/addon/class-addon-exception.php'
 require_once forminator_plugin_dir() . 'library/addon/class-addon-container.php';
 require_once forminator_plugin_dir() . 'library/addon/contracts/interface-addon.php';
 require_once forminator_plugin_dir() . 'library/addon/class-addon-abstract.php';
+require_once forminator_plugin_dir() . 'library/addon/class-addon-settings-abstract.php';
 require_once forminator_plugin_dir() . 'library/addon/class-addon-form-settings-abstract.php';
 require_once forminator_plugin_dir() . 'library/addon/class-addon-form-hooks-abstract.php';
 require_once forminator_plugin_dir() . 'library/addon/class-addon-poll-settings-abstract.php';

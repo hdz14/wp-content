@@ -105,7 +105,7 @@ class Forminator_Calculation extends Forminator_Field {
 		$required    = self::get_property( 'required', $field, false );
 		$value       = esc_html( self::get_post_data( $name, self::get_property( 'default_value', $field ) ) );
 		$label       = esc_html( self::get_property( 'field_label', $field, '' ) );
-		$description = esc_html( self::get_property( 'description', $field, '' ) );
+		$description = self::get_property( 'description', $field, '' );
 		$design      = $this->get_form_style( $settings );
 		$formula     = self::get_property( 'formula', $field, '', 'str' );
 		$is_hidden   = self::get_property( 'hidden', $field, false, 'bool' );

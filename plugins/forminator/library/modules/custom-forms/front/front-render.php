@@ -151,8 +151,18 @@ class Forminator_CForm_Front extends Forminator_Render_Form {
 				: false;
 		}
 
+		if ( ! $this->is_displayable( $is_preview ) ) {
+			return;
+		}
+
+		if ( $hide_form ) {
+			if ( $hidden_form_message ) {
+				echo $this->render_hidden_form_message( $hidden_form_message );
+			}
+			return;
+		}
+
 		if ( $is_ajax_load ) {
-			$this->generate_render_id( $id );
 			if ( ! $this->lead_model ) {
 				$this->get_form_placeholder( esc_attr( $id ), true );
 			}
@@ -161,23 +171,19 @@ class Forminator_CForm_Front extends Forminator_Render_Form {
 			return;
 		}
 
-		if ( $this->is_displayable( $is_preview ) && ! $hide_form ) {
-			echo $this->get_html( $hide, $is_preview );// wpcs xss ok.
+		echo $this->get_html( $hide, $is_preview );// wpcs xss ok.
 
-			if ( is_admin() || $is_preview ) {
-				$this->print_styles();
-			} else {
-				add_action( 'wp_footer', array( $this, 'print_styles' ), 9999 );
-			}
-
-			if ( $is_preview ) {
-				$this->forminator_render_front_scripts();
-			}
-
-			$this->enqueue_form_scripts( $is_preview );
-		} elseif ( $hide_form && $hidden_form_message ) {
-			echo $this->render_hidden_form_message( $hidden_form_message );
+		if ( is_admin() || $is_preview ) {
+			$this->print_styles();
+		} else {
+			add_action( 'wp_footer', array( $this, 'print_styles' ), 9999 );
 		}
+
+		if ( $is_preview ) {
+			$this->forminator_render_front_scripts();
+		}
+
+		$this->enqueue_form_scripts( $is_preview );
 	}
 
 
@@ -385,7 +391,9 @@ class Forminator_CForm_Front extends Forminator_Render_Form {
 		// Load Paypal scripts
 		if ( $this->has_paypal() ) {
 			$paypal_src = $this->paypal_script_argument( 'https://www.paypal.com/sdk/js' );
-			if ( ! $is_ajax_load ) {
+
+            // If there is more than 1 paypal field in a page, even if it's ajax loaded, enqueue script as usual to prevent paypal button errors.
+			if ( ! $is_ajax_load  || forminator_count_field_type_in_page( 'paypal' ) > 1 ) {
 				wp_enqueue_script(
 					'forminator-paypal-' . $this->model->id,
 					$paypal_src,
@@ -394,13 +402,13 @@ class Forminator_CForm_Front extends Forminator_Render_Form {
 					true
 				);
 			} else {
-				// load later via ajax to avoid cache
-				$this->scripts['forminator-paypal-' . $this->model->id ] = array(
-					'src'  => $paypal_src,
-					'on'   => 'window',
-					'id'   => $this->model->id,
-					'load' => 'PayPalCheckout',
-				);
+                // load later via ajax to avoid cache
+                $this->scripts['forminator-paypal-' . $this->model->id ] = array(
+                    'src'  => $paypal_src,
+                    'on'   => 'window',
+                    'id'   => $this->model->id,
+                    'load' => 'PayPalCheckout',
+                );
 			}
 
 			add_action( 'wp_footer', array( $this, 'print_paypal_scripts' ), 9999 );
@@ -1613,6 +1621,11 @@ class Forminator_CForm_Front extends Forminator_Render_Form {
 	public function is_ajax_submit() {
 		$form_settings = $this->get_form_settings();
 
+		if ( $this->has_stripe() ) {
+			return true;
+		}
+
+		// Force AJAX submit if form contains Stripe payment field
 		if ( ! isset( $form_settings['enable-ajax'] ) || empty( $form_settings['enable-ajax'] ) ) {
 			return false;
 		}
@@ -1831,7 +1844,11 @@ class Forminator_CForm_Front extends Forminator_Render_Form {
 	 * @return string
 	 */
 	public function change_condition_value_with_precision( $condition_value, $field ) {
-		$precision   = Forminator_Field::get_property( 'precision', $field, 2 );
+		if ( '' === $condition_value ) {
+			return $condition_value;
+		}
+
+		$precision = Forminator_Field::get_property( 'precision', $field, 2 );
 
 		return sprintf( "%.{$precision}f", $condition_value );
 	}
@@ -2061,12 +2078,11 @@ class Forminator_CForm_Front extends Forminator_Render_Form {
 
 		// If we have pagination skip button markup
 		if ( ! $this->has_pagination() ) {
-			if ( ! $has_paypal ) {
-				$html .= $this->get_button_markup();
-			} else {
+			if ( $has_paypal ) {
 				$html .= '<input type="hidden" name="payment_gateway_total" value="" />';
 				$html .= $this->get_paypal_button_markup( $form_id );
 			}
+			$html .= $this->get_button_markup();
 		}
 
 
@@ -2247,6 +2263,9 @@ class Forminator_CForm_Front extends Forminator_Render_Form {
 		$style_properties = $this->get_styles_properties();
 
 		if ( ! empty( $style_properties ) ) {
+
+            // Add divi overrider selector.
+            $divi_overrider = $this->divi_overrider();
 
 			foreach ( $style_properties as $style_property ) {
 
@@ -2849,6 +2868,7 @@ class Forminator_CForm_Front extends Forminator_Render_Form {
 					__( 'SSL required to submit this form, please check your URL.', Forminator::DOMAIN )
 				),
 				'payment_require_amount_error' => __( 'PayPal amount must be greater than 0.', Forminator::DOMAIN ),
+				'form_has_error'               => __( 'Please correct the errors before submission.', Forminator::DOMAIN ),
 			),
 			'payment_require_ssl' => $this->model->is_payment_require_ssl(),
 			'fadeout'             => $autoclose,
@@ -3024,6 +3044,9 @@ class Forminator_CForm_Front extends Forminator_Render_Form {
 			$this->model = Forminator_Custom_Form_Model::model()->load( $id );
 		}
 
+        $form_settings = $this->model->settings;
+        $form_type     = isset( $form_settings['form-type'] ) ? $form_settings['form-type'] : '';
+
 		$is_ajax_load = $this->model->is_ajax_load( $is_preview );
 
 		if ( ! empty( $quiz_id ) ) {
@@ -3066,7 +3089,20 @@ class Forminator_CForm_Front extends Forminator_Render_Form {
 		}
 
 		$response['is_ajax_load'] = true;
-		$response['html']         = $this->get_html( $hide, $is_preview );
+
+		// Hide registration or login form for logged-in users if enabled.
+		$hide_option = 'hide-' . $form_type . '-form';
+		if ( ! $is_preview
+				&& in_array( $form_type, array( 'login', 'registration' ), true ) && is_user_logged_in()
+				&& isset( $form_settings[ $hide_option ] ) && '1' === $form_settings[ $hide_option ] ) {
+
+			$hidden_message_option = 'hidden-' . $form_type . '-form-message';
+			$response['html']      = isset( $form_settings[ $hidden_message_option ] )
+					? $form_settings[ $hidden_message_option ]
+					: __( 'User is logged in.', Forminator::DOMAIN );
+		} else {
+			$response['html'] = $this->get_html( $hide, $is_preview );
+		}
 
 		$properties = isset( $this->forms_properties[0] ) ? $this->forms_properties[0] : array();
 
@@ -3377,4 +3413,12 @@ class Forminator_CForm_Front extends Forminator_Render_Form {
 		return $html;
     }
 
+	 /*
+	 * Divi Builder css overrider
+	 *
+	 * @return string
+	 */
+	public function divi_overrider() {
+		return $additional_css = '.et-db #et-boc .et_pb_module ';
+	}
 }

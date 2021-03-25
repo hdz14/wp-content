@@ -51,6 +51,7 @@ if ( ! function_exists( 'sampletheme_setup' ) ) :
 		register_nav_menus(
 			array(
 				'menu-primary' => esc_html__( 'Primary', 'sampletheme' ),
+				'menu-footer' => esc_html__( 'Footer', 'sampletheme' ),
 			)
 		);
 

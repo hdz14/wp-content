@@ -131,7 +131,7 @@ class Forminator_Text extends Forminator_Field {
 		$field_type  = trim( self::get_property( 'input_type', $field ) );
 		$design      = $this->get_form_style( $settings );
 		$label       = esc_html( self::get_property( 'field_label', $field, '' ) );
-		$description = esc_html( self::get_property( 'description', $field, '' ) );
+		$description = self::get_property( 'description', $field, '' );
 		$limit       = self::get_property( 'limit', $field, 0, 'num' );
 		$limit_type  = self::get_property( 'limit_type', $field, '', 'str' );
 
@@ -150,7 +150,7 @@ class Forminator_Text extends Forminator_Field {
 				'class'         => 'forminator-textarea',
 				'aria-required' => $ariareq,
 			);
-            
+
             // Add maxlength attribute if limit_type is characters
             if ( ! empty( $limit ) && 'characters' === $limit_type ) {
                 $textarea['maxlength'] = $limit;
@@ -208,7 +208,7 @@ class Forminator_Text extends Forminator_Field {
 				'class'         => 'forminator-input forminator-name--field',
 				'data-required' => $required,
 			);
-            
+
             // Add maxlength attribute if limit_type is characters
             if ( ! empty( $limit ) && 'characters' === $limit_type ) {
                 $input_text['maxlength'] = $limit;
@@ -364,17 +364,17 @@ class Forminator_Text extends Forminator_Field {
 			$field['limit'] = 0;
 		}
 
-		if ( $this->is_required( $field ) ) {
+		if ( $this->is_required( $field ) && '' === $data ) {
 			$required_message = self::get_property( 'required_message', $field, '' );
-			if ( empty( $data ) ) {
-				$this->validation_message[ $id ] = apply_filters(
-					'forminator_text_field_required_validation_message',
-					( ! empty( $required_message ) ? $required_message : __( 'This field is required. Please enter text.', Forminator::DOMAIN ) ),
-					$id,
-					$field
-				);
-			}
+
+			$this->validation_message[ $id ] = apply_filters(
+				'forminator_text_field_required_validation_message',
+				( ! empty( $required_message ) ? $required_message : __( 'This field is required. Please enter text.', Forminator::DOMAIN ) ),
+				$id,
+				$field
+			);
 		}
+
 		if ( $this->has_limit( $field ) ) {
 			if ( ( isset( $field['limit_type'] ) && 'characters' === trim( $field['limit_type'] ) ) && ( mb_strlen( $data ) > $field['limit'] ) ) {
 				$this->validation_message[ $id ] = apply_filters(

@@ -211,6 +211,8 @@ class Forminator_Addon_Hubspot_Wp_Api {
 		$res                   = wp_remote_request( $url, $_args );
 		$wp_response           = $res;
 
+		$this->_last_data_received = $res;
+
 		remove_filter( 'http_headers_useragent', array( $this, 'filter_user_agent' ) );
 
 		if ( is_wp_error( $res ) || ! $res ) {
@@ -241,6 +243,8 @@ class Forminator_Addon_Hubspot_Wp_Api {
 		// probably silent mode
 		if ( ! empty( $body ) ) {
 			$res = json_decode( $body );
+
+			$this->_last_data_received = $res;
 			if ( isset( $res->status ) && 'error' === $res->status ) {
 				$message = isset( $res->message ) ? $res->message : __( 'Invalid', Forminator::DOMAIN );
 				/* translators: ... */

@@ -580,6 +580,11 @@ class Forminator_Custom_Form_Model extends Forminator_Base_Form_Model {
 		$form_id       = (int) $this->id;
 		$form_settings = $this->settings;
 
+		// Force AJAX submit if form contains Stripe payment field
+		if ( $this->has_stripe_field() ) {
+			return true;
+		}
+
 		if ( ! isset( $form_settings['enable-ajax'] ) || empty( $form_settings['enable-ajax'] ) ) {
 			return false;
 		}

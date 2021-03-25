@@ -43,7 +43,7 @@
 				form = this.$el;
 			this.add_missing_relations();
 
-			this.$el.find( ".forminator-field input, .forminator-field select, .forminator-field textarea, .forminator-field-signature").change(function (e) {
+			this.$el.find( ".forminator-field input, .forminator-row input[type=hidden], .forminator-field select, .forminator-field textarea, .forminator-field-signature").on( 'change input', function (e) {
 				var $element = $(this),
 					element_id = $element.closest('.forminator-col').attr('id');
 				if (typeof element_id === 'undefined') {
@@ -63,14 +63,31 @@
 				}
 
 				self.process_relations( element_id, $element, e );
+
+				self.paypal_button_condition();
 			});
+
+            // Trigger change event to textarea that has tinyMCE editor
+            // For non-ajax form load
+            $( document ).on( 'tinymce-editor-init', function ( event, editor ) {
+                editor.on( 'change', function( e ) {
+                    form.find( '#' + $(this).attr( 'id' ) ).change();
+                });
+            });
+            // For ajax form load
+            if ( typeof tinyMCE !== 'undefined' && tinyMCE.activeEditor ) {
+                tinyMCE.activeEditor.on( 'change', function( e ) {
+                    form.find( '#' + $(this).attr( 'id' ) ).change();
+                });
+            }
+
 			this.$el.find('.forminator-button.forminator-button-back, .forminator-button.forminator-button-next').click(function (e) {
 				e.preventDefault();
-				form.find('.forminator-field input:not([type=file]), .forminator-field select, .forminator-field textarea').change();
+				form.find('.forminator-field input, .forminator-row input[type=hidden], .forminator-field select, .forminator-field textarea').change();
 				$(this).trigger('forminator.front.pagination.move');
 			});
 			// Simulate change
-			this.$el.find('.forminator-field input, .forminator-field select, .forminator-field textarea').change();
+			this.$el.find('.forminator-field input, .forminator-row input[type=hidden], .forminator-field select, .forminator-field textarea').change();
 			this.init_events();
 		},
 
@@ -144,7 +161,7 @@
 		 */
 		on_restart: function (e) {
 			// restart condition
-			this.$el.find('.forminator-field input, .forminator-field select, .forminator-field textarea').change();
+			this.$el.find('.forminator-field input, .forminator-row input[type=hidden], .forminator-field select, .forminator-field textarea').change();
 		},
 
 		/**
@@ -205,6 +222,10 @@
 						value.push($(this).val().toLowerCase());
 					}
 				});
+			} else if ( this.field_is_textarea_wpeditor( $element ) ) {
+                if ( typeof tinyMCE !== 'undefined' && tinyMCE.activeEditor ) {
+                    value = tinyMCE.activeEditor.getContent();
+                }
 			}
 			if (!value) return "";
 
@@ -323,6 +344,19 @@
 			});
 
 			return is_checkbox;
+		},
+
+        field_is_textarea_wpeditor: function ($element) {
+			var is_textarea_wpeditor = false;
+			$element.each(function () {
+				if ( $(this).parent( '.wp-editor-container' ).parent( 'div' ).hasClass( 'tmce-active' ) ) {
+					is_textarea_wpeditor = true;
+					//break
+					return false;
+				}
+			});
+
+			return is_textarea_wpeditor;
 		},
 
 		// used in forminatorFrontCalculate
@@ -784,6 +818,16 @@
 					sub_relations = self.show_element(sub_relation, e);
 				}
 			});
+		},
+
+		paypal_button_condition: function() {
+			var paymentElement = this.$el.find('.forminator-paypal-row');
+			if( paymentElement.length > 0 ) {
+				this.$el.find('.forminator-button-submit').closest('.forminator-row').removeClass('forminator-hidden');
+				if( ! paymentElement.hasClass('forminator-hidden') ) {
+					this.$el.find('.forminator-button-submit').closest('.forminator-row').addClass('forminator-hidden');
+				}
+			}
 		},
 	});
 

@@ -151,6 +151,6 @@ class Forminator_Section extends Forminator_Field {
 	 * @return mixed
 	 */
 	public function sanitize_output( $content ) {
-		return htmlentities( $content, ENT_QUOTES );
+		return esc_html( $content );
 	}
 }

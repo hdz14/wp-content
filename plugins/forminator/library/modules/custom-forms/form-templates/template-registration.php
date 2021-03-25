@@ -200,13 +200,14 @@ class Forminator_Template_Registration extends Forminator_Template {
 			'registration-username-field'      => 'text-1',
 			'registration-email-field'         => 'email-1',
 			'registration-password-field'      => 'password-1',
+			'registration-user-role'           => 'fixed',
 			'registration-role-field'          => 'subscriber',
 			//Redirected page for Email-activation method
 			'confirmation-page'                => ! empty( $pages ) ? $pages[0]->ID : '',
 			// Additional settings
 			'automatic-login'                  => false,
 			'hide-registration-form'           => true,
-			'hidden-registration-form-message' => '',
+			'hidden-registration-form-message' => __( 'You are already logged in.', Forminator::DOMAIN ),
 			'autoclose'                        => false,
 		);
 	}

@@ -102,13 +102,19 @@ class Forminator_Shortcode_Generator {
 		);
 
 		// Get SUI JS
-		wp_enqueue_script(
-			'shared-ui',
-			forminator_plugin_url() . 'assets/js/shared-ui.min.js',
-			array( 'jquery' ),
-			$sui_body_class,
-			true
-		);
+        // Change the handle to prevent SUI version conflicts
+        if ( defined( 'HUSTLE_SUI_VERSION' ) && version_compare( HUSTLE_SUI_VERSION, '2.8.0', '<' ) ) {
+            $sui_handle = 'shared-ui';
+        } else {
+            $sui_handle = 'forminator-shared-ui';
+        }
+        wp_enqueue_script(
+            $sui_handle,
+            forminator_plugin_url() . 'assets/js/shared-ui.min.js',
+            array( 'jquery' ),
+            $sui_body_class,
+            true
+        );
 
 		// Get shortcode generator scripts
 		wp_enqueue_script(

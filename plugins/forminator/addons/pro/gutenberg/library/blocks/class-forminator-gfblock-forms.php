@@ -107,7 +107,7 @@ class Forminator_GFBlock_Forms extends Forminator_GFBlock_Abstract {
 
 		wp_enqueue_script(
 			'select2-forminator',
-			forminator_plugin_url() . 'assets/js/library/select2.full.min.js',
+			forminator_plugin_url() . 'assets/forminator-ui/js/select2.full.min.js',
 			array( 'jquery' ),
 			FORMINATOR_VERSION,
 			false

@@ -501,6 +501,7 @@ class Forminator_Quiz_Form_Model extends Forminator_Base_Form_Model {
 					$answers = $question['answers'];
 					foreach ( $answers as $k => $answer ) {
 						if ( isset( $answer['toggle'] ) && filter_var( $answer['toggle'], FILTER_VALIDATE_BOOLEAN ) === true ) {
+                            $answer['id']      = $k;
 							$correct_answers[] = $answer;
 						}
 					}
@@ -542,5 +543,26 @@ class Forminator_Quiz_Form_Model extends Forminator_Base_Form_Model {
 		$enabled = apply_filters( 'forminator_quiz_is_result_share_enabled', $enabled, $global_enabled, $quiz_id, $quiz_settings );
 
 		return $enabled;
+	}
+
+	/**
+	 * Get the count of answered questions for multi-answer questions
+	 *
+	 * @since ?
+	 * @return int
+	 */
+	public function count_answered_questions( $questions, $user_answers ) {
+        $answered_questions = 0;
+
+		foreach ( $questions as $key => $val ) {
+            foreach ( $user_answers as $a_key => $a_val ) {
+                if ( false !== strpos( $a_key, $val['slug'] ) ) {
+                    $answered_questions ++;
+                    break;
+                }
+            }
+        }
+
+		return $answered_questions;
 	}
 }

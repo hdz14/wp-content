@@ -1,13 +1,13 @@
 === Forminator - Contact Form, Payment Form & Custom Form Builder ===
 Plugin Name: Forminator - Contact Form, Payment Form & Custom Form Builder
-Version: 1.14.8.1
+Version: 1.14.9
 Author: WPMU DEV
-Author URI: https://premium.wpmudev.org/
+Author URI: https://wpmudev.com/
 Contributors: WPMUDEV
 Tags: forms, contact form, wordpress form plugin, payment form, custom form, form builder, paypal form wordpress, form maker, quiz, quiz builder, order form, stripe payments, paypal payments, stripe form, paypal form
-Requires at least: 4.6
+Requires at least: 5.2
 Tested up to: 5.6
-Stable tag: 1.14.8.1
+Stable tag: 1.14.9
 Requires PHP: 5.2.4
 License: GPL v2 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -32,11 +32,11 @@ Forminator’s drag and drop visual builder makes it easy to setup and add forms
 
 ### Learn The Ropes With These Hands-On Forminator Tutorials
 
-- [Creating the Perfect Contact Form with Forminator](https://premium.wpmudev.org/blog/creating-the-perfect-contact-form-with-forminator/)
-- [Create an Easy Payment Form (for free!) with Forminator](https://premium.wpmudev.org/blog/create-free-payment-forms-with-forminator/)
-- [How to Get the Most Out of Using Forminator](https://premium.wpmudev.org/blog/get-the-most-out-of-forminator/)
-- [How To Capture eSignatures Using Forminator](https://premium.wpmudev.org/blog/forminator-wp-esignature-form/) 
-- [How To Collect Emails and Generate Leads With a Forminator Quiz](https://premium.wpmudev.org/blog/forminator-quiz-lead-generation/)  
+- [Creating the Perfect Contact Form with Forminator](https://wpmudev.com/blog/creating-the-perfect-contact-form-with-forminator/)
+- [Create an Easy Payment Form (for free!) with Forminator](https://wpmudev.com/blog/create-free-payment-forms-with-forminator/)
+- [How to Get the Most Out of Using Forminator](https://wpmudev.com/blog/get-the-most-out-of-forminator/)
+- [How To Capture eSignatures Using Forminator](https://wpmudev.com/blog/forminator-wp-esignature-form/)
+- [How To Collect Emails and Generate Leads With a Forminator Quiz](https://wpmudev.com/blog/forminator-quiz-lead-generation/)
 
 ### Accept Payments With Stripe and PayPal
 
@@ -81,7 +81,7 @@ Forminator comes stacked with crowd favorite third-party integrations – email 
 
 ### Develop And Sell Your Own Extensions
 
-Forminator is free and open to millions of WordPress users! Use the [developer API](https://premium.wpmudev.org/docs/wpmu-dev-plugins/forminator-api-docs/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=forminator-readme&utm_content=developer_api) and the included hooks and filters to build your own integrations or custom apps and sell them or give them away free here on WordPress.org.
+Forminator is free and open to millions of WordPress users! Use the [developer API](https://wpmudev.com/docs/wpmu-dev-plugins/forminator-api-docs/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=forminator-readme&utm_content=developer_api) and the included hooks and filters to build your own integrations or custom apps and sell them or give them away free here on WordPress.org.
 
 ### Poll Your Visitors
 
@@ -138,7 +138,7 @@ Perfect for appointment and hotel bookings - Forminator’s Date Picker Limits f
 
 Have an online application that requires a signature, or a contract you need your customers to sign? Forminator’s E-signature feature allows visitors to use their mouse, trackpad, or finger (on touch devices) to leave a signature upon submitting the form. Just insert the “E-Signature” field and voila! 
 
-***Note:** This feature is only available with [Forminator Pro](https://premium.wpmudev.org/project/forminator-pro/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=forminator-readme&utm_content=forminator_pro). Get instant access to Forminator Pro - as well as all our other premium plugins, managed WP hosting, our site management platform: The Hub, and 24/7 expert support - all with a [WPMU DEV membership](https://premium.wpmudev.org/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=forminator-readme&utm_content=wpmu_dev#trial) (7-day free trial included).
+***Note:** This feature is only available with [Forminator Pro](https://wpmudev.com/project/forminator-pro/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=forminator-readme&utm_content=forminator_pro). Get instant access to Forminator Pro - as well as all our other premium plugins, managed WP hosting, our site management platform: The Hub, and 24/7 expert support - all with a [WPMU DEV membership](https://wpmudev.com/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=forminator-readme&utm_content=wpmu_dev#trial) (7-day free trial included).
 
 ###What Do People Say About Forminator?
 
@@ -167,7 +167,7 @@ Love Forminator! WPMU DEV has some other awesome free plugins you should checkou
 
 = Are there any limitations in the free version of Forminator? =
 
-Currently the free version and the Pro version on [WPMU DEV](https://premium.wpmudev.org/project/forminator-pro/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=forminator-readme&utm_content=wpmu_dev#trial) are exactly the same, aside from our “E-Signature” feature, which is pro only.
+Currently the free version and the Pro version on [WPMU DEV](https://wpmudev.com/project/forminator-pro/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=forminator-readme&utm_content=wpmu_dev#trial) are exactly the same, aside from our “E-Signature” feature, which is pro only.
 
 = Does Forminator include a Gutenberg block? =
 
@@ -187,15 +187,15 @@ Yes! Forminator is not managing the payment processing. We worked with Stripe an
 
 = How do I create a contact form in WordPress with Forminator? =
 
-We've put together a simple guide to Forminator contact forms on our blog. You can read the article [here](https://premium.wpmudev.org/blog/build-contact-form/)
+We've put together a simple guide to Forminator contact forms on our blog. You can read the article [here](https://wpmudev.com/blog/build-contact-form/)
 
 = I want to develop for Forminator! Where can I find API documentation? =
 
-Find out all you need to know by checking out our API documentation [here](https://premium.wpmudev.org/docs/wpmu-dev-plugins/forminator-api-docs/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=forminator-readme&utm_content=developer_api)
+Find out all you need to know by checking out our API documentation [here](https://wpmudev.com/docs/wpmu-dev-plugins/forminator-api-docs/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=forminator-readme&utm_content=developer_api)
 
 = Where can I get Forminator docs? =
 
-[https://premium.wpmudev.org/docs/wpmu-dev-plugins/forminator/](https://premium.wpmudev.org/docs/wpmu-dev-plugins/forminator/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=forminator-readme&utm_content=docs_link)
+[https://wpmudev.com/docs/wpmu-dev-plugins/forminator/](https://wpmudev.com/docs/wpmu-dev-plugins/forminator/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=forminator-readme&utm_content=docs_link)
 
 == Screenshots ==
 
@@ -210,6 +210,46 @@ Find out all you need to know by checking out our API documentation [here](https
 9. Allow simple drag and drop multi-file uploads for users.
 
 == Changelog ==
+
+= 1.14.9 =
+
+- Improvement: Stripe submission stored but payment is not received
+- Improvement: Added multi-answering capability to knowledge quizzes
+- Improvement: Update the supported currencies list of Stripe and Paypal
+- Improvement: Duplicate form input ID’s in admin
+- Improvement: When using “User IP” merge tag in hidden field, captures the ip at the time of form submission instead of on form load
+- Fix: Select field pushing below field on expanding
+- Fix: Remove the “Enter List Limit” step in MailChimp integration
+- Fix: Polls results not showing up with Shortcodes Ultimate enabled
+- Fix: Quiz container border color cannot be changed
+- Fix: Missing images in radio options after update
+- Fix: Phone field is not showing when used inside Hustle
+- Fix: ReCaptcha doesn’t load on Firefox when Ajax load is disabled
+- Fix: Export Schedule is sent in different time
+- Fix: Allow whitespace on Form/Poll/Quiz title
+- Fix: Checkbox does not take up raw HTML tags
+- Fix: Submissions counter (stats) not updated when entry deleted
+- Fix: Payment possible even if form doesn’t validate
+- Fix: Pagination is broken in popup
+- Fix: Currency fields not exporting via Google Sheet integrations
+- Fix: Visibility conditions don’t work with the “Hidden” field type
+- Fix: Date picker limits don’t work with some date formats
+- Fix: Call to undefined function mime_content_type()
+- Fix: Console warnings for non-unique id #forminatorNonce
+- Fix: Global PayPal currency setting not followed on the PayPal settings
+- Fix: Conditionally hidden field that takes part in calculation has value “1" in email notifications
+- Fix: WP Editor with AJAX load breaks select field conditions
+- Fix: Only post data title field sent to email, others fields missing
+- Fix: Date conditions is_day and is_month are not functional
+- Fix: Form loses styles when displayed conditionally on a page
+- Fix: Import CF7 form submissions don’t work for Flamingo
+- Fix: Conflicts with Divi Overlays
+- Fix: Issues after selection of the last page of the pagination
+- Fix: reCAPTCHA V3 field does not work when “Load form using AJAX” is enabled and another active plugin uses the same keys
+- Fix: Personality quiz email settings include conditions from Knowledge quiz
+- Fix: Conditional logic is not working on IE11
+- Fix: Duplicate question with answers are modified when you edit answers of the original or the copy
+- Other minor enhancements/fixes
 
 = 1.14.8.1 =
 
@@ -1030,13 +1070,13 @@ Find out all you need to know by checking out our API documentation [here](https
 
 == About Us ==
 WPMU DEV is a premium supplier of quality WordPress plugins, services and support. Join here:
-[https://premium.wpmudev.org/](https://premium.wpmudev.org/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=forminator-readme&utm_content=wpmu_dev_link)
+[https://wpmudev.com/](https://wpmudev.com/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=forminator-readme&utm_content=wpmu_dev_link)
 
 Don't forget to stay up to date on everything WordPress from the Internet's number one resource:
-[WPMU DEV Blog](https://premium.wpmudev.org/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=forminator-readme&utm_content=wpmu_dev_blog_link)
+[WPMU DEV Blog](https://wpmudev.com/?utm_source=wordpress.org&utm_medium=readme&utm_campaign=forminator-readme&utm_content=wpmu_dev_blog_link)
 
 Hey, one more thing... we hope you [enjoy our free offerings](http://profiles.wordpress.org/WPMUDEV/) as much as we've loved making them for you!
 
 == Contact and Credits ==
 
-[WPMU DEV](https://premium.wpmudev.org/)
+[WPMU DEV](https://wpmudev.com/)

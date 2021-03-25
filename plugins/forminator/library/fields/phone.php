@@ -171,7 +171,7 @@ class Forminator_Phone extends Forminator_Field {
 		$international_country = self::get_property( 'phone_international_country', $field, 'US' );
 		$limit                 = esc_html( self::get_property( 'limit', $field, 10 ) );
 		$label                 = esc_html( self::get_property( 'field_label', $field, '' ) );
-		$description           = esc_html( self::get_property( 'description', $field, '' ) );
+		$description           = self::get_property( 'description', $field, '' );
 		$format_check          = self::get_property( 'validation', $field, self::FIELD_PROPERTY_VALUE_NOT_EXIST );
 
 		if ( (bool) $required ) {
@@ -239,7 +239,7 @@ class Forminator_Phone extends Forminator_Field {
 			$html .= '<span class="forminator-description">';
 
 			if ( ! empty( $description ) ) {
-				$html .= $description;
+				$html .= wp_kses_data( $description );
 			}
 
 			if ( 'character_limit' === $format_check && 0 < $limit ) {

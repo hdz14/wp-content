@@ -405,7 +405,7 @@ class Forminator_Address extends Forminator_Field {
 				$country_data = array(
 					'name'  => $id . '-country',
 					'id'    => $id . '-country',
-					'class' => 'forminator-select',
+					'class' => 'forminator-select2',
 				);
 
 				$countries = array(

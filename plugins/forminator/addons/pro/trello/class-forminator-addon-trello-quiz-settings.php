@@ -489,6 +489,7 @@ class Forminator_Addon_Trello_Quiz_Settings extends Forminator_Addon_Quiz_Settin
 		$var_list['quiz_name'] = __( 'Quiz Name', Forminator::DOMAIN );
 		$var_list              = array_merge( $var_list, forminator_get_vars() );
 		unset( $var_list['custom_value'] );
+		unset( $var_list['query'] );
 
 		$template_params['name_fields'] = $var_list;
 		$template_params['desc_fields'] = array_merge( forminator_get_quiz_vars(), $var_list );

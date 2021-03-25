@@ -70,6 +70,7 @@ class Forminator_Export {
 		add_action( 'wp_footer', array( &$this, 'schedule_entries_exporter' ) );
 
 		add_action( 'forminator_send_export', array( &$this, 'maybe_send_export' ) );
+		add_filter( 'cron_schedules', array( $this, 'add_cron_schedule' ) );
 	}
 
 	/**
@@ -79,8 +80,23 @@ class Forminator_Export {
 	 */
 	public function schedule_entries_exporter() {
 		if ( ! wp_next_scheduled( 'forminator_send_export' ) ) {
-			wp_schedule_single_event( time() + WP_CRON_LOCK_TIMEOUT, 'forminator_send_export' );
+			wp_schedule_event( time(), 'every_minute', 'forminator_send_export' );
 		}
+	}
+
+	/**
+	 * Add custom cron interval
+	 *
+	 * @param array $schedules Cron intervals.
+	 * @return array
+	 */
+	public function add_cron_schedule( $schedules ) {
+		$schedules['every_minute'] = array(
+			'interval' => MINUTE_IN_SECONDS,
+			'display'  => __( 'Every minute', FORMINATOR::DOMAIN ),
+		);
+
+		return $schedules;
 	}
 
 	/**
@@ -271,6 +287,9 @@ class Forminator_Export {
 	 */
 	public function maybe_send_export( $force = false ) {
 		$export_schedules = $this->get_entries_export_schedule();
+		if ( empty( $export_schedules ) ) {
+			return;
+		}
 
 		$receipts = array();
 		foreach ( $export_schedules as $row ) {
@@ -379,7 +398,9 @@ class Forminator_Export {
 		foreach ( $files as $file ) {
 			@unlink( $file ); // phpcs:ignore
 		}
-		update_option( 'forminator_entries_export_schedule', $export_schedules );
+		if ( $receipts ) {
+			update_option( 'forminator_entries_export_schedule', $export_schedules );
+		}
 	}
 
 	/**
@@ -787,21 +808,32 @@ class Forminator_Export {
 
 	private function get_monthly_export_date( $last_sent, $month_day ) {
 		// Array [0] = year. [1] = month. [2] = day.
-		$last_sent_array = explode( '-', date( 'Y-m-d', $last_sent ) );
+		$old_date  = gmdate( 'Y-m-d', intval( $last_sent ) );
+		$month_day = (int) $month_day;
+		if ( $old_date ) {
+			list( $old_year, $old_month, $old_day ) = explode( '-', $old_date );
 
-		$next_sent_array    = array();
-		$next_sent_array[0] = ( 12 == $last_sent_array[1] ) ? $last_sent_array[0] + 1 : $last_sent_array[0];
-		$next_sent_array[1] = ( 12 == $last_sent_array[1] ) ? 1 : $last_sent_array[1] + 1;
-		$next_sent_array[2] = $month_day;
+			$year  = ( '12' === $old_month ) ? $old_year + 1 : $old_year;
+			$month = ( '12' === $old_month ) ? 1 : $old_month + 1;
+			$day   = ( 0 < $month_day ) && ( 32 > $month_day ) ? $month_day : 1;
 
-		$is_valid_date = checkdate( $next_sent_array[1], $next_sent_array[2], $next_sent_array[0] );
+			$is_valid_date = checkdate( $month, $day, $year );
 
-		while ( ! $is_valid_date ) {
-			$next_sent_array[2] --;
-			$is_valid_date = checkdate( $next_sent_array[1], $next_sent_array[2], $next_sent_array[0] );
+			while ( ! $is_valid_date && $day > 0 ) {
+				$day--;
+				$is_valid_date = checkdate( $month, $day, $year );
+			}
 		}
 
-		$next_sent = strtotime( implode( '-', $next_sent_array ) );
+		if ( ! empty( $is_valid_date ) ) {
+			$next_sent = strtotime( "$year-$month-$day" );
+		} else {
+			$year  = gmdate( 'Y' );
+			$month = gmdate( 'm' );
+			$day   = gmdate( 'd' );
+
+			$next_sent = strtotime( '-1 day', strtotime( "$year-$month-$day" ) );
+		}
 
 		return $next_sent;
 	}

@@ -12,32 +12,31 @@
 ?>
 
 	<footer id="colophon" class="site-footer">
-		<div class="grid-container row">
+
+		<!-- <div class="grid-container row">
 			<div class="quick-title">
 				<h3 id="quick-h3">Quick Links</h3>
 			</div>
-		</div>
+		</div> -->
+
 		<div class="grid-container row footer-sidebar">
 			
 			<div class="col-3 footer-sidebar1">
 				<hr class="eSeparator">
 				<?php
+				if ( has_nav_menu( 'menu-footer' ) ) {
 				wp_nav_menu( 
 
 					array( 
-    					'theme_location' => 'side-menu', 
-    					'container_class' => 'side-bar' 
+    					'theme_location' => 'menu-footer', 
+    					'menu-id' => 'footer-menu' 
 					) 
 				); 
+				}
 				?>
-				<!-- <ul>
-					<li><a href="home">Privacy Policy</a></li>
-					<li><a href="home">Return Policy</a></li>
-					<li><a href="home">Help Center</a></li>
-				</ul> -->
 			</div>
 
-			<div class="col-3 footer-sidebar2">
+			<!-- <div class="col-3 footer-sidebar2">
 				<hr class="eSeparator">
 				<ul>
 					<li><a href="home">FAQs</a></li>
@@ -58,7 +57,7 @@
 			<div class="col-3 footer-sidebar4">
 				<hr class="eSeparator">
 				<a href="https://www.google.com/maps" target="_blank"><img id="map" src="<?php echo get_bloginfo('template_url') ?>/assets/images/map.png"/></a>
-			</div>
+			</div> -->
 
 		</div>
 

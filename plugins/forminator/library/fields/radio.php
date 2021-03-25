@@ -130,7 +130,7 @@ class Forminator_Radio extends Forminator_Field {
 		$options     = self::get_property( 'options', $field, array() );
 		$value_type  = isset( $field['value_type'] ) ? trim( $field['value_type'] ) : 'multiselect';
 		$post_value  = self::get_post_data( $name, false );
-		$description = esc_html( self::get_property( 'description', $field, '' ) );
+		$description = self::get_property( 'description', $field, '' );
 		$label       = esc_html( self::get_property( 'field_label', $field, '' ) );
 		$class      = ( 'horizontal' === self::get_property( 'layout', $field, '' ) ) ? 'forminator-radio forminator-radio-inline' : 'forminator-radio';
 		$design      = $this->get_form_style( $settings );
@@ -186,7 +186,27 @@ class Forminator_Radio extends Forminator_Field {
 
 				$html .= sprintf(
 					'<span>%s</span>',
-					esc_html( $option['label'] )
+					wp_kses(
+								$option['label'], 
+								array(
+									'a'      => array(
+												'href'  => array(),
+												'title' => array()
+									),
+									'span'   => array(
+												'class' => array()
+									),
+									'img'   => array(
+												'src' => array(),
+												'alt' => array()
+									),
+									'b' 	 => array(),
+									'i' 	 => array(),
+									'br'     => array(),
+									'em'     => array(),
+									'strong' => array(),
+								)
+							)
 				);
 
 			$html .= '</label>';

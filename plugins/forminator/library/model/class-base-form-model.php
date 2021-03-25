@@ -261,6 +261,31 @@ abstract class Forminator_Base_Form_Model {
 	}
 
 	/**
+	 * Get entry type
+	 *
+	 * @return string
+	 */
+	public function get_entry_type() {
+		$post_type = $this->get_post_type();
+		switch ( $post_type ) {
+			case 'forminator_forms':
+				$entry_type = 'custom-forms';
+				break;
+			case 'forminator_polls':
+				$entry_type = 'polls';
+				break;
+			case 'forminator_quizzes':
+				$entry_type = 'quizzes';
+				break;
+			default:
+				$entry_type = '';
+				break;
+		}
+
+		return $entry_type;
+	}
+
+	/**
 	 * Get all paginated
 	 *
 	 * @since 1.2
@@ -461,6 +486,10 @@ abstract class Forminator_Base_Form_Model {
 					} else {
 						if ( ! empty( $meta['fields'] ) && 'fields' === $map['field'] ) {
 							foreach ( $meta['fields'] as $field_data ) {
+								// Prevent creating empty wrappers
+								if ( isset( $field_data['type'] ) && 'honeypot' === $field_data['type'] ) {
+									continue;
+								}
 								$field          = new Forminator_Form_Field_Model( $form_settings );
 								$field->form_id = $post->ID;
 								$field->slug    = $field_data['id'];

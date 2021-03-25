@@ -510,8 +510,10 @@ class Forminator_Admin_AJAX {
 		$settings['version']  = $version;
 		$form_model->settings = $settings;
 
-		// status
-		$form_model->status = $status;
+		// don't update leads post_status.
+		if ( 'leads' !== $form_model->status ) {
+			$form_model->status = $status;
+		}
 
 		// Save data
 		$id = $form_model->save();

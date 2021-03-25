@@ -80,6 +80,9 @@ class Forminator_Addon_Admin_Ajax {
 			add_action( 'wp_ajax_forminator_addon_get_quiz_addons', array( $this, 'get_quiz_addons' ) );
 			add_action( 'wp_ajax_forminator_addon_quiz_settings', array( $this, 'quiz_settings' ) );
 			add_action( 'wp_ajax_forminator_addon_quiz_deactivate', array( $this, 'quiz_deactivate' ) );
+
+			add_action( 'wp_ajax_forminator_refresh_email_lists', array( $this, 'refresh_email_lists' ) );
+
 			self::$is_ajax_hooked = true;
 		}
 	}
@@ -478,6 +481,32 @@ class Forminator_Addon_Admin_Ajax {
 			self::$is_ajax_hooked = false;
 			self::$_instance      = null;
 		}
+	}
+
+	/**
+	 * Refresh email lists
+	 */
+	public function refresh_email_lists() {
+		$this->validate_ajax();
+		$sanitized_post_data = $this->validate_and_sanitize_fields( array( 'slug' ) );
+
+		$slug  = $sanitized_post_data['slug'];
+		$addon = $this->validate_addon_from_slug( $slug );
+		$lists = array();
+
+		if ( method_exists( $addon, 'get_api' ) ) {
+			$api = $addon->get_api();
+			if ( method_exists( $api, 'get_all_lists' ) ) {
+				$lists = $api->get_all_lists();
+			}
+		}
+		$html = Forminator_Addon_Settings_Abstract::email_lists_options( $lists );
+
+		wp_send_json_success(
+			array(
+				'options' => $html,
+			)
+		);
 	}
 
 	/**

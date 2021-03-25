@@ -134,7 +134,7 @@ class Forminator_Number extends Forminator_Field {
 		$placeholder         = $this->sanitize_value( self::get_property( 'placeholder', $field ) );
 		$value               = esc_html( self::get_post_data( $name, self::get_property( 'default_value', $field ) ) );
 		$label               = esc_html( self::get_property( 'field_label', $field, '' ) );
-		$description         = esc_html( self::get_property( 'description', $field, '' ) );
+		$description         = self::get_property( 'description', $field, '' ); // wp_kses_data already applied in get_description
 		$design              = $this->get_form_style( $settings );
 		$min                 = esc_html( self::get_property( 'limit_min', $field, false ) );
 		$max                 = esc_html( self::get_property( 'limit_max', $field, false ) );

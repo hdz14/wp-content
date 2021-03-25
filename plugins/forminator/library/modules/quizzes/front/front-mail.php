@@ -59,12 +59,13 @@ class Forminator_Quiz_Front_Mail extends Forminator_Mail {
 	 * @param array                       $data
 	 * @param Forminator_Form_Entry_Model $entry
 	 */
-	public function process_mail( $quiz, $data, Forminator_Form_Entry_Model $entry ) {
+	public function process_mail( $quiz, $data, Forminator_Form_Entry_Model $entry, $final_res = array() ) {
 		forminator_maybe_log( __METHOD__ );
 
 		$setting       = $quiz->settings;
 		$notifications = $quiz->notifications;
 		$lead_model    = null;
+		$result_slug   = isset( $final_res['slug'] ) ? $final_res['slug'] : '';
 
 		if ( ! isset( $data['current_url'] ) || empty( $data['current_url'] ) ) {
 			$data['current_url'] = forminator_get_current_url();
@@ -118,7 +119,7 @@ class Forminator_Quiz_Front_Mail extends Forminator_Mail {
 			//Process admin mail
 			foreach ( $notifications as $notification ) {
 
-				if ( $this->is_quiz_condition( $notification, $data, $quiz ) ) {
+				if ( $this->is_quiz_condition( $notification, $data, $quiz, $result_slug ) ) {
 					continue;
 				}
 

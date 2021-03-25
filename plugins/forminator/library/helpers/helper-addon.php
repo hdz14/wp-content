@@ -259,7 +259,9 @@ function forminator_get_allowed_field_types_for_addon() {
 		'calculation',
 		'stripe',
 		'paypal',
-		'signature'
+		'signature',
+        // 1.15
+		'currency'
 	);
 
 	/**

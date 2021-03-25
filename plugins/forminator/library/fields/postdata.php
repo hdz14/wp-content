@@ -314,7 +314,7 @@ class Forminator_Postdata extends Forminator_Field {
 
 				$html .= apply_filters(
 					'forminator_field_postdata_' . $category['value'],
-					$this->_get_post_field( $id, $name, $field, $required, $category['value'], $select_type, 'forminator-select', $category['value'], $options, $value, $design, $allow_multiple )
+					$this->_get_post_field( $id, $name, $field, $required, $category['value'], $select_type, 'forminator-select2', $category['value'], $options, $value, $design, $allow_multiple )
 				);
 			}
 		}
@@ -346,6 +346,7 @@ class Forminator_Postdata extends Forminator_Field {
 		$html          = '';
 		$field_enabled = self::get_property( $field_name, $field, '' );
 		$type          = trim( $type );
+		$full_id       = 'forminator-field-' . $input_suffix . '-' . $id;
 
 		if ( ! empty( $field_enabled ) ) {
 			$cols         = 12;
@@ -356,7 +357,7 @@ class Forminator_Postdata extends Forminator_Field {
 				'type'        => $type,
 				'name'        => $id . '-' . $input_suffix,
 				'placeholder' => $placeholder,
-				'id'          => 'forminator-field-' . $input_suffix . '-' . $id,
+				'id'          => $full_id,
 				'class'       => $class,
 			);
 
@@ -478,10 +479,11 @@ class Forminator_Postdata extends Forminator_Field {
 				}
 			} elseif ( 'file' === $type ) {
 
+				$label_id = $full_id;
 				if ( $required ) {
 					$html .= sprintf(
 						'<label for="%s" class="forminator-label">%s %s</label>',
-						'forminator-field-' . $input_suffix . '-' . $id,
+						$label_id,
 						$label,
 						forminator_get_required_icon()
 					);
@@ -489,13 +491,13 @@ class Forminator_Postdata extends Forminator_Field {
 
 					$html .= sprintf(
 						'<label for="%s" class="forminator-label">%s</label>',
-						'forminator-field-' . $input_suffix . '-' . $id,
+						$label_id,
 						$label
 					);
 				}
 
 				$html .= self::create_file_upload(
-					'forminator-field-' . $input_suffix . '-' . $id,
+					$input_suffix . '-' . $id,
 					$name . '-' . $input_suffix,
 					$description,
 					$required,

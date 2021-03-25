@@ -9,7 +9,7 @@
  *
  * @since 1.1
  */
-abstract class Forminator_Addon_Form_Settings_Abstract {
+abstract class Forminator_Addon_Form_Settings_Abstract extends Forminator_Addon_Settings_Abstract {
 
 	/**
 	 * Current Form ID

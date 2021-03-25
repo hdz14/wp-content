@@ -62,7 +62,7 @@ if ( 0 === $num_recent ) {
 
 						<tr>
 
-							<td class="sui-table-item-title"><?php echo esc_html( $module['name'] ); ?></td>
+							<td class="sui-table-item-title"><?php echo esc_html( htmlspecialchars( $module['name'] ) ); ?></td>
 
 							<td class="fui-col-status">
 
@@ -108,7 +108,7 @@ if ( 0 === $num_recent ) {
 
 										<li><button class="wpmudev-open-modal"
 											data-modal="preview_quizzes"
-											data-modal-title="<?php echo sprintf( '%s - %s', __( 'Preview Quiz', Forminator::DOMAIN ), forminator_get_form_name( $module['id'], 'quiz' ) ); // phpcs:ignore ?>"
+											data-modal-title="<?php echo sprintf( '%s - %s', __( 'Preview Quiz', Forminator::DOMAIN ), htmlspecialchars( htmlspecialchars( forminator_get_form_name( $module['id'], 'quiz' ) ) ) ); // phpcs:ignore ?>"
 											data-form-id="<?php echo esc_attr( $module['id'] ); ?>"
                                  data-has-leads="<?php echo esc_attr( $has_leads ); ?>"
                                  data-leads-id="<?php echo esc_attr( $leads_id ); ?>"
@@ -125,8 +125,12 @@ if ( 0 === $num_recent ) {
 
 										<li <?php echo ( $module['has_leads'] ) ? 'aria-hidden="true"' : ''; ?>><form method="post">
 											<input type="hidden" name="forminator_action" value="clone">
+											<input type="hidden" name="form_type" value="quiz">
 											<input type="hidden" name="id" value="<?php echo esc_attr( $module['id'] ); ?>"/>
-											<?php wp_nonce_field( 'forminatorQuizFormRequest', 'forminatorNonce' ); ?>
+											<?php
+											$clone_nonce = esc_attr( 'forminator-nonce-clone-' . $module['id'] );
+											wp_nonce_field( $clone_nonce, $clone_nonce );
+											?>
 											<?php if ( $module['has_leads'] ): ?>
 												<button type="submit" disabled="disabled" class="fui-button-with-tag sui-tooltip sui-tooltip-left sui-constrained" data-tooltip="<?php esc_html_e( 'Duplicate isn\'t supported at the moment for the quizzes with lead capturing enabled.', Forminator::DOMAIN ); ?>">
 													<span class="sui-icon-page-multiple" aria-hidden="true"></span>
@@ -134,7 +138,9 @@ if ( 0 === $num_recent ) {
 													<span class="sui-tag sui-tag-blue sui-tag-sm"><?php echo esc_html__( 'Coming soon', Forminator::DOMAIN ); ?></span>
 												</button>
 											<?php else: ?>
-												<button type="submit"><span class="sui-icon-page-multiple" aria-hidden="true"></span> <?php esc_html_e( 'Duplicate', Forminator::DOMAIN ); ?></button>
+												<button type="submit">
+													<i class="sui-icon-page-multiple" aria-hidden="true"></i> <?php esc_html_e( 'Duplicate', Forminator::DOMAIN ); ?>
+												</button>
 											<?php endif; ?>
 										</form></li>
 

@@ -66,6 +66,12 @@ class Forminator_PayPal extends Forminator_Field {
 	public function defaults() {
 
 		$default_currency = 'USD';
+		try {
+			$paypal           = new Forminator_PayPal_Express();
+			$default_currency = $paypal->get_default_currency();
+		} catch ( Forminator_Gateway_Exception $e ) {
+			forminator_maybe_log( __METHOD__, $e->getMessage() );
+		}
 
 		return array(
 			'mode'        => 'sandbox',

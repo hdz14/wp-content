@@ -130,7 +130,7 @@ class Forminator_MultiValue extends Forminator_Field {
 		$required    = self::get_property( 'required', $field, false );
 		$options     = self::get_property( 'options', $field, array() );
 		$value_type  = trim( isset( $field['value_type'] ) ? $field['value_type'] : "multiselect" );
-		$description = esc_html( self::get_property( 'description', $field, '' ) );
+		$description = self::get_property( 'description', $field, '' );
 		$label       = esc_html( self::get_property( 'field_label', $field, '' ) );
 		$class       = ( 'horizontal' === self::get_property( 'layout', $field, '' ) ) ? 'forminator-checkbox forminator-checkbox-inline' : 'forminator-checkbox';
 		$design      = $this->get_form_style( $settings );

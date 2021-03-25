@@ -9,7 +9,7 @@
  *
  * @since 1.6.2
  */
-abstract class Forminator_Addon_Quiz_Settings_Abstract {
+abstract class Forminator_Addon_Quiz_Settings_Abstract extends Forminator_Addon_Settings_Abstract {
 
 	/**
 	 * Current Quiz ID

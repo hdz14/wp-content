@@ -129,7 +129,7 @@ class Forminator_Textarea extends Forminator_Field {
 		$placeholder = $this->sanitize_value( self::get_property( 'placeholder', $field ) );
 		$design      = $this->get_form_style( $settings );
 		$label       = esc_html( self::get_property( 'field_label', $field, '' ) );
-		$description = esc_html( self::get_property( 'description', $field, '' ) );
+		$description = self::get_property( 'description', $field, '' );
 		$limit       = self::get_property( 'limit', $field, 0, 'num' );
 		$limit_type  = self::get_property( 'limit_type', $field, '', 'str' );
 		$editor_type  = self::get_property( 'editor-type', $field, false, 'bool' );

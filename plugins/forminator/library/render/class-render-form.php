@@ -122,6 +122,10 @@ abstract class Forminator_Render_Form {
 		} else {
 			self::$render_ids[ $id ] ++;
 		}
+		// Add other plugin classes here that causes additional render_id
+		if ( self::$render_ids[ $id ] > 0 && class_exists( 'DiviOverlaysCore' ) ) {
+			self::$render_ids[ $id ] --;
+		}
 	}
 
 	/**
@@ -1035,15 +1039,21 @@ abstract class Forminator_Render_Form {
 	 *
 	 * @param $action
 	 * @param $name
+	 * @param string $referer_url Optional. Referer URL.
 	 *
 	 * @return string
 	 */
-	protected function nonce_field( $action, $name ) {
-		$with_referer = ! empty( $this->_wp_http_referer ) ? false : true;
+	protected function nonce_field( $action, $name, $referer_url = '' ) {
+		if ( $referer_url ) {
+			$referer = $referer_url;
+		} elseif ( ! empty( $this->_wp_http_referer ) ) {
+			$referer = $this->_wp_http_referer;
+		}
+		$with_referer = ! empty( $referer ) ? false : true;
 		$nonce        = wp_nonce_field( $action, $name, $with_referer, false );
 
 		if ( ! $with_referer ) {
-			$nonce .= sprintf( '<input type="hidden" name="_wp_http_referer" value="%s" />', esc_attr( $this->_wp_http_referer ) );
+			$nonce .= sprintf( '<input type="hidden" name="_wp_http_referer" value="%s" />', esc_attr( $referer ) );
 		}
 
 		return $nonce;

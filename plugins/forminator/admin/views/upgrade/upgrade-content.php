@@ -69,14 +69,19 @@ if ( ! defined( 'ABSPATH' ) ) {
                     <p><?php esc_html_e( 'We love our superhero branding, but we know it\'s not for everyone. With a Pro membership, you can remove our superhero branding and replace it with your own.', Forminator::DOMAIN ); ?></p>
                 </div>
                 <div class="sui-upgrade-page-features__item">
-                    <i class="sui-icon-smush" aria-hidden="true"></i>
-                    <h3><?php esc_html_e( 'Smush Pro and Hummingbird Pro - the ultimate site optimization & performance package.', Forminator::DOMAIN ); ?></h3>
-                    <p><?php esc_html_e( 'Smush\'s award-winning image optimization + Hummingbird\'s performance optimization gives you the fastest possible WordPress site. It\'s a powerful combination that your visitors, customers, and search engines will love.', Forminator::DOMAIN ); ?></p>
+                    <i class="sui-icon-update" aria-hidden="true"></i>
+                    <h3><?php esc_html_e( 'Create Recurring/Subscription Payments with Forminator Pro.', Forminator::DOMAIN ); ?></h3>
+                    <p><?php esc_html_e( 'Start accepting subscription and recurring Stripe/PayPal payments on your WordPress sites with Forminator Pro. Add multiple payment fields and conditionally process them based on form values selected by your users.', Forminator::DOMAIN ); ?></p>
                 </div>
                 <div class="sui-upgrade-page-features__item">
                     <i class="sui-icon-gdpr" aria-hidden="true"></i>
                     <h3><?php esc_html_e( 'Premium WordPress plugins', Forminator::DOMAIN ); ?></h3>
                     <p><?php esc_html_e( 'In addition to Forminator Pro, you\'ll get our full suite of premium WordPress plugins. From security to backups to marketing and SEO, you\'ve got all the WordPress solutions you\'ll need to build, promote and manage your website. Get access to unlimited usage across all your sites. Join more than 1 million users with our plugins.', Forminator::DOMAIN ); ?></p>
+                </div>
+                <div class="sui-upgrade-page-features__item">
+                    <i class="sui-icon-smush" aria-hidden="true"></i>
+                    <h3><?php esc_html_e( 'Smush Pro and Hummingbird Pro - the ultimate site optimization & performance package.', Forminator::DOMAIN ); ?></h3>
+                    <p><?php esc_html_e( 'Smush\'s award-winning image optimization + Hummingbird\'s performance optimization gives you the fastest possible WordPress site. It\'s a powerful combination that your visitors, customers, and search engines will love.', Forminator::DOMAIN ); ?></p>
                 </div>
                 <div class="sui-upgrade-page-features__item">
                     <i class="sui-icon-hub" aria-hidden="true"></i>

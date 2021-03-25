@@ -50,18 +50,6 @@
 					</div>
 				</div>
 				
-				<div class="col-7 topnav">
-					<!-- <div class="search-container">
-					<form action="/action_page.php">
-						<input type="text" placeholder="Search..." name="search">
-						<button type="submit"><i class="fa fa-search"></i></button>
-					</form>
-					</div> -->
-				</div>
-
-				<div class="col-1 topnav cart">
-					<a href="cart"><h3>My Cart</h3></a>
-				</div>
 				
 
 			</div>

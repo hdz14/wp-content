@@ -233,7 +233,7 @@ class Forminator_Date extends Forminator_Field {
 					$start_offset_value    = self::get_property( 'start-offset-value', $field, '0' );
 					$start_offset_duration = self::get_property( 'start-offset-duration', $field, 'days' );
 					if ( 'today' === $start_date_type ) {
-						$start_date = date_i18n( datepicker_default_format( $date_format ), strtotime( $start_offset_operator . $start_offset_value . ' ' . $start_offset_duration ) );
+						$start_date = date_i18n( 'Y-m-d', strtotime( $start_offset_operator . $start_offset_value . ' ' . $start_offset_duration ) );
 					} else {
 						$start_date_field = $start_date_type;
 						$start_offset     = $start_offset_operator . '_' . $start_offset_value . '_' . $start_offset_duration;
@@ -248,7 +248,7 @@ class Forminator_Date extends Forminator_Field {
 					$end_offset_value    = self::get_property( 'end-offset-value', $field, '0' );
 					$end_offset_duration = self::get_property( 'end-offset-duration', $field, 'days' );
 					if ( 'today' === $end_date_type ) {
-						$end_date = date_i18n( datepicker_default_format( $date_format ), strtotime( $end_offset_operator . $end_offset_value . ' ' . $end_offset_duration ) );
+						$end_date = date_i18n( 'Y-m-d', strtotime( $end_offset_operator . $end_offset_value . ' ' . $end_offset_duration ) );
 					} else {
 						$end_date_field = $end_date_type;
 						$end_offset     = $end_offset_operator . '_' . $end_offset_value . '_' . $end_offset_duration;
@@ -372,7 +372,7 @@ class Forminator_Date extends Forminator_Field {
 						$day_data = array(
 							'name'        => $id . '-day',
 							'id'          => 'forminator-field-' . $id . '-day',
-							'class'       => 'forminator-select',
+							'class'       => 'forminator-select2',
 							'data-format' => $date_format,
 							'data-parent' => $id,
 						);
@@ -422,7 +422,7 @@ class Forminator_Date extends Forminator_Field {
 						$month_data = array(
 							'name'        => $id . '-month',
 							'id'          => 'forminator-field-' . $id . '-month',
-							'class'       => 'forminator-select',
+							'class'       => 'forminator-select2',
 							'data-format' => $date_format,
 							'data-parent' => $id,
 						);
@@ -472,7 +472,7 @@ class Forminator_Date extends Forminator_Field {
 						$year_data = array(
 							'name'        => $id . '-year',
 							'id'          => 'forminator-field-' . $id . '-year',
-							'class'       => 'forminator-select',
+							'class'       => 'forminator-select2',
 							'data-format' => $date_format,
 							'data-parent' => $id,
 						);
@@ -1164,6 +1164,8 @@ class Forminator_Date extends Forminator_Field {
 			}
 			if ( 'picker' === $date_type ) {
 
+				$selected_date   = preg_replace( "/(\d+)\D+(\d+)\D+(\d+)/","$1/$2/$3", $data );
+
 				if ( 'week' === $restrict_type ) {
 					$restrict = array();
 					$days = forminator_week_days();
@@ -1175,7 +1177,7 @@ class Forminator_Date extends Forminator_Field {
 						}
 					}
 					if ( ! empty( $restrict ) ) {
-						$current_day = date( 'l', strtotime( $data ) );
+						$current_day = date( 'l', strtotime( $selected_date ) );
 						if ( in_array( strtolower( $current_day ), $restrict, true ) ) {
 							$this->validation_message[ $id ] = apply_filters(
 								'forminator_field_date_valid_between_date_validation_message',
@@ -1192,13 +1194,13 @@ class Forminator_Date extends Forminator_Field {
 						$start_offset_value    = self::get_property( 'start-offset-value', $field, '0' );
 						$start_offset_duration = self::get_property( 'start-offset-duration', $field, 'days' );
 						if ( 'today' === $start_date_type ) {
-							$start_date = date_i18n( datepicker_default_format( $date_format ), strtotime( $start_offset_operator . $start_offset_value . ' ' . $start_offset_duration ) );
+							$start_date = date_i18n( 'm/d/Y', strtotime( $start_offset_operator . $start_offset_value . ' ' . $start_offset_duration ) );
 						} else {
 							$start_date_field = isset( $post_data[ $start_date_type ] ) ? $post_data[ $start_date_type ] : '';
-							$start_date       = ! empty( $start_date_field ) ? date_i18n( datepicker_default_format( $date_format ), strtotime( $start_date_field . ' ' . $start_offset_operator . $start_offset_value . ' ' . $start_offset_duration ) ) : '';
+							$start_date       = ! empty( $start_date_field ) ? date_i18n( 'm/d/Y', strtotime( $start_date_field . ' ' . $start_offset_operator . $start_offset_value . ' ' . $start_offset_duration ) ) : '';
 						}
 					}
-					if ( ! empty( $start_date ) && strtotime( $data ) <= strtotime( $start_date ) ) {
+					if ( ! empty( $start_date ) && strtotime( $selected_date ) < strtotime( $start_date ) ) {
 						$this->validation_message[ $id ] = apply_filters(
 							'forminator_field_date_valid_between_date_validation_message',
 							self::get_property( 'restrict_message', $field, __( 'Please select one of the available dates.', Forminator::DOMAIN ) )
@@ -1213,13 +1215,13 @@ class Forminator_Date extends Forminator_Field {
 						$end_offset_value    = self::get_property( 'end-offset-value', $field, '0' );
 						$end_offset_duration = self::get_property( 'end-offset-duration', $field, 'days' );
 						if ( 'today' === $end_date_type ) {
-							$end_date = date_i18n( datepicker_default_format( $date_format ), strtotime( $end_offset_operator . $end_offset_value . ' ' . $end_offset_duration ) );
+							$end_date = date_i18n( 'm/d/Y', strtotime( $end_offset_operator . $end_offset_value . ' ' . $end_offset_duration ) );
 						} else {
 							$end_date_field = isset( $post_data[ $end_date_type ] ) ? $post_data[ $end_date_type ] : '';
-							$end_date       = date_i18n( datepicker_default_format( $date_format ), strtotime( $end_date_field . ' ' . $end_offset_operator . $end_offset_value . ' ' . $end_offset_duration ) );
+							$end_date       = date_i18n( 'm/d/Y', strtotime( $end_date_field . ' ' . $end_offset_operator . $end_offset_value . ' ' . $end_offset_duration ) );
 						}
 					}
-					if ( ! empty( $end_date ) && strtotime( $data ) >= strtotime( $end_date ) ) {
+					if ( ! empty( $end_date ) && strtotime( $selected_date ) > strtotime( $end_date ) ) {
 						$this->validation_message[ $id ] = apply_filters(
 							'forminator_field_date_valid_between_date_validation_message',
 							self::get_property( 'restrict_message', $field, __( 'Please select one of the available dates.', Forminator::DOMAIN ) )
@@ -1227,7 +1229,7 @@ class Forminator_Date extends Forminator_Field {
 					}
 				}
 
-				if ( ! empty( $disabled_dates ) && in_array( $data, $disabled_dates, true ) ) {
+				if ( ! empty( $disabled_dates ) && in_array( $selected_date, $disabled_dates, true ) ) {
 					$this->validation_message[ $id ] = apply_filters(
 						'forminator_field_date_valid_disabled_validation_message',
 						self::get_property( 'restrict_message', $field, __( 'Please select one of the available dates.', Forminator::DOMAIN ) )
@@ -1241,7 +1243,7 @@ class Forminator_Date extends Forminator_Field {
 						if ( ! empty( $range_arr ) ) {
 							$start_date = isset( $range_arr[0] ) ? $range_arr[0] : '';
 							$end_date   = isset( $range_arr[1] ) ? $range_arr[1] : '';
-							if ( strtotime( $data ) >= strtotime( $start_date ) && strtotime( $data ) <= strtotime( $end_date ) ) {
+							if ( strtotime( $selected_date ) >= strtotime( $start_date ) && strtotime( $selected_date ) <= strtotime( $end_date ) ) {
 								$has_range = false;
 								continue;
 							}

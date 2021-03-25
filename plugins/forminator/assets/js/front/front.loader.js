@@ -226,15 +226,19 @@
 		},
 
 		maybe_append_scripts: function (scripts) {
-			var self            = this;
-			var scripts_to_load = [];
+			var self           = this,
+				scripts_to_load = [],
+				hasHustle       = $( 'body' ).find( '.hustle-ui' ).length,
+            paypal_src      = $( 'body' ).find( "script[src^='https://www.paypal.com/sdk/js']" ).attr('src')
+			;
+
 			for (var script_id in scripts) {
 				if (scripts.hasOwnProperty(script_id)) {
 					var load_on = scripts[script_id].on;
 					var load_of = scripts[script_id].load;
 					// already loaded?
 					if ('window' === load_on) {
-						if (window[load_of]) {
+						if ( window[load_of] && 'forminator-google-recaptcha' !== script_id && 0 === hasHustle ) {
 							continue;
 						}
 					} else if ('$' === load_on) {
@@ -245,8 +249,11 @@
 
 					var script = {};
 					script.src = scripts[script_id].src;
-					scripts_to_load.push(script);
-					this.scriptsQue.push(script_id);
+                    // Check if a paypal script is already loaded.
+                    if ( script.src !== paypal_src ) {
+                        scripts_to_load.push(script);
+                        this.scriptsQue.push(script_id);
+                    }
 				}
 			}
 
@@ -255,7 +262,6 @@
 				this.init_front();
 				return;
 			}
-
 
 			for (var script_id_to_load in scripts_to_load) {
 				if (scripts_to_load.hasOwnProperty(script_id_to_load)) {

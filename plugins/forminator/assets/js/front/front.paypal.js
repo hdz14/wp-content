@@ -109,8 +109,15 @@
 					$form.find('input, select, textarea').change( function() {
 						if ( self.is_data_valid() && self.is_form_valid() ) {
 							actions.enable();
-						}
+						} else {
+                            actions.disable();
+                        }
 					});
+                    
+                    // Check if form has error to disable actions
+                    $form.on( 'validation:error', function() {
+                        actions.disable();
+                    });
 
 					// Check if the form is valid on init
 					if ( self.is_data_valid() && self.is_form_valid() ) {
@@ -129,7 +136,11 @@
 						$target_message.removeClass('forminator-accessible').addClass('forminator-error').html('').removeAttr( 'aria-hidden' );
 						$target_message.html('<label class="forminator-label--error"><span>' + generalMessage.payment_require_ssl_error + '</span></label>');
 						self.focus_to_element($target_message);
-					}
+					} else if ( ! $form.valid() ) {
+						$target_message.removeClass('forminator-accessible').addClass('forminator-error').html('').removeAttr( 'aria-hidden' );
+						$target_message.html('<label class="forminator-label--error"><span>' + generalMessage.form_has_error + '</span></label>');
+						self.focus_to_element($target_message);
+                    }
 
 					if ( paypalData.amount_type === 'variable' && paypalData.variable !== '' ) {
 						paypalData.amount = self.get_field_calculation( paypalData.variable );

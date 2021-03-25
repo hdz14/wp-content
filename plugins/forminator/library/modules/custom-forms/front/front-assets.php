@@ -33,10 +33,9 @@ class Forminator_Assets_Enqueue_Form extends Forminator_Assets_Enqueue {
 
 		$has_select_single       = $this->has_field_type_with_setting_value( 'select', 'value_type', 'single' );
 		$has_select_multiple     = $this->has_field_type_with_setting_value( 'select', 'value_type', 'multiselect' );
-		$has_select_search       = $this->has_field_type_with_setting_value( 'select', 'search_status', 'enable' );
-		$has_select_settings     = ( $has_select_single && $has_select_search );
 
 		$has_datepicker          = $this->has_field_type_with_setting_value( 'date', 'field_type', 'picker' );
+		$has_dateselect          = $this->has_field_type_with_setting_value( 'date', 'field_type', 'select' );
 
 		$has_timepicker          = $this->has_field_type( 'time' );
 
@@ -102,7 +101,7 @@ class Forminator_Assets_Enqueue_Form extends Forminator_Assets_Enqueue {
 			);
 
 			// Forminator UI - Full stylesheet.
-			if ( $has_phone_settings || $has_address_country || $has_select_multiple || $has_select_settings || $has_datepicker || $has_timepicker || $has_uploader || $has_post_feat_image || ( $has_post_categories && $has_multi_categories ) || ( $has_post_tags && $has_multi_tags ) || $has_currency || $has_paypal || $has_stripe || $has_signature ) {
+			if ( $has_phone_settings || $has_address_country || $has_select_multiple || $has_datepicker || $has_timepicker || $has_uploader || $has_post_feat_image || ( $has_post_categories && $has_multi_categories ) || ( $has_post_tags && $has_multi_tags ) || $has_currency || $has_paypal || $has_stripe || $has_signature || $has_dateselect || $has_select_single || $has_timepicker ) {
 				wp_enqueue_style(
 					'forminator-forms-' . $form_design . '-full',
 					forminator_plugin_url() . 'assets/forminator-ui/css/src/form/forminator-form-' . $form_design . '.full.min.css',
@@ -124,7 +123,7 @@ class Forminator_Assets_Enqueue_Form extends Forminator_Assets_Enqueue {
 		}
 
 		// Forminator UI - Select2 stylesheet.
-		if ( $has_address_country || $has_select_settings ) {
+		if ( $has_dateselect || $has_address_country || $has_select_single || $has_timepicker ) {
 
 			wp_enqueue_style(
 				'forminator-select2',
@@ -153,9 +152,9 @@ class Forminator_Assets_Enqueue_Form extends Forminator_Assets_Enqueue {
 	 */
 	public function enqueue_scripts() {
 		$has_select_single       = $this->has_field_type_with_setting_value( 'select', 'value_type', 'single' );
-		$has_select_search       = $this->has_field_type_with_setting_value( 'select', 'search_status', 'enable' );
-		$has_select_with_search  = ( $has_select_single && $has_select_search );
 		$has_address_country     = $this->has_field_type_with_setting_value( 'address', 'address_country', 'true' );
+		$has_dateselect          = $this->has_field_type_with_setting_value( 'date', 'field_type', 'select' );
+		$has_timepicker          = $this->has_field_type( 'time' );
 
 		// Load form base scripts.
 		$this->load_base_scripts();
@@ -170,10 +169,10 @@ class Forminator_Assets_Enqueue_Form extends Forminator_Assets_Enqueue {
 			$this->load_date_scripts();
 		}
 
-		if ( $has_address_country || $has_select_with_search ) {
+		if ( $has_dateselect || $has_address_country || $has_select_single || $has_timepicker ) {
 			wp_enqueue_script(
 				'forminator-select2',
-				forminator_plugin_url() . 'assets/forminator-ui/js/select2.full.js',
+				forminator_plugin_url() . 'assets/forminator-ui/js/select2.full.min.js',
 				array( 'jquery' ),
 				FORMINATOR_VERSION,
 				false
@@ -181,11 +180,11 @@ class Forminator_Assets_Enqueue_Form extends Forminator_Assets_Enqueue {
 		}
 
 		// FIELD: calculation picker.
-//		if ( $this->has_field_type( 'calculation' )
-//		     || $this->has_field_type( 'currency' )
-//		     || $this->has_field_type( 'number' ) ) {
-//			$this->load_mask_scripts();
-//		}
+		if ( $this->has_field_type( 'calculation' )
+		     || $this->has_field_type( 'currency' )
+		     || $this->has_field_type( 'number' ) ) {
+			$this->load_number_scripts();
+		}
 
 		// $this->get_module_design() returns the design
 	}
@@ -293,10 +292,10 @@ class Forminator_Assets_Enqueue_Form extends Forminator_Assets_Enqueue {
 	 *
 	 * @since 1.11
 	 */
-	public function load_mask_scripts() {
-		$script_src     = forminator_plugin_url() . 'assets/js/library/jquery.mask.js';
+	public function load_number_scripts() {
+		$script_src     = forminator_plugin_url() . 'assets/js/library/jquery.number.min.js';
 		$script_version = FORMINATOR_VERSION;
 
-		wp_enqueue_script( 'forminator-mask', $script_src, array( 'jquery' ), $script_version, false ); // mask
+		wp_enqueue_script( 'forminator-number-formatting', $script_src, array( 'jquery' ), $script_version, false ); // mask
 	}
 }

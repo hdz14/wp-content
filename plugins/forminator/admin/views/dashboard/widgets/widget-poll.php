@@ -57,7 +57,7 @@ if ( 0 === $num_recent ) {
 
 						<tr>
 
-							<td class="sui-table-item-title"><?php echo esc_html( $module['name'] ); ?></td>
+							<td class="sui-table-item-title"><?php echo esc_html( htmlspecialchars( $module['name'] ) ); ?></td>
 
 							<td class="fui-col-status">
 
@@ -100,7 +100,7 @@ if ( 0 === $num_recent ) {
 										</li>
 										<li><button class="wpmudev-open-modal"
 											data-modal="preview_polls"
-											data-modal-title="<?php echo sprintf( '%s - %s', __( 'Preview Poll', Forminator::DOMAIN ), forminator_get_form_name( $module['id'], 'poll' ) ); // phpcs:ignore ?>"
+											data-modal-title="<?php echo sprintf( '%s - %s', __( 'Preview Poll', Forminator::DOMAIN ), htmlspecialchars( htmlspecialchars( forminator_get_form_name( $module['id'], 'poll' ) ) ) ); // phpcs:ignore ?>"
 											data-nonce-preview="<?php echo esc_attr( wp_create_nonce( 'forminator_load_module' ) ); ?>"
 											data-form-id="<?php echo esc_attr( $module['id'] ); ?>"
 											data-nonce="<?php echo esc_attr( wp_create_nonce( 'forminator_popup_preview_polls' ) ); ?>">
@@ -115,8 +115,12 @@ if ( 0 === $num_recent ) {
 
 										<li><form method="post">
 											<input type="hidden" name="forminator_action" value="clone">
+											<input type="hidden" name="form_type" value="poll">
 											<input type="hidden" name="id" value="<?php echo esc_attr( $module['id'] ); ?>"/>
-											<?php wp_nonce_field( 'forminatorPollFormRequest', 'forminatorNonce' ); ?>
+                                            <?php
+                                                $clone_nonce = esc_attr( 'forminator-nonce-clone-' . $module['id'] );
+                                                wp_nonce_field( $clone_nonce, $clone_nonce );
+                                            ?>
 											<button type="submit">
 												<i class="sui-icon-page-multiple" aria-hidden="true"></i> <?php esc_html_e( 'Duplicate', Forminator::DOMAIN ); ?>
 											</button>

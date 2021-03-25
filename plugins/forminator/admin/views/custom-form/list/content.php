@@ -149,7 +149,7 @@ $most_entry = Forminator_Form_Entry_Model::get_most_entry( 'custom-forms' );
 							<span class="sui-screen-reader-text"><?php esc_html_e( 'Select this form', Forminator::DOMAIN ); ?></span>
 						</label>
 
-						<span class="sui-trim-text"><?php echo forminator_get_form_name( $module['id'], 'custom_form' );// phpcs:ignore ?></span>
+						<span class="sui-trim-text"><?php echo htmlspecialchars( forminator_get_form_name( $module['id'], 'custom_form' ) );// phpcs:ignore ?></span>
 
 						<?php
 						if ( 'publish' === $module['status'] ) {
@@ -195,7 +195,7 @@ $most_entry = Forminator_Form_Entry_Model::get_most_entry( 'custom-forms' );
 									data-nonce-preview="<?php echo esc_attr( wp_create_nonce( 'forminator_load_module' ) ); ?>"
 									data-form-id="<?php echo esc_attr( $module['id'] ); ?>"
 									data-modal="preview_cforms"
-									data-modal-title="<?php echo sprintf( '%s - %s', esc_html__( 'Preview Custom Form', Forminator::DOMAIN ), forminator_get_form_name( $module['id'], 'custom_form' ) ); // phpcs:ignore ?>">
+									data-modal-title="<?php echo sprintf( '%s - %s', esc_html__( 'Preview Custom Form', Forminator::DOMAIN ), htmlspecialchars( htmlspecialchars( forminator_get_form_name( $module['id'], 'custom_form' ) ) ) ); // phpcs:ignore ?>">
 									<i class="sui-icon-eye" aria-hidden="true"></i> <?php esc_html_e( 'Preview', Forminator::DOMAIN ); ?>
 								</a></li>
 
@@ -210,7 +210,10 @@ $most_entry = Forminator_Form_Entry_Model::get_most_entry( 'custom-forms' );
 											<input type="hidden" name="forminator_action" value="update-status">
 											<input type="hidden" name="id" value="<?php echo esc_attr( $module['id'] ); ?>"/>
 											<input type="hidden" name="status" value="draft"/>
-											<?php wp_nonce_field( 'forminatorCustomFormRequest', 'forminatorNonce' ); ?>
+											<?php
+                                                $update_status_nonce = esc_attr( 'forminator-nonce-update-status-' . $module['id'] );
+                                                wp_nonce_field( $update_status_nonce, $update_status_nonce );
+                                            ?>
 											<button type="submit">
 												<i class="sui-icon-unpublish" aria-hidden="true"></i> <?php esc_html_e( 'Unpublish', Forminator::DOMAIN ); ?>
 											</button>
@@ -226,7 +229,10 @@ $most_entry = Forminator_Form_Entry_Model::get_most_entry( 'custom-forms' );
 											<input type="hidden" name="forminator_action" value="update-status">
 											<input type="hidden" name="id" value="<?php echo esc_attr( $module['id'] ); ?>"/>
 											<input type="hidden" name="status" value="publish"/>
-											<?php wp_nonce_field( 'forminatorCustomFormRequest', 'forminatorNonce' ); ?>
+											<?php
+                                                $update_status_nonce = esc_attr( 'forminator-nonce-update-status-' . $module['id'] );
+                                                wp_nonce_field( $update_status_nonce, $update_status_nonce );
+                                            ?>
 											<button type="submit">
 												<i class="sui-icon-upload-cloud" aria-hidden="true"></i> <?php esc_html_e( 'Publish', Forminator::DOMAIN ); ?>
 											</button>
@@ -246,18 +252,28 @@ $most_entry = Forminator_Form_Entry_Model::get_most_entry( 'custom-forms' );
 								<li><form method="post">
 									<input type="hidden" name="forminator_action" value="clone">
 									<input type="hidden" name="id" value="<?php echo esc_attr( $module['id'] ); ?>"/>
-									<?php wp_nonce_field( 'forminatorCustomFormRequest', 'forminatorNonce' ); ?>
+                                    <?php
+                                        $clone_nonce = esc_attr( 'forminator-nonce-clone-' . $module['id'] );
+                                        wp_nonce_field( $clone_nonce, $clone_nonce );
+                                    ?>
 									<button type="submit">
 										<i class="sui-icon-page-multiple" aria-hidden="true"></i> <?php esc_html_e( 'Duplicate', Forminator::DOMAIN ); ?>
 									</button>
 								</form></li>
 
-								<li><form method="post">
-									<input type="hidden" name="forminator_action" value="reset-views">
-									<input type="hidden" name="id" value="<?php echo esc_attr( $module['id'] ); ?>"/>
-									<?php wp_nonce_field( 'forminatorCustomFormRequest', 'forminatorNonce' ); ?>
-									<button type="submit"><i class="sui-icon-update" aria-hidden="true"></i> <?php esc_html_e( 'Reset Tracking data', Forminator::DOMAIN ); ?></button>
-								</form></li>
+								<li>
+									<button
+										class="wpmudev-open-modal"
+										data-modal="delete-module"
+										data-modal-title="<?php esc_attr_e( 'Reset Tracking Data', Forminator::DOMAIN ); ?>"
+										data-modal-content="<?php esc_attr_e( 'Are you sure you wish reset the tracking data of this form?', Forminator::DOMAIN ); ?>"
+										data-form-id="<?php echo esc_attr( $module['id'] ); ?>"
+										data-action="reset-views"
+										data-nonce="<?php echo esc_attr( wp_create_nonce( 'forminator-nonce-reset-views-' . $module['id'] ) ); ?>"
+									>
+										<i class="sui-icon-update" aria-hidden="true"></i> <?php esc_html_e( 'Reset Tracking data', Forminator::DOMAIN ); ?>
+									</button>
+								</li>
 
 								<?php if ( Forminator::is_import_export_feature_enabled() ) : ?>
 

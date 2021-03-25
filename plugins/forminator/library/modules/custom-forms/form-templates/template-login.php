@@ -200,7 +200,7 @@ class Forminator_Template_Login extends Forminator_Template {
 			'remember-me-cookie-type'       => 'weeks',
 			// Additional settings
 			'hide-login-form'               => true,
-			'hidden-login-form-message'     => ''
+			'hidden-login-form-message'     => __( 'You are already logged in.', Forminator::DOMAIN ),
 		);
 	}
 }

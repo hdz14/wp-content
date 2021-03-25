@@ -465,6 +465,10 @@ abstract class Forminator_Mail {
 				return $form_field_value ? true : false;
 			case 'is_incorrect':
 				return ! $form_field_value ? true : false;
+			case 'is_final_result':
+				return $form_field_value === $condition['element_id'];
+			case 'is_not_final_result':
+				return $form_field_value !== $condition['element_id'];
 			default:
 				return false;
 		}
@@ -530,7 +534,7 @@ abstract class Forminator_Mail {
 	 *
 	 * @return bool
 	 */
-	public function is_quiz_condition( $notification, $form_data, $quiz_model ) {
+	public function is_quiz_condition( $notification, $form_data, $quiz_model, $result = '' ) {
 		// empty conditions
 		if ( empty( $notification['conditions'] ) ) {
 			return false;
@@ -568,6 +572,8 @@ abstract class Forminator_Mail {
 			} elseif ( stripos( $element_id, 'question-' ) !== false ) {
 				$is_correct  = self::is_correct_answer( $element_id, $form_data['answers'][ $element_id ], $quiz_model );
 				$is_condition_fulfilled = self::is_condition_fulfilled( $is_correct, $condition );
+			} elseif ( stripos( $element_id, 'result-' ) !== false ) {
+				$is_condition_fulfilled = self::is_condition_fulfilled( $result, $condition );
 			} elseif ( 'final_result' === $element_id ) {
 				$is_condition_fulfilled = self::is_condition_fulfilled( $form_data[ $element_id ], $condition );
 			} elseif ( ! isset( $form_data[ $element_id ] ) ) {

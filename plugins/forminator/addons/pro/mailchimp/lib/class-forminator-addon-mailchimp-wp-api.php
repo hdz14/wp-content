@@ -317,7 +317,7 @@ class Forminator_Addon_Mailchimp_Wp_Api {
 	 */
 	public function get_lists( $args ) {
 		$default_args = array(
-			'fields'     => implode( ',', array( 'lists.id', 'lists.name' ) ),
+			'fields'     => implode( ',', array( 'lists.id', 'lists.name', 'total_items' ) ),
 			'count'      => 10,
 			'sort_field' => 'date_created',
 			'sort_dir'   => 'DESC',
@@ -330,6 +330,50 @@ class Forminator_Addon_Mailchimp_Wp_Api {
 			'lists',
 			$args
 		);
+	}
+
+	/**
+	 * Get all lists
+	 *
+	 * @param bool $force Use cahce or not.
+	 * @return array
+	 */
+	public function get_all_lists( $force = false ) {
+		$option_key = 'forminator_mailchimp_' . $this->_api_key;
+		if ( ! $force ) {
+			$lists = get_option( $option_key );
+			if ( ! empty( $lists ) && is_array( $lists ) ) {
+				return $lists;
+			}
+		}
+
+		$lists  = array();
+		$limit  = 1000;
+		$offset = 0;
+
+		do {
+			$args     = array(
+				'count'  => $limit,
+				'offset' => $offset,
+			);
+			$response = $this->get_lists( $args );
+
+			if ( is_wp_error( $response ) || ! isset( $response->lists ) || ! is_array( $response->lists ) ) {
+				return array();
+			}
+
+			$_lists = $response->lists;
+			$total  = $response->total_items;
+			if ( is_array( $_lists ) ) {
+				$lists = array_merge( $lists, $_lists );
+			}
+
+			$offset += $limit;
+		} while ( $total > $offset );
+
+		update_option( $option_key, $lists );
+
+		return $lists;
 	}
 
 	/**

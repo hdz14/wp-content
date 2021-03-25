@@ -215,7 +215,7 @@ function forminator_sui_scripts() {
 function forminator_admin_enqueue_scripts( $version, $data = array(), $l10n = array() ) {
 	$language = get_option( 'forminator_captcha_language', 'en' );
 
-	wp_enqueue_script( 'select2-forminator', forminator_plugin_url() . 'assets/js/library/select2.full.min.js', array( 'jquery' ), $version, false );
+	wp_enqueue_script( 'select2-forminator', forminator_plugin_url() . 'assets/forminator-ui/js/select2.full.min.js', array( 'jquery' ), $version, false );
 	wp_enqueue_script( 'ace-editor', forminator_plugin_url() . 'assets/js/library/ace/ace.js', array( 'jquery' ), $version, false );
 	wp_enqueue_script( 'google-charts', 'https://www.gstatic.com/charts/loader.js', array( 'jquery' ), $version, false );
 
@@ -252,7 +252,7 @@ function forminator_admin_enqueue_scripts( $version, $data = array(), $l10n = ar
  * @param $version
  */
 function forminator_admin_enqueue_scripts_forms( $version, $data = array(), $l10n = array() ) {
-	wp_enqueue_script( 'select2-forminator', forminator_plugin_url() . 'assets/js/library/select2.full.min.js', array( 'jquery' ), $version, false );
+	wp_enqueue_script( 'select2-forminator', forminator_plugin_url() . 'assets/forminator-ui/js/select2.full.min.js', array( 'jquery' ), $version, false );
 	wp_enqueue_script( 'ace-editor', forminator_plugin_url() . 'assets/js/library/ace/ace.js', array( 'jquery' ), $version, false );
 	wp_enqueue_script( 'google-charts', 'https://www.gstatic.com/charts/loader.js', array( 'jquery' ), $version, false );
 
@@ -312,7 +312,7 @@ function forminator_enqueue_color_picker_alpha( $version ) {
  * @param $version
  */
 function forminator_admin_enqueue_scripts_polls( $version, $data = array(), $l10n = array() ) {
-	wp_enqueue_script( 'select2-forminator', forminator_plugin_url() . 'assets/js/library/select2.full.min.js', array( 'jquery' ), $version, false );
+	wp_enqueue_script( 'select2-forminator', forminator_plugin_url() . 'assets/forminator-ui/js/select2.full.min.js', array( 'jquery' ), $version, false );
 	wp_enqueue_script( 'ace-editor', forminator_plugin_url() . 'assets/js/library/ace/ace.js', array( 'jquery' ), $version, false );
 	wp_enqueue_script( 'google-charts', 'https://www.gstatic.com/charts/loader.js', array( 'jquery' ), $version, false );
 
@@ -352,7 +352,7 @@ function forminator_admin_enqueue_scripts_polls( $version, $data = array(), $l10
  * @param $version
  */
 function forminator_admin_enqueue_scripts_knowledge( $version, $data = array(), $l10n = array() ) {
-	wp_enqueue_script( 'select2-forminator', forminator_plugin_url() . 'assets/js/library/select2.full.min.js', array( 'jquery' ), $version, false );
+	wp_enqueue_script( 'select2-forminator', forminator_plugin_url() . 'assets/forminator-ui/js/select2.full.min.js', array( 'jquery' ), $version, false );
 	wp_enqueue_script( 'ace-editor', forminator_plugin_url() . 'assets/js/library/ace/ace.js', array( 'jquery' ), $version, false );
 	wp_enqueue_script( 'google-charts', 'https://www.gstatic.com/charts/loader.js', array( 'jquery' ), $version, false );
 
@@ -395,7 +395,7 @@ function forminator_admin_enqueue_scripts_knowledge( $version, $data = array(), 
  * @param $version
  */
 function forminator_admin_enqueue_scripts_personality( $version, $data = array(), $l10n = array() ) {
-	wp_enqueue_script( 'select2-forminator', forminator_plugin_url() . 'assets/js/library/select2.full.min.js', array( 'jquery' ), $version, false );
+	wp_enqueue_script( 'select2-forminator', forminator_plugin_url() . 'assets/forminator-ui/js/select2.full.min.js', array( 'jquery' ), $version, false );
 	wp_enqueue_script( 'ace-editor', forminator_plugin_url() . 'assets/js/library/ace/ace.js', array( 'jquery' ), $version, false );
 	wp_enqueue_script( 'google-charts', 'https://www.gstatic.com/charts/loader.js', array( 'jquery' ), $version, false );
 
@@ -496,7 +496,7 @@ function forminator_print_front_scripts( $version = '1.0' ) {
 
 	// LOAD: ChartJS
 	wp_enqueue_script(
-		'chartjs',
+		'forminator-chartjs',
 		forminator_plugin_url() . 'assets/js/front/Chart.min.js',
 		array( 'jquery' ),
 		'2.8.0',
@@ -504,9 +504,9 @@ function forminator_print_front_scripts( $version = '1.0' ) {
 	);
 	$save_global_color = "if (typeof window !== 'undefined' && typeof window.Color !== 'undefined') {window.notChartColor = window.Color;}";
 	$restore_global_color = "if (typeof window !== 'undefined' && typeof window.notChartColor !== 'undefined') {window.Color = window.notChartColor;}";
-	wp_add_inline_script( 'chartjs', $save_global_color, 'before' );
+	wp_add_inline_script( 'forminator-chartjs', $save_global_color, 'before' );
 	wp_add_inline_script( 'forminator-chart', $save_global_color, 'before' );
-	wp_add_inline_script( 'chartjs', $restore_global_color );
+	wp_add_inline_script( 'forminator-chartjs', $restore_global_color );
 	wp_add_inline_script( 'forminator-chart', $restore_global_color );
 
 	// LOAD: Datalabels plugin for ChartJS
@@ -1410,6 +1410,11 @@ function forminator_reset_settings() {
 	$wpdb->query( "TRUNCATE TABLE {$entry_table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery
 	$wpdb->query( "TRUNCATE TABLE {$entry_meta_table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery
 	$wpdb->query( "TRUNCATE TABLE {$views_table}" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery
+
+	// Purge count forms cache.
+	wp_cache_delete( 'forminator_form_total_entries', 'forminator_form_total_entries' );
+	wp_cache_delete( 'forminator_form_total_entries_publish', 'forminator_form_total_entries_publish' );
+	wp_cache_delete( 'forminator_form_total_entries_draft', 'forminator_form_total_entries_draft' );
 
 	/**
 	 * Fires after Settings reset

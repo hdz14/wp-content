@@ -142,7 +142,7 @@ class Forminator_Name extends Forminator_Field {
 		$required    = self::get_property( 'required', $field, false );
 		$ariareq     = 'false';
 		$label       = esc_html( self::get_property( 'field_label', $field, '' ) );
-		$description = esc_html( self::get_property( 'description', $field, '' ) );
+		$description = self::get_property( 'description', $field, '' );
 		$placeholder = $this->sanitize_value( self::get_property( 'placeholder', $field ) );
 
 		if ( (bool) $required ) {
@@ -227,7 +227,7 @@ class Forminator_Name extends Forminator_Field {
 			$prefix_data = array(
 				'name'  => $id . '-prefix',
 				'id'    => 'forminator-field-prefix-' . $id,
-				'class' => 'forminator-select',
+				'class' => 'forminator-select2',
 			);
 
 			$options        = array();

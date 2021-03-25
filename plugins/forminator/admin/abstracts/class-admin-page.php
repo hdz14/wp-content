@@ -86,6 +86,8 @@ abstract class Forminator_Admin_Page {
 
 		$this->init();
 
+		add_filter( 'removable_query_args', array( $this, 'remove_notice_params' ) );
+
 	}
 
 	/**
@@ -157,6 +159,18 @@ abstract class Forminator_Admin_Page {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_filter( 'admin_body_class', array( $this, 'admin_body_classes' ) );
 		add_action( 'init', array( $this, 'init_scripts' ) );
+	}
+
+	/**
+	 * Remove Get parameters for Forminator notices
+	 *
+	 * @param string[] $vars An array of query variables to remove from a URL.
+	 * @return array
+	 */
+	public function remove_notice_params( $vars ) {
+		$vars[] = 'forminator_notice';
+
+		return $vars;
 	}
 
 	/**
@@ -569,7 +583,7 @@ abstract class Forminator_Admin_Page {
 	protected function maybe_redirect_to_referer( $fallback_redirect = '', $to_referer = true ) {
 		$referer = wp_get_referer();
 		$referer = ! empty( $referer ) ? $referer : wp_get_raw_referer();
-		$referer = remove_query_arg( array( 'export', 'delete' ), $referer );
+		$referer = remove_query_arg( array( 'export', 'delete', 'forminator_notice' ), $referer );
 
 		if ( $referer && $to_referer ) {
 			wp_safe_redirect( $referer );

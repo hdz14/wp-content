@@ -117,48 +117,79 @@ class Forminator_Poll_Page extends Forminator_Admin_Page {
 	 * @since 1.0
 	 */
 	public function processRequest() {
-		if ( ! isset( $_POST['forminatorNonce'] ) ) {
+		if ( ! isset( $_POST['forminator_action'] ) ) {
+			return;
+		}
+        // Check if the page is not poll page and not forminator dashboard page.
+		if ( ! isset( $_REQUEST['page'] ) || ( 'forminator-poll' !== $_REQUEST['page'] && 'forminator' !== $_REQUEST['page'] ) ) {
+			return;
+		}
+        // In forminator dashboard, check if form type is not poll.
+		if ( 'forminator' === $_REQUEST['page'] && isset( $_REQUEST['form_type'] ) && 'poll' !== $_REQUEST['form_type'] ) {
 			return;
 		}
 
-		$nonce = $_POST['forminatorNonce']; // WPCS: CSRF OK
-		if ( ! wp_verify_nonce( $nonce, 'forminatorPollFormRequest' ) ) {
-			return;
+		$action = isset( $_POST['forminator_action'] ) ? $_POST['forminator_action'] : '';
+        $id     = isset( $_POST['id'] ) ? intval( $_POST['id'] ) : 0;
+        // Set nonce names first for verification.
+		switch ( $action ) {
+			case 'clone':
+                $nonce_name   = 'forminator-nonce-clone-' . $id;
+                $nonce_action = $nonce_name;
+				break;
+
+			case 'reset-views':
+				$nonce_name   = 'forminatorNonce';
+                $nonce_action = 'forminator-nonce-reset-views-' . $id;
+				break;
+
+			case 'update-status' :
+                $nonce_name   = 'forminator-nonce-update-status-' . $id;
+                $nonce_action = $nonce_name;
+				break;
+
+			default:
+                $nonce_name   = 'forminatorNonce';
+                $nonce_action = 'forminatorPollFormRequest';
+				break;
 		}
+
+        // Verify nonce.
+        if ( ! isset( $_POST[ $nonce_name ] ) || ! wp_verify_nonce( $_POST[ $nonce_name ], $nonce_action ) ) {
+            return;
+        }
 
 		$is_redirect = true;
-		$action      = $_POST['forminator_action'];
+        $ids         = isset( $_POST['ids'] ) ? $_POST['ids'] : '';
 		switch ( $action ) {
 			case 'delete':
-				$id = isset( $_POST['id'] ) ? intval( $_POST['id'] ) : 0;
 				if ( ! empty( $id ) ) {
 					$this->delete_module( $id );
+					$notice = 'poll_deleted';
 				}
 				break;
 
 			case 'clone':
-				$id = isset( $_POST['id'] ) ? intval( $_POST['id'] ) : 0;
 				if ( ! empty( $id ) ) {
 					$this->clone_module( $id );
+					$notice = 'poll_duplicated';
 				}
 				break;
 
 			case 'reset-views' :
-				$id = isset( $_POST['id'] ) ? intval( $_POST['id'] ) : 0;
 				if ( ! empty( $id ) ) {
 					$this->reset_module_views( $id );
+					$notice = 'poll_reset';
 				}
 				break;
 
 			case 'delete-votes' :
-				$id = isset( $_POST['id'] ) ? intval( $_POST['id'] ) : 0;
 				if ( ! empty( $id ) ) {
 					$this->delete_module_entries( $id );
 				}
 				break;
 
 			case 'export':
-				$id = isset( $_POST['id'] ) ? intval( $_POST['id'] ) : 0;
 				if ( ! empty( $id ) ) {
 					$this->export_module( $id );
 				}
@@ -166,7 +197,6 @@ class Forminator_Poll_Page extends Forminator_Admin_Page {
 				break;
 
 			case 'delete-polls' :
-				$ids = isset( $_POST['ids'] ) ? $_POST['ids'] : '';
 				if ( ! empty( $ids ) ) {
 					$form_ids = explode( ',', $ids );
 					if ( is_array( $form_ids ) && count( $form_ids ) > 0 ) {
@@ -178,7 +208,6 @@ class Forminator_Poll_Page extends Forminator_Admin_Page {
 				break;
 
 			case 'delete-votes-polls' :
-				$ids = isset( $_POST['ids'] ) ? $_POST['ids'] : '';
 				if ( ! empty( $ids ) ) {
 					$form_ids = explode( ',', $ids );
 					if ( is_array( $form_ids ) && count( $form_ids ) > 0 ) {
@@ -190,7 +219,6 @@ class Forminator_Poll_Page extends Forminator_Admin_Page {
 				break;
 
 			case 'clone-polls' :
-				$ids = isset( $_POST['ids'] ) ? $_POST['ids'] : '';
 				if ( ! empty( $ids ) ) {
 					$form_ids = explode( ',', $ids );
 					if ( is_array( $form_ids ) && count( $form_ids ) > 0 ) {
@@ -202,7 +230,6 @@ class Forminator_Poll_Page extends Forminator_Admin_Page {
 				break;
 
 			case 'reset-views-polls' :
-				$ids = isset( $_POST['ids'] ) ? $_POST['ids'] : '';
 				if ( ! empty( $ids ) ) {
 					$form_ids = explode( ',', $ids );
 					if ( is_array( $form_ids ) && count( $form_ids ) > 0 ) {
@@ -213,7 +240,6 @@ class Forminator_Poll_Page extends Forminator_Admin_Page {
 				}
 				break;
 			case 'update-status' :
-				$id     = isset( $_POST['id'] ) ? intval( $_POST['id'] ) : 0;
 				$status = isset( $_POST['status'] ) ? sanitize_text_field( $_POST['status'] ) : '';
 
 				if ( ! empty( $id ) && ! empty( $status ) ) {
@@ -228,7 +254,6 @@ class Forminator_Poll_Page extends Forminator_Admin_Page {
 				}
 				break;
 			case 'update-statuses' :
-				$ids    = isset( $_POST['ids'] ) ? $_POST['ids'] : '';
 				$status = isset( $_POST['status'] ) ? sanitize_text_field( $_POST['status'] ) : '';
 
 				if ( ! empty( $ids ) && ! empty( $status ) ) {
@@ -252,15 +277,21 @@ class Forminator_Poll_Page extends Forminator_Admin_Page {
 		}
 
 		if ( $is_redirect ) {
-			//todo add messaging as flash
-			$fallback_redirect = admin_url( 'admin.php' );
-			$fallback_redirect = add_query_arg(
-				array(
-					'page' => $this->get_admin_page(),
-				),
-				$fallback_redirect
+			$to_referer = true;
+
+			$args = array(
+				'page' => $this->get_admin_page(),
 			);
-			$this->maybe_redirect_to_referer( $fallback_redirect );
+			if ( ! empty( $notice ) ) {
+				$args['forminator_notice'] = $notice;
+				$to_referer                = false;
+			}
+			$fallback_redirect = add_query_arg(
+				$args,
+				admin_url( 'admin.php' )
+			);
+
+			$this->maybe_redirect_to_referer( $fallback_redirect, $to_referer );
 		}
 
 		exit;
