@@ -1380,3 +1380,67 @@ form a {
 .site-info {
 	color: #ffffff;
 }
+
+/* for tablets */
+@media print,
+screen and (max-width:64em) {
+
+	.custom-logo-link {
+		padding: 0;
+		padding-top: 1rem;
+		width: 300px;
+	}
+
+	.top-bar ul {
+		margin: 0;
+		padding: 0;
+	}
+
+	.top-bar li a {
+		padding: 2px;
+	}
+
+	.top-bar li form {
+		margin-left: 1rem;
+	}
+
+	.top-bar input {
+		padding: 0;
+		margin: 0;
+	}
+
+	.top-bar .search-submit {
+		padding: 4px;
+	}
+}
+/* for mobiles */
+@media print,
+screen and (max-width: 40em) {
+    .custom-logo-link {
+		padding: 0;
+		padding-top: 1rem;
+		width: 300px;
+	}
+    
+	.top-bar ul {
+		margin: 0;
+		padding: 0;
+	}
+
+	.top-bar li a {
+		padding: 3px;
+	}
+
+	.top-bar li form {
+		margin-left: 1rem;
+	}
+
+	.top-bar input {
+		padding: 0;
+		margin: 0;
+	}
+
+	.top-bar .search-submit {
+		padding: 4px;
+	}
+}

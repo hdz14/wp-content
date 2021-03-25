@@ -10,6 +10,27 @@
  */
 
 ?>
+	</div>
+
+	<?php 
+	$recipe_args = array(
+		'post_type' 	=> 'sampletheme_recipe',
+		'post_per_page' => 3,
+	);
+
+	$recipe_query = new WP_Query( $recipe_args );
+
+	if ( $recipe_query->have_posts() ) {
+		while ( $recipe_query->have_posts() ) {
+			$recipe_query->the_post();
+			?>
+			<h2><?php the_title(); ?></h2>
+			<?php
+		}
+	}
+	?>
+
+
 
 	<footer id="colophon" class="site-footer">
 
@@ -21,8 +42,9 @@
 
 		<div class="grid-container row footer-sidebar">
 			
-			<div class="col-3 footer-sidebar1">
-				<hr class="eSeparator">
+			
+				
+				<!-- custom footer menu -->
 				<?php
 				if ( has_nav_menu( 'menu-footer' ) ) {
 				wp_nav_menu( 
@@ -34,7 +56,21 @@
 				); 
 				}
 				?>
-			</div>
+				<!-- social media link -->
+				<?php 
+				$facebook_url = get_theme_mod( 'facebook_url' );
+				$twitter_url = get_theme_mod( 'twitter_url' );
+				if ( $facebook_url ) { 
+					?>
+					<a class="facebook-link" href="<?php echo get_theme_mod( 'facebook_url' ); ?>"><?php echo esc_html__( 'Facebook', 'sampletheme' ); ?></a>
+					<?php 
+				}
+				if ( $twitter_url ) { 
+					?>
+					<a class="twitter-link" href="<?php echo get_theme_mod( 'twitter_url' ); ?>"><?php echo esc_html__( 'Twitter', 'sampletheme' ); ?></a>
+					<?php 
+				}
+				?>
 
 			<!-- <div class="col-3 footer-sidebar2">
 				<hr class="eSeparator">
@@ -78,8 +114,9 @@
 						/* translators: 1: Theme name, 2: Theme author. */
 						printf( esc_html__( 'Theme: %1$s by %2$s', 'sampletheme' ), 'sampletheme', '<a style="color: white" href="https://handanzhang.com">Handan Zhang</a>' );
 						?>
+						&copy; 2000 - <?php echo date( 'Y' ); ?>
 				</div>
-			<!-- .site-info -->
+				<!-- .site-info -->
 		</div>
 
 	</footer><!-- #colophon -->

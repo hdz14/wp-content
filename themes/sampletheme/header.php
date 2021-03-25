@@ -31,6 +31,7 @@
 			<div class="row">
 				<div class="col-4">
 					<div class="site-branding">
+					<!-- custom logo php -->
 						<?php
 						the_custom_logo();
 						if ( is_front_page() && is_home() ) :
@@ -55,16 +56,21 @@
 			</div>
 
 			<div class="site-nav row">
-				
+				<!-- custom header menu -->
 				<?php
-				wp_nav_menu( 
-
-					array( 
-    					'theme_location' => 'top-menu', 
-    					'container_class' => 'top-bar' 
-					) 
-				); 
+				if ( has_nav_menu( 'top-menu' ) ) {
+					wp_nav_menu( 
+					
+						array( 
+    						'theme_location' => 'top-menu', 
+    						'container_class' => 'top-bar' 
+						) 
+					); 
+				}
 				?>
+
+				<!-- <?php echo get_search_form(); ?> -->
+				
 			</div>
 
 			<!-- Use in conjunction with https://gist.github.com/woogists/c0a86397015b88f4ca722782a724ff6c -->
@@ -78,4 +84,4 @@
 
 	</header>
 
-	<div class="container">
+	<div class="site-content grid-container">
