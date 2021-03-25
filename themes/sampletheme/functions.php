@@ -118,7 +118,9 @@ if ( ! function_exists( 'sampletheme_setup' ) ) :
 		/** 
 		 *  Add support for wide alignment
 		*/
-		add_theme_support( 'align-wide' );
+		if ( ! is_page_template( 'templates/sidebar-right.php' ) ) {
+			add_theme_support( 'align-wide' );
+		}
 
 		/** 
 		 *  Add support for custom color
@@ -242,6 +244,9 @@ function sampletheme_scripts() {
 	wp_enqueue_style( 'bootstrap-style', get_template_directory_uri() . '/assets/css/vendor/bootstrap.min.css' );
 	wp_enqueue_script( 'bootstrap-reply', get_template_directory_uri() . '/assets/js/vendor/bootstrap.min.js' );
 
+	wp_enqueue_style( 'custom-style', get_template_directory_uri() . '/assets/css/custom.css' );
+
+
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
@@ -268,6 +273,12 @@ require get_template_directory() . '/inc/customizer.php';
  * Customizer hooks.
  */
 require get_template_directory() . '/inc/woocommerce.php';
+
+/**
+ * Customizer post types.
+ */
+require get_template_directory() . '/inc/post-types.php';
+
 
 /**
  * Enqueuing block editor assets

@@ -1,0 +1,23 @@
+body {
+    overflow-x: hidden;
+}
+
+.grid-container {
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.alignwide {
+    margin-left: calc( 50% - 45rem );
+    margin-right: calc( 50% - 45rem );
+    width: 100vw;
+    max-width: 90rem;
+}
+
+.alignfull {
+    margin-left: calc( 50% - 50vw );
+    margin-right: calc( 50% - 50vw );
+    width: 100vw;
+    max-width: 100vw;
+}

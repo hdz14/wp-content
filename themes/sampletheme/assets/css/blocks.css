@@ -158,5 +158,11 @@ h1 {
     color: #e9eaea;
 }
 
+.wp-block {
+    max-width: 80rem;
+}
 
+.wp-block[data-align|=wide] {
+    max-width: 90rem;
+}
 
