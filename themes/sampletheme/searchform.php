@@ -3,6 +3,7 @@
 * Search form
 **/
 
+// search result
 ?>
 
 <form role="search" method="get" class="search-form flex-container" action="<?php echo esc_url( home_url() ); ?>">
