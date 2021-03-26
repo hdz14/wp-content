@@ -11,7 +11,7 @@ get_header();
 ?>
 
 	<main id="primary" class="site-main">
-
+		<!-- new post type post -->
 		<?php
 		while ( have_posts() ) :
 			the_post();

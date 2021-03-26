@@ -32,16 +32,7 @@ function sampletheme_customize_register( $wp_customize ) {
 		);
 	}
 
-	// $wp_customize->add_panel( 
-	// 	'social_media', 
-	// 	array(
-	// 	'priority'       => 10,
-	// 	'capability'     => 'edit_theme_options',
-	// 	'theme_supports' => '',
-	// 	'title'          => 'Social Media',
-	// 	'description'    => 'Add social links',
-	// 	) 
-	// );
+	// add social media setting and control
 
 	$wp_customize->add_section(
 		'social_media',

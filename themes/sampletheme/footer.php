@@ -13,6 +13,7 @@
 </div>
 
 <div class="grid-container footer-top">
+	<!-- custom WP_Query New post type  -->
 	<h4>Find Out More...</h4>
 	<?php 
 	$recipe_args = array(

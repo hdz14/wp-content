@@ -3,6 +3,7 @@
  *  Registering custom post types
  */
 
+// New custom post type 
 function sampletheme_init() {
     $labels = array(
         'name'                  => _x( 'Recipes', 'Post type general name', 'sampletheme' ),
