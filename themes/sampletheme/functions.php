@@ -72,17 +72,6 @@ if ( ! function_exists( 'sampletheme_setup' ) ) :
 			)
 		);
 
-		// Set up the WordPress core custom background feature.
-		// add_theme_support(
-		// 	'custom-background',
-		// 	apply_filters(
-		// 		'sampletheme_custom_background_args',
-		// 		array(
-		// 			'default-color' => 'ffffff',
-		// 			'default-image' => '',
-		// 		)
-		// 	)
-		// );
 
 		// search box
 		add_filter( 'wp_nav_menu_items','add_search_box', 10, 2 );
