@@ -14,9 +14,14 @@
 <html <?php language_attributes(); ?>>
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
+	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="profile" href="https://gmpg.org/xfn/11">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 	<?php wp_head(); ?>
 </head>
@@ -55,8 +60,45 @@
 
 			</div>
 
-			<div class="site-nav row">
+			<div class="grid-container">
+
+			<nav class="navbar navbar-expand-md site-nav">
+				<div class="container">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+							<!-- <span class="responsive-menu-box"></span> -->
+							<span class="navbar-toggler-icon"></span>
+						</button>
+						<a class="navbar-brand" href="#"></a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse">
+						<ul class="nav navbar-nav">
+								<li>
+									<a href="">
+									<?php
+									if ( has_nav_menu( 'top-menu' ) ) {
+										wp_nav_menu( 
+										
+											array( 
+												'theme_location' => 'top-menu', 
+												'container_class' => 'top-bar' 
+											) 
+										); 
+									}
+									?>
+									</a>
+								</li>
+
+						</ul>
+					</div>
+				</div>
+			</nav>
+
+
+
+			
 				<!-- custom header menu -->
+				<!-- 
 				<?php
 				if ( has_nav_menu( 'top-menu' ) ) {
 					wp_nav_menu( 
@@ -67,7 +109,7 @@
 						) 
 					); 
 				}
-				?>
+				?> -->
 
 				<!-- <?php echo get_search_form(); ?> -->
 				
@@ -84,4 +126,4 @@
 
 	</header>
 
-	<div class="site-content grid-container">
+	<div class="site-content grid-x grid-container">
