@@ -6,6 +6,7 @@ body {
     margin-bottom: 0;
 }
 
+/* alignwide styling */
 .alignwide {
     margin-left: calc( 50% - 45rem );
     margin-right: calc( 50% - 45rem );
@@ -224,8 +225,8 @@ form a {
 	color: #aaa;
 }
 
-/* woocommerce */
 
+/* woocommerce */
 /* shop page */
 #page{
     margin-top: 0;
@@ -529,6 +530,7 @@ address {
     text-align: center;
 }
 
+
 /* footer */
 
 /* footer top */
@@ -579,7 +581,7 @@ footer h4 {
     margin-right: auto;
 }
 
-/* recent post */
+/* footer sidebar 1 recent post */
 #menu-footer-menu, #social {
     margin-left: 130px;
 }
@@ -612,6 +614,7 @@ footer .search-submit {
     text-decoration: underline;
 }
 
+/* footer sidebar 3 */
 #map {
     margin-left: 40px;
 }
@@ -720,10 +723,8 @@ screen and (max-width:64em) {
     #menu-footer-menu, #social {
         margin-left: 50px;
     }
-    
-	
-
 }
+
 /* for mobiles */
 @media print,
 screen and (max-width: 40em) {
@@ -734,6 +735,7 @@ screen and (max-width: 40em) {
 		width: 300px;
 	}
     
+    /* nav */
 	.navbar li {
 		list-style-type: none;
 		margin-top: 0px;
@@ -802,7 +804,6 @@ screen and (max-width: 40em) {
     }
 
     /* search result page */
-
     .post-thumbnail img {
         width: 50%;
         margin-left: 120px;
