@@ -32,7 +32,7 @@
 	<a class="skip-link screen-reader-text" href="#primary"><?php esc_html_e( 'Skip to content', 'sampletheme' ); ?></a>
 
 	<header id="masthead" class="site-header">
-		<div class="container">
+		<div class="grid-container">
 			<div class="row">
 				<div class="col-4">
 					<div class="site-branding">
@@ -87,8 +87,6 @@
 				</div>				
 			</nav>
 
-				
-				
 			</div>
 
 			<!-- Use in conjunction with https://gist.github.com/woogists/c0a86397015b88f4ca722782a724ff6c -->
@@ -96,10 +94,8 @@
 			<!-- view shopping cart content -->
 			<!-- <a class="cart-customlocation" href="<?php echo wc_get_cart_url(); ?>" title="<?php _e( 'View your shopping cart' ); ?>"><?php echo sprintf ( _n( '%d item', '%d items', WC()->cart->get_cart_contents_count() ), WC()->cart->get_cart_contents_count() ); ?> – <?php echo WC()->cart->get_cart_total(); ?></a> -->
 
-
-
 		</div>
 
 	</header>
 
-	<div class="site-content grid-x grid-container">
+	<div class="grid-container">

@@ -10,8 +10,10 @@
  */
 
 ?>
-	</div>
+</div>
 
+<div class="grid-container footer-top">
+	<h4>Find Out More...</h4>
 	<?php 
 	$recipe_args = array(
 		'post_type' 	=> 'sampletheme_recipe',
@@ -24,21 +26,24 @@
 		while ( $recipe_query->have_posts() ) {
 			$recipe_query->the_post();
 			?>
-			<div class="grid-x recipe-footer">
-				<div class="large-4">
-					<h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
+			<div class="recipe-footer">
+				<div class="grid-x large-12">
+					<h5><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h5>
 				</div>
-				<div class="large-4">
-					<?php the_excerpt(); ?>
-				</div>
-				<div class="large-4" style="width: 100px;" >
-					<?php the_post_thumbnail(); ?>
+				<div class="grid-container row">
+					<div class="col-10">
+						<?php the_excerpt(); ?>
+					</div>
+					<div class="col-2" style="width: 100px;" >
+						<?php the_post_thumbnail(); ?>
+					</div>
 				</div>
 		</div>
 			<?php
 		}
 	}
 	?>
+</div>
 
 
 	<footer id="colophon" class="site-footer">

@@ -2,12 +2,6 @@ body {
     overflow-x: hidden;
 }
 
-.grid-container {
-    max-width: 80rem;
-    margin-left: auto;
-    margin-right: auto;
-}
-
 .alignwide {
     margin-left: calc( 50% - 45rem );
     margin-right: calc( 50% - 45rem );
@@ -32,7 +26,6 @@ body {
 
 .navbar-toggler-icon {
 	background-image: linear-gradient(180deg, #ffffff 20%, #d086a3 20%, #d086a3 40%, #ffffff 40%, #ffffff 60%, #d086a3 60%, #d086a3 80%, #ffffff 80%, #ffffff 100%);
-    
 }
 
 .custom-logo-link {
@@ -130,6 +123,32 @@ label {
 
 
 /* body */
+
+/* home page */
+.is-style-pink-heading {
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.wp-block-gallery {
+    margin-left: 3rem;
+    margin-top: 2rem;
+}
+
+.wp-block-image img {
+    width: 70%;
+}
+
+.wp-block-image figcaption {
+    color: #6a7583;
+    font-size: 20px;
+    text-align: center;
+}
+
+.is-style-fancy-image {
+    width: 70%;
+}
 
 .entry-header {
 	margin-top: 2rem;
@@ -366,6 +385,35 @@ form a {
 }
 
 /* footer */
+
+/* footer top */
+.footer-top {
+    background-color: #f8eff3;
+}
+
+.footer-top h4 {
+    text-align: center;
+    padding-top: 2rem;
+    color: #a77aac;
+}
+
+.recipe-footer {
+    margin-left: 3rem;
+    margin-right: 0rem;
+}
+
+h5 a {
+    color: #b491b8;
+    text-decoration: none;
+    text-align: center;
+}
+
+.recipe-footer {
+    color: #7b8794;
+    padding-bottom: 1rem;
+}
+
+/* footer sidebar */
 .footer-sidebar {
     background-color: #e2bbcb;
     color: #ffffff;
@@ -388,7 +436,7 @@ footer h4 {
 
 /* recent post */
 #menu-footer-menu, #social {
-    margin-left: 100px;
+    margin-left: 130px;
 }
 
 #menu-footer-menu li, #social li {
@@ -442,8 +490,19 @@ footer .search-submit {
 @media print,
 screen and (min-width:64.5em) {
 
+    .grid-container {
+        max-width: 100rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
     .top-bar li form {
         margin-left: 1rem;
+    }
+
+    /* footer */
+    .recipe-footer {
+        margin-left: 4rem;
     }
 
 }
@@ -451,6 +510,11 @@ screen and (min-width:64.5em) {
 /* for tablets */
 @media print,
 screen and (max-width:64em) {
+    .grid-container {
+        max-width: 64rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
 
 	.custom-logo-link {
 		padding: 0;
@@ -499,6 +563,7 @@ screen and (max-width:64em) {
 /* for mobiles */
 @media print,
 screen and (max-width: 40em) {
+    /* header */
     .custom-logo-link {
 		padding: 0;
 		padding-top: 1rem;
@@ -531,7 +596,21 @@ screen and (max-width: 40em) {
 		padding: 4px;
 	}
 
+    /* body */
+    .wp-block-image img {
+        width: 50%;
+        padding-top: 0;
+    }
+
+    .wp-block-image img {
+        width: 40%;
+    }
+
     /* footer */
+    .recipe-footer {
+        padding-bottom: 3rem;
+    }
+
     #menu-footer-menu, #social {
         margin-left: 0px;
     }
