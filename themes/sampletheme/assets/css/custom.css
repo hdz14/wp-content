@@ -380,7 +380,7 @@ b {
 	color: #404040;
 }
 .woocommerce-Address-title h3 {
-    width: 100px;
+    width: 200px;
 }
 
 .woocommerce .col2-set .col-2, .woocommerce-page .col2-set .col-2 {
@@ -457,6 +457,18 @@ address {
 
 .woocommerce-checkout label {
 	color:#d086a3;
+}
+
+.woocommerce-billing-fields {
+    width: 600px;
+}
+
+.woocommerce-shipping-fields {
+    width: 300px;
+}
+
+.woocommerce .col2-set .col-2, .woocommerce-page .col2-set .col-2 {
+    float: none;
 }
 
 /* service page */
@@ -778,6 +790,15 @@ screen and (max-width: 40em) {
     /* cart page */
     .woocommerce-page table.cart td.actions .coupon .button {
         width: 100px;
+    }
+
+    /* checkout */
+    .woocommerce-billing-fields, .woocommerce-shipping-fields {
+        width: 300px;
+    }
+
+    .woocommerce-checkout-review-order {
+        margin-right: 1rem;
     }
 
     /* search result page */
