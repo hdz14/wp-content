@@ -22,10 +22,10 @@
 	);
 
 	$recipe_query = new WP_Query( $recipe_args );
-
 	if ( $recipe_query->have_posts() ) {
 		while ( $recipe_query->have_posts() ) {
 			$recipe_query->the_post();
+			// title link, excerpt and featured image
 			?>
 			<div class="recipe-footer">
 				<div class="grid-x large-12">
@@ -65,7 +65,7 @@
 				}
 				?>
 			</div>
-			<!-- footer social media link -->
+			<!-- footer social media links -->
 			<div class="col-4 footer-sidebar2">
 				<h4>Social Media</h4>
 				<hr class="eSeparator">
