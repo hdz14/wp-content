@@ -16,6 +16,7 @@ get_header();
 
 			<header class="page-header">
 				<h2 style="margin-top: 2rem;" class="page-title">
+				<!-- search result -->
 					<?php
 					/* translators: %s: search query. */
 					printf( esc_html__( 'Search Results for: %s', 'sampletheme' ), '<span>' . get_search_query() . '</span>' );
