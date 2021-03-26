@@ -71,6 +71,7 @@
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
 						<li>
+							<!-- nav menu -->
 							<?php
 							if ( has_nav_menu( 'top-menu' ) ) {
 								wp_nav_menu( 
