@@ -135,6 +135,10 @@ label {
     text-align: center;
 }
 
+.wp-block-eedee-block-gutenslider {
+    width: 100%;
+}
+
 .wp-block-gallery {
     margin-left: 3rem;
     margin-top: 2rem;
@@ -730,6 +734,11 @@ screen and (max-width: 40em) {
 	}
 
     /* body */
+    .wp-block-eedee-block-gutenslider {
+        width: 100%;
+        height: 300px;
+    }
+
     .wp-block-image img {
         width: 50%;
         padding-top: 0;
