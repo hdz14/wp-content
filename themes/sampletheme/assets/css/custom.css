@@ -268,6 +268,19 @@ form a {
 
 .woocommerce-product-details__short-description p {
     margin-left: 0;
+    text-align: left;
+}
+
+.woocommerce-product-details__short-description {
+    text-align: left;
+}
+
+b {
+    text-align: left;
+}
+
+.woocommerce div.product form.cart .button {
+    float: none;
 }
 
 .woocommerce-loop-product__title {
@@ -278,6 +291,7 @@ form a {
     color: #a77aac;
     margin-left: 0;
     font-size: 1.5rem;
+    text-align: left;
 }
 
 .woocommerce ul.products li.product .woocommerce-loop-category__title, .woocommerce ul.products li.product .woocommerce-loop-product__title, .woocommerce ul.products li.product h3 {
@@ -320,6 +334,7 @@ form a {
 
 .product_meta {
 	color: #666;
+    text-align: left;
 }
 
 .product_meta a {
