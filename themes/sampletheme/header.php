@@ -62,56 +62,32 @@
 
 			<div class="grid-container">
 
+			<!-- navigation, collapsed navbar -->
 			<nav class="navbar navbar-expand-md site-nav">
-				<div class="container">
-					<div class="navbar-header">
-						<button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-							<!-- <span class="responsive-menu-box"></span> -->
-							<span class="navbar-toggler-icon"></span>
-						</button>
-						<a class="navbar-brand" href="#"></a>
-					</div>
-					<div id="navbar" class="navbar-collapse collapse">
-						<ul class="nav navbar-nav">
-								<li>
-									<a href="">
-									<?php
-									if ( has_nav_menu( 'top-menu' ) ) {
-										wp_nav_menu( 
-										
-											array( 
-												'theme_location' => 'top-menu', 
-												'container_class' => 'top-bar' 
-											) 
-										); 
-									}
-									?>
-									</a>
-								</li>
-
-						</ul>
-					</div>
-				</div>
+				<button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<a class="navbar-brand" href="#"></a>
+				<div id="navbar" class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li>
+							<?php
+							if ( has_nav_menu( 'top-menu' ) ) {
+								wp_nav_menu( 
+								
+									array( 
+										'theme_location' => 'top-menu', 
+										'container_class' => 'top-bar' 
+									) 
+								); 
+							}
+							?>
+						</li>
+					</ul>
+				</div>				
 			</nav>
 
-
-
-			
-				<!-- custom header menu -->
-				<!-- 
-				<?php
-				if ( has_nav_menu( 'top-menu' ) ) {
-					wp_nav_menu( 
-					
-						array( 
-    						'theme_location' => 'top-menu', 
-    						'container_class' => 'top-bar' 
-						) 
-					); 
-				}
-				?> -->
-
-				<!-- <?php echo get_search_form(); ?> -->
+				
 				
 			</div>
 

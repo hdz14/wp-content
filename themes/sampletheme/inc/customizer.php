@@ -86,6 +86,23 @@ function sampletheme_customize_register( $wp_customize ) {
 		)
 	);
 
+	$wp_customize->add_setting(
+		'youtube_url',
+		array(
+			'default'	=> '',
+			'transport' => 'refresh',
+		)
+	);
+
+	$wp_customize->add_control(
+		'youtube_url',
+		array(
+			'label' => 'Youtube URL',
+			'section' => 'social_media',
+			'settings' => 'youtube_url',
+		)
+	);
+
 
 }
 add_action( 'customize_register', 'sampletheme_customize_register' );

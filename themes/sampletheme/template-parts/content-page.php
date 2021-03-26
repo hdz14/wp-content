@@ -10,11 +10,11 @@
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-	<!-- <?php if ( get_the_title() ) { ?>
+	<?php if ( !is_page() ) { ?>
 		<header class="entry-header">
 			<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
 		</header>
-	<?php } ?> --> <!-- no .entry-header -->
+	<?php } ?>  <!-- .entry-header -->
 	
 	<?php // sampletheme_post_thumbnail(); ?>
 
