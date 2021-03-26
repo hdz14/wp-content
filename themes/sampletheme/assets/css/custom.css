@@ -2,6 +2,10 @@ body {
     overflow-x: hidden;
 }
 
+.page {
+    margin-bottom: 0;
+}
+
 .alignwide {
     margin-left: calc( 50% - 45rem );
     margin-right: calc( 50% - 45rem );
@@ -150,6 +154,13 @@ label {
     width: 70%;
 }
 
+/* about page */
+.is-style-default {
+    margin-left: 3rem;
+    margin-right: 3rem;
+    margin-top: 2rem;
+}
+
 .entry-header {
 	margin-top: 2rem;
 	margin-bottom: 2rem;
@@ -179,7 +190,7 @@ h1, h2 {
 
 .entry-content {
     margin-top: 0;
-    width: 100%;
+    
 }
 
 .entry-footer {
@@ -212,21 +223,57 @@ form a {
 /* woocommerce */
 
 /* shop page */
+#page{
+    margin-top: 0;
+}
+
 .entry-content p {
 	margin-top: 1rem;
 	color: #d086a3;
+    margin-left: 2rem;
+}
+
+.woocommerce .columns-4  {
+    margin-left: 2rem;
+    margin-right: 2rem;
 }
 
 .shop .product {
 	background-color: #eedde4;
 }
 
+.woocommerce-Price-amount {
+    color: #a77aac;
+}
+
+/* single product page */
+.product {
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+.product h1 {
+    font-size: 2rem;
+}
+
 .product h2 {
 	text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.woocommerce-product-details__short-description p {
+    margin-left: 0;
 }
 
 .woocommerce-loop-product__title {
 	margin-left: 1rem;
+}
+
+.woocommerce div.product p.price, .woocommerce div.product span.price {
+    color: #a77aac;
+    margin-left: 0;
+    font-size: 1.5rem;
 }
 
 .woocommerce ul.products li.product .woocommerce-loop-category__title, .woocommerce ul.products li.product .woocommerce-loop-product__title, .woocommerce ul.products li.product h3 {
@@ -253,6 +300,15 @@ form a {
 	color: #fff;
 }
 
+.woocommerce-Tabs-panel {
+    margin-bottom: 2rem;
+}
+
+.nav-links, #comments {
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
 /* product single */
 .summary h1 {
 	text-align: left;
@@ -269,13 +325,15 @@ form a {
 }
 
 /* my account */
-.woocommerce {
-	margin-top: 3em;
-}
 
 .woocommerce-MyAccount-navigation {
 	padding-left: 2rem;
 	border-right: 2px solid #e2bbcb;
+    margin-top: 2rem;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation {
+    width: 25%;
 }
 
 .woocommerce-MyAccount-navigation ul {
@@ -296,10 +354,22 @@ form a {
 
 .woocommerce-MyAccount-content {
 	margin-top: 2rem;
+    margin-right: 4rem;
 }
 
 .woocommerce-MyAccount-content p {
 	color: #404040;
+}
+.woocommerce-Address-title h3 {
+    width: 100px;
+}
+
+.woocommerce .col2-set .col-2, .woocommerce-page .col2-set .col-2 {
+    margin-right: 4rem;
+}
+
+address {
+    width: 300px;
 }
 
 /* woocommerce cart */
@@ -370,6 +440,21 @@ form a {
 	color:#d086a3;
 }
 
+/* service page */
+.wp-block-column, .is-style-smalltext-paragraph {
+    margin-right: 2rem;
+}
+
+.wp-block-column p {
+    color: #d086a3;
+}
+
+/* blog page */
+.is-style-fancy-paragraph {
+    margin-right: 2rem;
+    color: #b491b8;
+}
+
 /* contact page */
 .has-text-align-center {
 	margin-top: 2rem;
@@ -382,6 +467,35 @@ form a {
 	margin-left: auto;
     margin-right: auto;
 	margin-top: 3rem;
+}
+
+/* cart page */
+.woocommerce-cart-form {
+    margin-left: 0rem;
+}
+
+.woocommerce-cart table.cart td.actions .coupon .input-text {
+    width: 100px;
+}
+
+.woocommerce .cart .button {
+    margin-top: 2rem;
+    margin-left: 0;
+}
+
+.cart_totals {
+    margin-right: 2rem;
+}
+
+/* search result page */
+
+.post-thumbnail img {
+    width: 25%;
+    margin-left: 450px;
+}
+
+.entry-summary {
+    text-align: center;
 }
 
 /* footer */
@@ -552,6 +666,25 @@ screen and (max-width:64em) {
 		padding: 4px;
 	}
 
+    /* account page */
+    /* addresses */
+    .woocommerce-MyAccount-navigation {
+        padding-left: 0rem;
+        border: none;
+    }
+
+    /* cart page */
+    .woocommerce-page table.cart td.actions .coupon .button {
+        width: 100px;
+    }
+
+    /* search result page */
+
+    .post-thumbnail img {
+        width: 30%;
+        margin-left: 300px;
+    }
+
     /* footer */
     #menu-footer-menu, #social {
         margin-left: 50px;
@@ -605,6 +738,31 @@ screen and (max-width: 40em) {
     .wp-block-image img {
         width: 40%;
     }
+
+    /* service page */
+    .wp-block-image img {
+        width: 90%;
+    }
+
+    /* account page */
+    /* addresses */
+    .woocommerce-MyAccount-navigation {
+        padding-left: 0rem;
+        border: none;
+    }
+
+    /* cart page */
+    .woocommerce-page table.cart td.actions .coupon .button {
+        width: 100px;
+    }
+
+    /* search result page */
+
+    .post-thumbnail img {
+        width: 50%;
+        margin-left: 120px;
+    }
+
 
     /* footer */
     .recipe-footer {
