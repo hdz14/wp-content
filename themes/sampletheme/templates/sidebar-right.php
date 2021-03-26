@@ -20,7 +20,7 @@ get_header();
 	<div class="cell small-12 medium-8">
 
 		<main id="primary" class="site-main">
-
+		<!-- sidebar -->
 			<?php
 			while ( have_posts() ) :
 				the_post();
